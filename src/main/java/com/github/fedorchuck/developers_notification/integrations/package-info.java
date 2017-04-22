@@ -1,5 +1,5 @@
 /**
- * Package contain an integrations witch supporting by this library.
+ * Package contain an integrations which supporting by this library.
  *
  * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>

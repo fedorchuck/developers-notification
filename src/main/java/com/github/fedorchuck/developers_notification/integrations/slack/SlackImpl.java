@@ -30,7 +30,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 /**
- * Provide sending messages via Slack messenger
+ *  Provides sending messages via Slack messenger
  *
  * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
@@ -55,7 +55,7 @@ public class SlackImpl implements Integration {
     }
 
     /**
-     * Pint environment variable value with
+     * Prints environment variable value with
      * {@link DevelopersNotificationLogger#infoEnvironmentVariable(String, String)}.
      * @since 0.1.0
      **/
@@ -65,7 +65,7 @@ public class SlackImpl implements Integration {
     }
 
     /**
-     * Provide sending messages to telegram messenger
+     * Provides sending messages to Slack messenger
      * @param message to send
      *
      * @since 0.1.0

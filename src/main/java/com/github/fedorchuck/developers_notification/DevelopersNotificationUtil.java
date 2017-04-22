@@ -22,7 +22,7 @@ import java.net.URLEncoder;
 import java.util.Map;
 
 /**
- * Class contains helpers methods
+ * Class contains helper methods
  *
  * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
@@ -62,7 +62,7 @@ public class DevelopersNotificationUtil {
     }
 
     /**
-     * Pint environment variable value with
+     * Prints environment variable value with.
      * {@link DevelopersNotificationLogger#infoEnvironmentVariable(String, String)}.
      * @param name of property
      * @since 0.1.0
@@ -74,7 +74,7 @@ public class DevelopersNotificationUtil {
     /**
      * Translates a string into application/x-www-form-urlencoded format using UTF-8 encoding scheme.
      * This method uses the supplied encoding scheme to obtain the bytes for unsafe characters.
-     * @param param string to be translated.
+     * @param param string to be translated
      * @throws UnsupportedEncodingException - If the named encoding is not supported
      * @since 0.1.0
      **/

@@ -19,8 +19,8 @@ package com.github.fedorchuck.developers_notification.integrations;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 /**
- * Decelerate witch methods should contain each integration,
- * witch allows to send messages to messengers.
+ * Decelerate which methods should contain each integration,
+ * which allows to send messages to messengers.
  *
  * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
@@ -29,7 +29,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 public interface Integration {
 
     /**
-     * Provide sending messages to specified messenger
+     * Provides sending messages to specified messenger
      * @param message to send
      *
      * @since 0.1.0

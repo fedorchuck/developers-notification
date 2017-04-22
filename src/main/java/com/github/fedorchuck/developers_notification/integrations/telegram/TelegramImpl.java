@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Provide sending messages via Telegram messenger
+ * Provides sending messages via Telegram messenger
  *
  * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
@@ -54,7 +54,7 @@ public class TelegramImpl implements Integration {
     }
 
     /**
-     * Pint environment variable value with
+     * Prints environment variable value with
      * {@link DevelopersNotificationLogger#infoEnvironmentVariable(String, String)}.
      *
      * @since 0.1.0
@@ -65,7 +65,7 @@ public class TelegramImpl implements Integration {
     }
 
     /**
-     * Provide sending messages to telegram messenger
+     * Provides sending messages to Telegram messenger
      * @param message to send
      *
      * @since 0.1.0

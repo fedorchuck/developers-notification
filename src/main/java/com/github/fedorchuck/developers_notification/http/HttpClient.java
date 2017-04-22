@@ -50,7 +50,7 @@ public class HttpClient {
     }
 
     /**
-     * Pint environment variable value with
+     * Prints environment variable value with
      * {@link DevelopersNotificationLogger#infoEnvironmentVariable(String, String)}.
      *
      * @since 0.1.0
@@ -61,7 +61,7 @@ public class HttpClient {
     }
 
     /**
-     * Create an HTTP GET request to send to the server at the specified url,
+     * Creates an HTTP GET request to send to the server at the specified URL,
      * specifying a response handler to receive the response
      * @param stringUrl the url
      * @param arguments of url
@@ -84,7 +84,7 @@ public class HttpClient {
     }
 
     /**
-     * Create an HTTP POST request to send to the server at the specified url,
+     * Creates an HTTP POST request to send to the server at the specified url,
      * specifying json to receive the response
      * @param stringUrl the url
      * @param json for request
