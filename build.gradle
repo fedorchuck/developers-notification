@@ -1,0 +1,78 @@
+project.repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+project.apply(plugin: 'java')
+project.apply(plugin: 'maven-publish')
+project.setSourceCompatibility(1.6)
+project.setTargetCompatibility(1.6)
+
+project.dependencies {
+    compile 'org.projectlombok:lombok:1.16.16'
+    compile 'com.google.guava:guava:21.0'
+    compile 'org.slf4j:slf4j-api:1.7.25'
+    compile 'com.fasterxml.jackson.core:jackson-core:2.8.8'
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.8.8'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.8'
+
+    testRuntime 'org.slf4j:slf4j-log4j12:1.7.5'
+}
+
+project.compileJava.options.encoding = 'UTF-8'
+
+project.task([type: Jar], 'sourceJar') {
+    from(project.sourceSets.main.allSource)
+}
+
+project.task([type: Copy], 'copyDocs') {
+    delete "$projectDir/docs/javadoc"
+    from "$buildDir/docs"
+    into "$projectDir/docs"
+}
+
+project.publishing {
+    publications {
+        if (project.tasks.findByPath('jar') != null) {
+            jar(MavenPublication) {
+                from(project.components.java)
+                pom.withXml {
+                    Node root = asNode()
+                    root.get('dependencies').each {
+                        root.remove(it as Node)
+                    }
+                    def dependenciesNode = root.appendNode('dependencies')
+                    project.configurations.compile?.resolvedConfiguration?.resolvedArtifacts?.each {
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', it.moduleVersion.id.group)
+                        dependencyNode.appendNode('artifactId', it.moduleVersion.id.name)
+                        dependencyNode.appendNode('version', it.moduleVersion.id.version)
+                    }
+                }
+            }
+        }
+
+        sources(MavenPublication) {
+            artifact(project.sourceJar) {
+                classifier = 'sources'
+            }
+            pom.withXml {
+                Node root = asNode()
+                root.get('dependencies').each {
+                    root.remove(it as Node)
+                }
+                def dependenciesNode = root.appendNode('dependencies')
+                project.configurations.compile?.resolvedConfiguration?.resolvedArtifacts?.each {
+                    def dependencyNode = dependenciesNode.appendNode('dependency')
+                    dependencyNode.appendNode('groupId', it.moduleVersion.id.group)
+                    dependencyNode.appendNode('artifactId', it.moduleVersion.id.name)
+                    dependencyNode.appendNode('version', it.moduleVersion.id.version)
+                }
+            }
+        }
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.3'
+}
