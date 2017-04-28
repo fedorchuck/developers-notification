@@ -1,7 +1,9 @@
 ---
 language: java
 
-install: /bin/true
+install:
+- npm https://services.gradle.org/distributions/gradle-2.14-bin.zip
+- /bin/true
 
 jdk:
 - openjdk6
