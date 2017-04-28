@@ -2,7 +2,7 @@
 language: java
 
 install:
-- npm https://services.gradle.org/distributions/gradle-2.14-bin.zip
+- npm install https://services.gradle.org/distributions/gradle-2.14-bin.zip
 - /bin/true
 
 jdk:

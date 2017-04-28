@@ -1,6 +1,6 @@
 # Java library which provides developers notification via messengers 
 
-[![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)](TODO)
+[![Build Status](https://travis-ci.org/fedorchuck/developers-notification.svg?branch=master)](https://travis-ci.org/fedorchuck/developers-notification)
 [![Apache License Version 2.0](https://img.shields.io/badge/license-Apache%20License%202.0-brightgreen.svg)](https://github.com/fedorchuck/developers-notification/blob/master/LICENSE.md)
 [![Maven Central](https://img.shields.io/badge/maven--central-0.1.0-brightgreen.svg)](TODO)
 
