@@ -1,6 +1,10 @@
 ---
 language: java
 
+script:
+    - gradle check
+    - gradle assemble
+
 sudo: false
 
 install: true
