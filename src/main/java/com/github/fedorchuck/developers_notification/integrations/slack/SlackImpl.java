@@ -46,11 +46,11 @@ public class SlackImpl implements Integration {
     public SlackImpl() {
         if (Strings.isNullOrEmpty(token)) {
             DevelopersNotificationLogger.errorWrongSlackConfig(token);
-            throw new IllegalArgumentException("SlackImpl token is null or empty: " + token);
+            throw new IllegalArgumentException("DN_SLACK_TOKEN has invalid value: " + token);
         }
         if (Strings.isNullOrEmpty(channel)) {
             DevelopersNotificationLogger.errorWrongSlackConfig(channel);
-            throw new IllegalArgumentException("SlackImpl channel is null or empty: " + channel);
+            throw new IllegalArgumentException("DN_SLACK_CHANNEL has invalid value: " + channel);
         }
     }
 
@@ -112,6 +112,7 @@ public class SlackImpl implements Integration {
         payload.setUsername("developers notification bot");
         payload.setAttachments(Collections.singletonList(attachment));
 
+        //created new - for saving memory: probably will not using (example - of using telegram)
         return new ObjectMapper().writeValueAsString(payload);
     }
 }

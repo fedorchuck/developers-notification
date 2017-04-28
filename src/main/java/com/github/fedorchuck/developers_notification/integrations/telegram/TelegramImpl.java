@@ -45,11 +45,11 @@ public class TelegramImpl implements Integration {
     public TelegramImpl() {
         if (Strings.isNullOrEmpty(token)) {
             DevelopersNotificationLogger.errorWrongTelegramConfig(token);
-            throw new IllegalArgumentException("TelegramImpl token is null or empty: " + token);
+            throw new IllegalArgumentException("DN_TELEGRAM_TOKEN has invalid value: " + token);
         }
         if (Strings.isNullOrEmpty(channel)) {
             DevelopersNotificationLogger.errorWrongTelegramConfig(channel);
-            throw new IllegalArgumentException("TelegramImpl channel is null or empty: " + channel);
+            throw new IllegalArgumentException("DN_TELEGRAM_CHANNEL has invalid value: " + channel);
         }
     }
 

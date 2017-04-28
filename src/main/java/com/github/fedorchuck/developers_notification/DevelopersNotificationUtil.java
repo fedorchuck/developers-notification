@@ -31,7 +31,14 @@ import java.util.Map;
 public class DevelopersNotificationUtil {
 
     /**
-     * Setting environment variables.
+     * Setting environment variables using reflection.
+     * <p>
+     *     <b>NOTE:</b>
+     *     System environment variables are accessible by <b>any</b> process.
+     *     Java system properties are <b>only</b> accessible by the process they are added to.
+     *     Probably, In your case should use <i>Java system properties</i> -
+     *     for it you can use, for example, {@link System#setProperty(String, String)}
+     * </p>
      * @param key name of property
      * @param value of property
      * @throws IllegalStateException if failed to set environment variable

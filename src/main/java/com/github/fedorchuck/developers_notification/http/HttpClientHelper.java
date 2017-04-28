@@ -51,7 +51,7 @@ class HttpClientHelper {
             throw new IllegalArgumentException("URL can not be null or empty.");
         }
         String url = stringUrl;
-        if (arguments != null) {
+        if ((arguments != null) && (!arguments.isEmpty())) {
             StringBuilder query = new StringBuilder();
             for (Map.Entry<String, String> entry : arguments.entrySet()) {
                 query
