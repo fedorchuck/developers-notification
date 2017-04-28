@@ -1,10 +1,35 @@
 language: java
-gradle check
-gradle assemble
+
+sudo: false
+
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
 cache:
   directories:
+    - $HOME/.m2
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
+
+jdk:
+- oraclejdk8
+- oraclejdk7
+- openjdk6
+
+matrix:
+  include:
+  - jdk: openjdk6
+    script: gradle check assemble
+  - jdk: oraclejdk7
+    script: gradle check assemble
+  - jdk: oraclejdk8
+    script: gradle check assemble
+
+branches:
+  only:
+  - master
+
+notifications:
+  email:
+- vl.fedorchuck@gmail.com

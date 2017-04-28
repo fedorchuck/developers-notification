@@ -22,9 +22,10 @@ dependencies {
     testRuntime 'org.slf4j:slf4j-log4j12:1.7.5'
 }
 
-signing {
-    sign configurations.archives
-}
+if(project.hasProperty('signing.keyId'))
+    signing {
+        sign configurations.archives
+    }
 
 task([type: Copy], 'copyDocs') {
     delete "$projectDir/docs/javadoc"
