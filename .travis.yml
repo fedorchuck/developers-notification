@@ -2,12 +2,12 @@
 language: java
 
 script:
-    - gradle check
-    - gradle assemble
+    - ./gradlew check assemble
 
 sudo: false
 
-install: true
+install:
+  - /bin/true
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -27,11 +27,11 @@ jdk:
 matrix:
   include:
   - jdk: openjdk6
-    script: gradle check assemble
+    script: ./gradlew check assemble
   - jdk: oraclejdk7
-    script: gradle check assemble
+    script: ./gradlew check assemble
   - jdk: oraclejdk8
-    script: gradle check assemble
+    script: ./gradlew check assemble
 
 branches:
   only:
