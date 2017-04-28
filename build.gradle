@@ -33,13 +33,12 @@ task([type: Copy], 'copyDocs') {
 }
 
 task([type: Jar], 'sourcesJar') {
-//    build.execute()
     classifier = 'sources'
     from project.sourceSets.main.allSource
 }
 
 task([type: Jar], 'javadocJar') {
-//    javadoc.execute()
+    javadoc.execute()
     classifier = 'javadoc'
     from project.buildDir.canonicalPath + "/docs/javadoc"
     copyDocs.execute()
