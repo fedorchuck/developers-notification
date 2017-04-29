@@ -1,14 +1,18 @@
 ---
 language: java
 
-install:
-- npm install https://services.gradle.org/distributions/gradle-2.14-bin.zip
-- /bin/true
+install: /bin/true
 
 jdk:
 - openjdk6
 - oraclejdk7
 - oraclejdk8
+
+before_script:
+    - wget https://services.gradle.org/distributions/gradle-2.14-bin.zip
+    - unzip gradle-2.14-bin.zip
+    - export GRADLE_HOME=$PWD/gradle-2.14
+    - export PATH=$GRADLE_HOME/bin:$PATH
 
 script: ./gradlew check assemble
 

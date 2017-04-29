@@ -23,7 +23,6 @@ import com.github.fedorchuck.developers_notification.http.HttpClient;
 import com.github.fedorchuck.developers_notification.DevelopersNotificationUtil;
 import com.github.fedorchuck.developers_notification.integrations.Integration;
 import com.github.fedorchuck.developers_notification.http.HttpResponse;
-import com.google.common.base.Strings;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -44,11 +43,11 @@ public class SlackImpl implements Integration {
     private static final String SERVER_ENDPOINT = "https://hooks.slack.com/services/";
 
     public SlackImpl() {
-        if (Strings.isNullOrEmpty(token)) {
+        if (DevelopersNotificationUtil.isNullOrEmpty(token)) {
             DevelopersNotificationLogger.errorWrongSlackConfig(token);
             throw new IllegalArgumentException("DN_SLACK_TOKEN has invalid value: " + token);
         }
-        if (Strings.isNullOrEmpty(channel)) {
+        if (DevelopersNotificationUtil.isNullOrEmpty(channel)) {
             DevelopersNotificationLogger.errorWrongSlackConfig(channel);
             throw new IllegalArgumentException("DN_SLACK_CHANNEL has invalid value: " + channel);
         }
@@ -97,7 +96,7 @@ public class SlackImpl implements Integration {
             attachment.setFallback("The message isn't supported.");
             attachment.setColor("#FF0049");
             attachment.setMrkdwnIn(Arrays.asList("text","fields"));
-        if (!Strings.isNullOrEmpty(projectName)) {
+        if (!DevelopersNotificationUtil.isNullOrEmpty(projectName)) {
             attachment.setAuthorName(projectName);
         }
         if (throwable!=null) {
@@ -105,7 +104,7 @@ public class SlackImpl implements Integration {
             attachment.setText(DevelopersNotificationUtil.arrayToString(throwable.getStackTrace()));
         }
         payload.setChannel(channel);
-        if (!Strings.isNullOrEmpty(description)) {
+        if (!DevelopersNotificationUtil.isNullOrEmpty(description)) {
             payload.setText(description);
         }
         payload.setIconUrl("http://placehold.it/48x48");

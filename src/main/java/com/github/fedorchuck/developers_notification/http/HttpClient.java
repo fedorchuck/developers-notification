@@ -18,7 +18,6 @@ package com.github.fedorchuck.developers_notification.http;
 
 import com.github.fedorchuck.developers_notification.DevelopersNotificationLogger;
 import com.github.fedorchuck.developers_notification.DevelopersNotificationUtil;
-import com.google.common.base.Strings;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -39,7 +38,7 @@ public class HttpClient {
 
     public HttpClient() {
         USER_AGENT = DevelopersNotificationUtil.getEnvironmentVariable("DN_USER_AGENT");
-        if (Strings.isNullOrEmpty(USER_AGENT)) {
+        if (DevelopersNotificationUtil.isNullOrEmpty(USER_AGENT)) {
             USER_AGENT = "Mozilla/5.0";
         }
         CONNECT_TIMEOUT = Integer.getInteger(

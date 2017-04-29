@@ -2,26 +2,27 @@
 
 [![Build Status](https://travis-ci.org/fedorchuck/developers-notification.svg?branch=master)](https://travis-ci.org/fedorchuck/developers-notification)
 [![Apache License Version 2.0](https://img.shields.io/badge/license-Apache%20License%202.0-brightgreen.svg)](https://github.com/fedorchuck/developers-notification/blob/master/LICENSE.md)
-[![Maven Central](https://img.shields.io/badge/maven--central-0.1.0-brightgreen.svg)](TODO)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.fedorchuck/developers-notification/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.fedorchuck/developers-notification)
 
 ## Introduction
+This library compatible with Java 6+
 
 ## Getting started
 ### Download
 Gradle:
 ```groovy
-compile 'com.github.fedorchuck:developers-notification:0.1.0'
+compile 'com.github.fedorchuck:developers-notification:0.1.1'
 ```
 Maven:
 ```xml
 <dependency>
   <groupId>com.github.fedorchuck</groupId>
   <artifactId>developers-notification</artifactId>
-  <version>0.1.0</version>
+  <version>0.1.1</version>
 </dependency>
 ```
 JAR-files:  
-TODO
+https://oss.sonatype.org/content/repositories/releases/com/github/fedorchuck/developers-notification/
 
 ### Connecting your bot
 #### Telegram
@@ -57,6 +58,15 @@ DevelopersNotification.send(DevelopersNotificationMessenger.ALL_AVAILABLE,
 DevelopersNotification.send(
   "your project name", "short description", new IllegalStateException("abcd"));
 ```
+## Changelog
+See [changelog file](https://github.com/fedorchuck/developers-notification/master/CHANGELOG.md)
+
+## Dependencies
+* [org.projectlombok:lombok:1.16.16](https://projectlombok.org/)
+* com.fasterxml.jackson.core:jackson-core:2.8.8
+* com.fasterxml.jackson.core:jackson-annotations:2.8.8
+* com.fasterxml.jackson.core:jackson-databind:2.8.8
+* [org.slf4j:slf4j-api:1.7.25](https://www.slf4j.org/) 
 
 # License
 This software is licensed under [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)

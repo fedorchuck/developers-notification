@@ -21,7 +21,6 @@ import com.github.fedorchuck.developers_notification.http.HttpClient;
 import com.github.fedorchuck.developers_notification.integrations.Integration;
 import com.github.fedorchuck.developers_notification.integrations.slack.SlackImpl;
 import com.github.fedorchuck.developers_notification.integrations.telegram.TelegramImpl;
-import com.google.common.base.Strings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +78,7 @@ public class DevelopersNotification {
         String stringMessengerDestination =
                 DevelopersNotificationUtil.getEnvironmentVariable("DN_MESSENGER");
 
-        if (Strings.isNullOrEmpty(stringMessengerDestination)){
+        if (DevelopersNotificationUtil.isNullOrEmpty(stringMessengerDestination)){
             DevelopersNotificationLogger.errorWrongConfig();
             throw new IllegalArgumentException("DN_MESSENGER is null or empty.");
         }

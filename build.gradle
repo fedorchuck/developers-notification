@@ -13,7 +13,6 @@ compileJava.options.encoding = 'UTF-8'
 
 dependencies {
     compile 'org.projectlombok:lombok:1.16.16'
-    compile 'com.google.guava:guava:21.0'
     compile 'org.slf4j:slf4j-api:1.7.25'
     compile 'com.fasterxml.jackson.core:jackson-core:2.8.8'
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.8.8'
@@ -28,9 +27,9 @@ if(project.hasProperty('signing.keyId'))
     }
 
 task([type: Copy], 'copyDocs') {
-    delete "$projectDir/docs/javadoc"
-    from buildDir.canonicalPath + "/docs"
-    into projectDir.canonicalPath + "/docs"
+    delete "$projectDir/docs/javadoc-${version}"
+    from buildDir.canonicalPath + "/docs/javadoc"
+    into projectDir.canonicalPath + "/docs/javadoc-${version}"
 }
 
 task([type: Jar], 'sourcesJar') {
@@ -40,9 +39,9 @@ task([type: Jar], 'sourcesJar') {
 
 task([type: Jar], 'javadocJar') {
     javadoc.execute()
+    copyDocs.execute()
     classifier = 'javadoc'
     from project.buildDir.canonicalPath + "/docs/javadoc"
-    copyDocs.execute()
 }
 
 artifacts {

@@ -18,7 +18,6 @@ package com.github.fedorchuck.developers_notification.http;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fedorchuck.developers_notification.DevelopersNotificationUtil;
-import com.google.common.base.Strings;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.IOException;
@@ -47,7 +46,7 @@ class HttpClientHelper {
      * @since 0.1.0
      */
     static HttpURLConnection getConnection(String stringUrl, Map<String, String> arguments) throws IOException {
-        if (Strings.isNullOrEmpty(stringUrl)) {
+        if (DevelopersNotificationUtil.isNullOrEmpty(stringUrl)) {
             throw new IllegalArgumentException("URL can not be null or empty.");
         }
         String url = stringUrl;

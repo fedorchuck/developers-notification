@@ -103,4 +103,14 @@ public class DevelopersNotificationUtil {
         return result.toString();
     }
 
+    /**
+     * Check is the given string is null or is the empty string.
+     * @param string to check
+     * @return true if the given string is null or is the empty string.
+     * @since 0.1.1
+     * */
+    public static boolean isNullOrEmpty(String string) {
+        return string == null || string.isEmpty();
+    }
+
 }

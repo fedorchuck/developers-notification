@@ -21,7 +21,6 @@ import com.github.fedorchuck.developers_notification.integrations.Integration;
 import com.github.fedorchuck.developers_notification.http.HttpClient;
 import com.github.fedorchuck.developers_notification.DevelopersNotificationUtil;
 import com.github.fedorchuck.developers_notification.http.HttpResponse;
-import com.google.common.base.Strings;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -43,11 +42,11 @@ public class TelegramImpl implements Integration {
     private static final String SEND_MESSAGE = "/sendMessage";
 
     public TelegramImpl() {
-        if (Strings.isNullOrEmpty(token)) {
+        if (DevelopersNotificationUtil.isNullOrEmpty(token)) {
             DevelopersNotificationLogger.errorWrongTelegramConfig(token);
             throw new IllegalArgumentException("DN_TELEGRAM_TOKEN has invalid value: " + token);
         }
-        if (Strings.isNullOrEmpty(channel)) {
+        if (DevelopersNotificationUtil.isNullOrEmpty(channel)) {
             DevelopersNotificationLogger.errorWrongTelegramConfig(channel);
             throw new IllegalArgumentException("DN_TELEGRAM_CHANNEL has invalid value: " + channel);
         }
@@ -98,10 +97,10 @@ public class TelegramImpl implements Integration {
     @Override
     public String generateMessage(String projectName, String description, Throwable throwable) {
         String generatedMessage = "";
-        if (!Strings.isNullOrEmpty(projectName)) {
+        if (!DevelopersNotificationUtil.isNullOrEmpty(projectName)) {
             generatedMessage += "*Project*: " + projectName + " \n";
         }
-        if (!Strings.isNullOrEmpty(projectName)) {
+        if (!DevelopersNotificationUtil.isNullOrEmpty(projectName)) {
             generatedMessage += "*Message*: " + description + " \n";
         }
         if (throwable!=null) {
