@@ -97,27 +97,28 @@ def generatePom(Object pom) {
     }
 }
 
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+if(project.hasProperty('signing.keyId'))
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-            def repoUrl
-            if (project.version.endsWith("SNAPSHOT")) {
-                repoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
-            } else {
-                repoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-            }
-            repository(url: repoUrl) {
-                authentication(
-                        userName: project.getProperty('sonatype.username'),
-                        password: project.getProperty('sonatype.password'))
-            }
+                def repoUrl
+                if (project.version.endsWith("SNAPSHOT")) {
+                    repoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+                } else {
+                    repoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+                }
+                repository(url: repoUrl) {
+                    authentication(
+                            userName: project.getProperty('sonatype.username'),
+                            password: project.getProperty('sonatype.password'))
+                }
 
-            generatePom(pom)
+                generatePom(pom)
+            }
         }
     }
-}
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.14'
