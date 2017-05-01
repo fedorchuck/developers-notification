@@ -5,9 +5,12 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.fedorchuck/developers-notification/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.fedorchuck/developers-notification)
 
 ## Introduction
-Sometimes every developer needs to know about the event that happened as soon as possible. For example, about irregular work of the server or about changing the third-party rest-api, about anything, depending on the specifics of the project. 
+Sometimes every developer needs to know about the event that happened as soon as possible. For example, about irregular work of the server or about changing the third-party rest-api, about anything, depending on the specifics of the project.
+ 
 There are many ways to inform developers about such events - all sorts of services, loggers. But most of them send notifications to the mail or a issue tracking system of a different type, which is not always convenient and not always possible to track quickly.
+
 This library sending notifications to messengers. Just create and connect a bot in the messenger that your team using and that is supported by this library. For now it is Slack and Telegram. Add the library to the project, add it configuration (access keys to the bot that you created), add lines, where it is needed, to send message and you receive messages when something happened.
+
 This library compatible with Java 6+
 
 ## Getting started
@@ -41,7 +44,7 @@ Required configuration which will be using for sending messages.
 
 ### Connecting your bot
 #### Slack
-1) Login in into [Slack]()
+1) Login in into [Slack](https://slack.com/)
 1) Add [incoming-webhook](https://my.slack.com/services/new/incoming-webhook/)
 2) Choose a channel and add press green button :-)
 3) Choose the channel again add press green button, again :-)
@@ -60,7 +63,7 @@ GET https://api.telegram.org/bot<YourBOTToken>/getUpdates
 ```
 example:
 ```http
-GET https://api.telegram.org/botjbd78sadvbdy63d37gda37bd8/getUpdates
+GET https://api.telegram.org/bot32031087p:abzcu_j17-jbd78sadvbdy63d37gda37-d8/getUpdates
 ```
 4) Find object <b>chat</b>. It looks like this:
 ```json
@@ -75,7 +78,7 @@ GET https://api.telegram.org/botjbd78sadvbdy63d37gda37bd8/getUpdates
 * `DN_TELEGRAM_TOKEN` = `YourBOTToken`
 * `DN_TELEGRAM_CHANNEL` = `chat.id`
  For this example it is:
-* `DN_TELEGRAM_TOKEN` = `jbd78sadvbdy63d37gda37bd8`
+* `DN_TELEGRAM_TOKEN` = `32031087p:abzcu_j17-jbd78sadvbdy63d37gda37-d8`
 * `DN_TELEGRAM_CHANNEL` = `-197235129`
 
 ## Usage
