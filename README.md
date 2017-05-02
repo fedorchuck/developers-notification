@@ -17,14 +17,14 @@ This library compatible with Java 6+
 ### Download
 Gradle:
 ```groovy
-compile 'com.github.fedorchuck:developers-notification:0.1.1'
+compile 'com.github.fedorchuck:developers-notification:0.1.2'
 ```
 Maven:
 ```xml
 <dependency>
   <groupId>com.github.fedorchuck</groupId>
   <artifactId>developers-notification</artifactId>
-  <version>0.1.1</version>
+  <version>0.1.2</version>
 </dependency>
 ```
 JAR-files:  
@@ -64,7 +64,7 @@ GET https://api.telegram.org/bot<YourBOTToken>/getUpdates
 ```
 example:
 ```http
-GET https://api.telegram.org/bot32031087p:abzcu_j17-jbd78sadvbdy63d37gda37-d8/getUpdates
+GET https://api.telegram.org/bot32031087:pabzcu_j17-jbd78sadvbdy63d37gda37-d8/getUpdates
 ```
 4) Find object <b>chat</b>. It looks like this:
 ```json
@@ -79,7 +79,7 @@ GET https://api.telegram.org/bot32031087p:abzcu_j17-jbd78sadvbdy63d37gda37-d8/ge
 * `DN_TELEGRAM_TOKEN` = `YourBOTToken`
 * `DN_TELEGRAM_CHANNEL` = `chat.id`
  For this example it is:
-* `DN_TELEGRAM_TOKEN` = `32031087p:abzcu_j17-jbd78sadvbdy63d37gda37-d8`
+* `DN_TELEGRAM_TOKEN` = `32031087:pabzcu_j17-jbd78sadvbdy63d37gda37-d8`
 * `DN_TELEGRAM_CHANNEL` = `-197235129`
 
 ## Usage
@@ -105,9 +105,6 @@ See [changelog file](https://github.com/fedorchuck/developers-notification/blob/
 
 ## Dependencies
 * [org.projectlombok:lombok:1.16.16](https://projectlombok.org/)
-* com.fasterxml.jackson.core:jackson-core:2.8.8
-* com.fasterxml.jackson.core:jackson-annotations:2.8.8
-* com.fasterxml.jackson.core:jackson-databind:2.8.8
 * [org.slf4j:slf4j-api:1.7.25](https://www.slf4j.org/) 
 
 ## License
