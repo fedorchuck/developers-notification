@@ -16,16 +16,14 @@
 
 package com.github.fedorchuck.developers_notification.integrations.slack;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fedorchuck.developers_notification.DevelopersNotificationLogger;
-import com.github.fedorchuck.developers_notification.http.HttpClient;
 import com.github.fedorchuck.developers_notification.DevelopersNotificationUtil;
-import com.github.fedorchuck.developers_notification.integrations.Integration;
+import com.github.fedorchuck.developers_notification.http.HttpClient;
 import com.github.fedorchuck.developers_notification.http.HttpResponse;
+import com.github.fedorchuck.developers_notification.integrations.Integration;
+import com.github.fedorchuck.developers_notification.json.serializer.ObjectMapper;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collections;
 
 /**
@@ -72,7 +70,12 @@ public class SlackImpl implements Integration {
     @Override
     public void sendMessage(String message) {
         String url = SERVER_ENDPOINT + token;
-        DevelopersNotificationLogger.infoSlackSend(url);
+        Boolean isHide = Boolean.valueOf(DevelopersNotificationUtil.getEnvironmentVariable("DN_SHOW_WHOLE_LOG_DETAILS"));
+        if (isHide) {
+            DevelopersNotificationLogger.infoSlackSend(url, message);
+        } else {
+            DevelopersNotificationLogger.infoMessageSend("Slack");
+        }
         try {
             HttpResponse res = httpClient.post(url, message);
             DevelopersNotificationLogger.infoSlackResponse(res.toString());
@@ -86,18 +89,19 @@ public class SlackImpl implements Integration {
      * @param projectName where was method called. Can be <code>null</code>
      * @param description about situation. Can be <code>null</code>
      * @param throwable which happened. Can be <code>null</code>
-     *
+     * @return generated message as JSON
      * @since 0.1.0
      **/
     @Override
-    public String generateMessage(String projectName, String description, Throwable throwable) throws JsonProcessingException {
+    public String generateMessage(String projectName, String description, Throwable throwable) {
+        String returningValue = null;
         Payload payload = new Payload();
         Attachment attachment = new Attachment();
             attachment.setFallback("The message isn't supported.");
             attachment.setColor("#FF0049");
-            attachment.setMrkdwnIn(Arrays.asList("text","fields"));
+            attachment.setMrkdwn_in(new String[]{"text","fields"});
         if (!DevelopersNotificationUtil.isNullOrEmpty(projectName)) {
-            attachment.setAuthorName(projectName);
+            attachment.setAuthor_name(projectName);
         }
         if (throwable!=null) {
             attachment.setTitle(String.valueOf(throwable));
@@ -107,11 +111,18 @@ public class SlackImpl implements Integration {
         if (!DevelopersNotificationUtil.isNullOrEmpty(description)) {
             payload.setText(description);
         }
-        payload.setIconUrl("http://placehold.it/48x48");
+        payload.setIcon_url("http://placehold.it/48x48");
         payload.setUsername("developers notification bot");
         payload.setAttachments(Collections.singletonList(attachment));
 
-        //created new - for saving memory: probably will not using (example - of using telegram)
-        return new ObjectMapper().writeValueAsString(payload);
+        try {
+            //created new - for saving memory: probably will not using (example - of using telegram)
+            returningValue = new ObjectMapper().writeValueAsString(payload);
+        } catch (IOException ex) {
+            DevelopersNotificationLogger.errorTaskFailed(this.getClass().getName(), ex);
+        } catch (IllegalAccessException ex) {
+            DevelopersNotificationLogger.errorTaskFailed(this.getClass().getName(), ex);
+        }
+        return returningValue;
     }
 }

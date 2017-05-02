@@ -16,8 +16,6 @@
 
 package com.github.fedorchuck.developers_notification.integrations;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 /**
  * Decelerate which methods should contain each integration,
  * which allows to send messages to messengers.
@@ -41,8 +39,8 @@ public interface Integration {
      * @param projectName where was method called. Can be <code>null</code>
      * @param description about situation. Can be <code>null</code>
      * @param throwable which happened. Can be <code>null</code>
-     *
+     * @return generated message as JSON
      * @since 0.1.0
      **/
-    String generateMessage(String projectName, String description, Throwable throwable) throws JsonProcessingException;
+    String generateMessage(String projectName, String description, Throwable throwable);
 }

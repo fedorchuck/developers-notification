@@ -16,7 +16,6 @@
 
 package com.github.fedorchuck.developers_notification.http;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fedorchuck.developers_notification.DevelopersNotificationUtil;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -88,8 +87,8 @@ class HttpClientHelper {
         HttpResponse httpResponse = new HttpResponse();
         httpResponse.setStatusCode((connection).getResponseCode());
         httpResponse.setResponseMessage(connection.getResponseMessage());
-        if ("application/json".equals(connection.getContentType()))
-            httpResponse.setJsonResponse(new ObjectMapper().readValue(response, Map.class));
+//        if ("application/json".equals(connection.getContentType()))
+//            httpResponse.setJsonResponse(new ObjectMapper().readValue(response, Map.class));
 
         response.close();
         return httpResponse;

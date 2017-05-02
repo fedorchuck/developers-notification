@@ -16,7 +16,6 @@
 
 package com.github.fedorchuck.developers_notification;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.fedorchuck.developers_notification.http.HttpClient;
 import com.github.fedorchuck.developers_notification.integrations.Integration;
 import com.github.fedorchuck.developers_notification.integrations.slack.SlackImpl;
@@ -42,6 +41,8 @@ import java.util.List;
  * is not required; default value is <code>Mozilla/5.0</code></li>
  * <li>DN_CONNECT_TIMEOUT - for {@link HttpClient#CONNECT_TIMEOUT};
  * is not required; default value is <code>5000</code></li>
+ * <li>DN_SHOW_WHOLE_LOG_DETAILS - receive {@link Boolean} value; if true - at log will be
+ * printed Information containing passwords; default value is <code>false</code> </li>
  * </ul>
  * Required configuration which will be using for sending messages.
  *
@@ -59,8 +60,13 @@ public class DevelopersNotification {
     public static void printConfiguration() {
         DevelopersNotificationUtil.printToLogEnvironmentVariable("DN_MESSENGER");
         HttpClient.printConfiguration();
-        TelegramImpl.printConfiguration();
-        SlackImpl.printConfiguration();
+        Boolean isHide = Boolean.valueOf(DevelopersNotificationUtil.getEnvironmentVariable("DN_SHOW_WHOLE_LOG_DETAILS"));
+        if (isHide) {
+            TelegramImpl.printConfiguration();
+            SlackImpl.printConfiguration();
+        } else {
+            DevelopersNotificationLogger.errorPrintingConfig();
+        }
     }
 
     /**
@@ -127,11 +133,7 @@ public class DevelopersNotification {
                 }
 
                 for (Integration integration : integrations) {
-                    try {
-                        integration.sendMessage(integration.generateMessage(projectName, description, throwable));
-                    } catch (JsonProcessingException ex) {
-                        DevelopersNotificationLogger.errorTaskFailed(integration.getClass().getName(), ex);
-                    }
+                    integration.sendMessage(integration.generateMessage(projectName, description, throwable));
                     DevelopersNotificationLogger.infoTaskCompleted(integration.getClass().getSimpleName());
                 }
             }

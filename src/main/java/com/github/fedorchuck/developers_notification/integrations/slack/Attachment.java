@@ -16,10 +16,7 @@
 
 package com.github.fedorchuck.developers_notification.integrations.slack;
 
-import java.util.ArrayList;
-import java.util.List;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.Serializable;
 import lombok.*;
 
 /**
@@ -30,18 +27,11 @@ import lombok.*;
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
 @EqualsAndHashCode @ToString
-@JsonInclude(JsonInclude.Include.NON_NULL)
-class Attachment {
-
+class Attachment implements Serializable {
     private String fallback;
-
     private String title;
-
     private String color;
-    @JsonProperty("author_name")
-    private String authorName;
-    @JsonProperty("mrkdwn_in")
-    private List<String> mrkdwnIn = new ArrayList<String>(0);
-
+    private String author_name;
+    private String[] mrkdwn_in;
     private String text;
 }

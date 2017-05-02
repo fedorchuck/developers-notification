@@ -47,6 +47,10 @@ public class DevelopersNotificationLogger {
         logger(2).error("DEVELOPERS_NOTIFICATION_MESSENGER has invalid value: {}", val);
     }
 
+    public static void errorPrintingConfig() {
+        logger(3).error("DN_SHOW_WHOLE_LOG_DETAILS is false.");
+    }
+
     public static void errorWrongSlackConfig(String val) {
         logger(100).error("SlackImpl config has invalid value: {}", val);
     }
@@ -73,16 +77,20 @@ public class DevelopersNotificationLogger {
         logger(4001).info("Environment property {} is {}. ", key, val);
     }
 
-    public static void infoSlackSend(String val) {
-        logger(4100).info("Sending message to slack by url: {}", val);
+    public static void infoMessageSend(String integration) {
+        logger(4002).info("Sending message to {}. DN_SHOW_WHOLE_LOG_DETAILS is false.", integration);
+    }
+
+    public static void infoSlackSend(String val, String message) {
+        logger(4100).info("Sending message to slack by url: {} with message: {}", val, message);
     }
 
     public static void infoSlackResponse(String val) {
         logger(4101).info("Response from slack: {}", val);
     }
 
-    public static void infoTelegramSend(String val) {
-        logger(4200).info("Sending message to telegram by url: {}", val);
+    public static void infoTelegramSend(String val, String message) {
+        logger(4200).info("Sending message to telegram by url: {} with message: {}", val, message);
     }
 
     public static void infoTelegramResponse(String val) {

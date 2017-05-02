@@ -14,25 +14,21 @@
  * limitations under the License.
  */
 
-package com.github.fedorchuck.developers_notification.integrations.slack;
+package com.github.fedorchuck.developers_notification.integrations.telegram;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.*;
 
 /**
  * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
- * @since 0.1.0
+ * @since 0.1.2
  */
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
 @EqualsAndHashCode @ToString
-class Payload implements Serializable {
-    private String username;
-    private String icon_url;
+class Message implements Serializable {
+    private String chat_id;
+    private String parse_mode;
     private String text;
-    private String channel;
-    private List<Attachment> attachments = new ArrayList<Attachment>(0);
 }

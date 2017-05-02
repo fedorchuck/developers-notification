@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package com.github.fedorchuck.developers_notification.integrations.slack;
+package com.github.fedorchuck.developers_notification.json.serializer;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.*;
+import java.io.Serializable;
 
 /**
  * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
@@ -29,10 +27,11 @@ import lombok.*;
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
 @EqualsAndHashCode @ToString
-class Payload implements Serializable {
-    private String username;
-    private String icon_url;
+class Attachment implements Serializable {
+    private String fallback;
+    private String title;
+    private String color;
+    private String author_name;
+    private String[] mrkdwn_in;
     private String text;
-    private String channel;
-    private List<Attachment> attachments = new ArrayList<Attachment>(0);
 }

@@ -96,7 +96,8 @@ public class HttpClient {
 
         connection.setRequestMethod("POST");
         connection.setRequestProperty("User-Agent", USER_AGENT);
-        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+//        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        connection.setRequestProperty("Content-Type", "application/json");
         connection.setRequestProperty("Accept-Charset", "UTF-8");
         connection.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
         connection.setConnectTimeout(CONNECT_TIMEOUT);

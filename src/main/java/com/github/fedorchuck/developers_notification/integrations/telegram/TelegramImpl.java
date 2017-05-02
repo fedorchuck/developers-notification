@@ -21,10 +21,9 @@ import com.github.fedorchuck.developers_notification.integrations.Integration;
 import com.github.fedorchuck.developers_notification.http.HttpClient;
 import com.github.fedorchuck.developers_notification.DevelopersNotificationUtil;
 import com.github.fedorchuck.developers_notification.http.HttpResponse;
+import com.github.fedorchuck.developers_notification.json.serializer.ObjectMapper;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Provides sending messages via Telegram messenger
@@ -72,14 +71,14 @@ public class TelegramImpl implements Integration {
     @Override
     public void sendMessage(String message) {
         String url = SERVER_ENDPOINT + token + SEND_MESSAGE;
-        Map<String, String> params = new HashMap<String, String>();
-            params.put("chat_id", channel);
-            params.put("text", message);
-            params.put("parse_mode", "Markdown");
-
-        DevelopersNotificationLogger.infoTelegramSend(url);
+        Boolean isHide = Boolean.valueOf(DevelopersNotificationUtil.getEnvironmentVariable("DN_SHOW_WHOLE_LOG_DETAILS"));
+        if (isHide) {
+            DevelopersNotificationLogger.infoTelegramSend(url, message);
+        } else {
+            DevelopersNotificationLogger.infoMessageSend("Telegram");
+        }
         try {
-            HttpResponse res = httpClient.get(url, params);
+            HttpResponse res = httpClient.post(url, message);
             DevelopersNotificationLogger.infoTelegramResponse(res.toString());
         } catch (IOException e) {
             DevelopersNotificationLogger.errorSendTelegramMessage(e);
@@ -91,22 +90,47 @@ public class TelegramImpl implements Integration {
      * @param projectName where was method called. Can be <code>null</code>
      * @param description about situation. Can be <code>null</code>
      * @param throwable which happened. Can be <code>null</code>
-     *
+     * @return generated message as JSON
      * @since 0.1.0
      **/
     @Override
     public String generateMessage(String projectName, String description, Throwable throwable) {
+        String returningValue = null;
+        Message message = new Message();
+        message.setChat_id(channel);
+        message.setParse_mode("Markdown");
+
         String generatedMessage = "";
         if (!DevelopersNotificationUtil.isNullOrEmpty(projectName)) {
-            generatedMessage += "*Project*: " + projectName + " \n";
+            generatedMessage += "*Project*: " + replaceLowLine(projectName) + " \n";
         }
         if (!DevelopersNotificationUtil.isNullOrEmpty(projectName)) {
-            generatedMessage += "*Message*: " + description + " \n";
+            generatedMessage += "*Message*: " + replaceLowLine(description) + " \n";
         }
         if (throwable!=null) {
-            generatedMessage += "*Throwable*:` " + String.valueOf(throwable) + " `\n*Stack trace*:``` " +
+            generatedMessage += "*Throwable*:` " + replaceLowLine(String.valueOf(throwable)) +
+                    " `\n*Stack trace*:``` " +
                 DevelopersNotificationUtil.arrayToString(throwable.getStackTrace()) + " ```";
         }
-        return generatedMessage;
+        message.setText(generatedMessage);
+
+        try {
+            returningValue = new ObjectMapper().writeValueAsString(message);
+        } catch (IOException ex) {
+            DevelopersNotificationLogger.errorTaskFailed(this.getClass().getName(), ex);
+        } catch (IllegalAccessException ex) {
+            DevelopersNotificationLogger.errorTaskFailed(this.getClass().getName(), ex);
+        }
+        return returningValue;
+    }
+
+    /**
+     * Replace <code>_</code> to <code>-</code>
+     * @param string that possible contains <code>_</code>
+     * @return handled string
+     * @since 1.0.2
+     **/
+    private String replaceLowLine(String string) {
+        return string.replace('_','-');
     }
 }

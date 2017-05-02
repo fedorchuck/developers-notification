@@ -38,7 +38,8 @@ The library is configured by environment variables or system properties. Support
 * `DN_TELEGRAM_TOKEN` access key; required if you use Telegram messages;
 * `DN_TELEGRAM_CHANNEL` destination chat; required if you use Telegram messages;
 * `DN_USER_AGENT` user agent for [HttpClient](https://fedorchuck.github.io/developers-notification/javadoc/com/github/fedorchuck/developers_notification/http/HttpClient.html) is not required; default value is `Mozilla/5.0`;
-* `DN_CONNECT_TIMEOUT` for [HttpClient](https://fedorchuck.github.io/developers-notification/javadoc/com/github/fedorchuck/developers_notification/http/HttpClient.html) is not required; default value is `5000`.
+* `DN_CONNECT_TIMEOUT` for [HttpClient](https://fedorchuck.github.io/developers-notification/javadoc/com/github/fedorchuck/developers_notification/http/HttpClient.html) is not required; default value is `5000`;
+* `DN_SHOW_WHOLE_LOG_DETAILS` receive boolean value; if value is true - at log will be printed Information containing passwords; default value is `false`.
 
 Required configuration which will be using for sending messages.
 

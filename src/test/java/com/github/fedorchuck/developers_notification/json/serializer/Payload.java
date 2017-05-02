@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.github.fedorchuck.developers_notification.integrations.slack;
+package com.github.fedorchuck.developers_notification.json.serializer;
 
+import lombok.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.*;
 
 /**
  * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
