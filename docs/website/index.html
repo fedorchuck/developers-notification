@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright 2017 Volodymyr Fedorchuk <vl.fedorchuck@gmail.com>
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<html lang="en">
+<head>
+    <title>Developers Notification</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="resources/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="resources/bootstrap-3.3.7-dist/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="resources/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="resources/font-awesome-4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="resources/custom.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="resources/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <script src="resources/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+    <!-- Yandex.Metrika counter --> <script type="text/javascript"> (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter44546241 = new Ya.Metrika({ id:44546241, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks"); </script> <noscript><div><img src="https://mc.yandex.ru/watch/44546241" style="position:absolute; left:-9999px;" alt="" /></div></noscript> <!-- /Yandex.Metrika counter -->
+</head>
+<body data-spy="scroll" data-target="#scrollspy" data-offset="20">
+<header>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <h1>Developers Notification</h1>
+        </div>
+        <div class="col-md-4">
+            <ul class="list-inline" style="margin-top: 3%;">
+                <li>
+                    <a href="https://oss.sonatype.org/content/repositories/releases/com/github/fedorchuck/developers-notification/0.1.2/developers-notification-0.1.2.jar"
+                                class="btn btn-success btn-download" role="button">Download v0.1.2 JAR </a>
+                </li>
+                <li>
+                    <a href="https://github.com/fedorchuck/developers-notification" target="_blank"
+                       class="btn-outline" title="View GitHub Project" style="position: absolute; margin-top: -8%;">
+                    <i class="fa fa-fw fa-github"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</header>
+<div class="container header">
+    <div class="row">
+        <div class="text-center">
+            <h2>Java library which provides developers notification via messengers</h2>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <div id="introduction" class="chapter-line">
+                <h2>Introduction</h2>
+                <p>Sometimes every developer needs to know about the event that happened as soon as possible. For example,
+                    about irregular work of the server or about changing the third-party rest-api, about anything, depending
+                    on the specifics of the project.</p>
+                <p>There are many ways to inform developers about such events - all sorts of services, loggers. But most
+                    of them send notifications to the mail or a issue tracking system of a different type, which is not
+                    always convenient and not always possible to track quickly.</p>
+                <p>This library sending notifications to messengers. Just create and connect a bot in the messenger that
+                    your team using and that is supported by this library. For now it is Slack and Telegram. Add the library
+                    to the project, add it configuration (access keys to the bot that you created), add lines, where it is
+                    needed, to send message and you receive messages when something happened.</p>
+                <p>This library compatible with Java 6+</p>
+            </div>
+            <div id="download" class="chapter-line">
+                <h2>Download</h2>
+                <a href="https://oss.sonatype.org/content/repositories/releases/com/github/fedorchuck/developers-notification/0.1.2/developers-notification-0.1.2.jar"
+                       class="btn btn-success btn-download" role="button">↓ v0.1.2 JAR </a>
+                <p>The source code to the developers-notification, its samples, and this website is
+                    <a href="https://github.com/fedorchuck/developers-notification" target="_blank"> available on GitHub.</a>
+                </p>
+                <h4>Gradle:</h4>
+                <pre>
+                    compile 'com.github.fedorchuck:developers-notification:0.1.2'
+                </pre>
+                <p>
+                    Another versions and their JAR-files you can find
+                    <a href="https://oss.sonatype.org/content/repositories/releases/com/github/fedorchuck/developers-notification/" target="_blank">here.</a>
+                </p>
+            </div>
+            <div id="setup" class="chapter-line">
+                <h2>Setup</h2>
+                <p>The library is configured by environment variables or system properties. Supported variables:</p>
+                <ul>
+                    <li>
+                        <p><code>DN_MESSENGER</code> where the message will be sent; possible values you can see
+                            in <a href="http://fedorchuck.github.io/developers-notification/javadoc-0.1.2/com/github/fedorchuck/developers_notification/DevelopersNotificationMessenger.html" target="_blank">DevelopersNotificationMessenger</a>
+                            required if you use method <code>send</code> with signature <code>DevelopersNotification.send(String, String, Throwable)</code>;
+                        </p>
+                    </li>
+                    <li>
+                        <p><code>DN_SLACK_TOKEN</code> access key; required if you use Slack messages;</p>
+                    </li>
+                    <li>
+                        <p><code>DN_SLACK_CHANNEL</code> destination chat; required if you use Slack messages;</p>
+                    </li>
+                    <li>
+                        <p><code>DN_TELEGRAM_TOKEN</code> access key; required if you use Telegram messages;</p>
+                    </li>
+                    <li>
+                        <p><code>DN_TELEGRAM_CHANNEL</code> destination chat; required if you use Telegram messages;</p>
+                    </li>
+                    <li>
+                        <p><code>DN_USER_AGENT</code> user agent for
+                            <a href="https://fedorchuck.github.io/developers-notification/javadoc-0.1.2/com/github/fedorchuck/developers_notification/http/HttpClient.html" target="_blank">HttpClient</a>
+                            is not required; default value is <code>Mozilla/5.0</code>;
+                        </p>
+                    </li>
+                    <li>
+                        <p><code>DN_CONNECT_TIMEOUT</code> for
+                            <a href="https://fedorchuck.github.io/developers-notification/javadoc-0.1.2/com/github/fedorchuck/developers_notification/http/HttpClient.html" target="_blank">HttpClient</a>
+                            is not required; default value is <code>5000</code>;
+                        </p>
+                    </li>
+                    <li>
+                        <p><code>DN_SHOW_WHOLE_LOG_DETAILS</code> receive boolean value; if value is true - at log will be
+                            printed Information containing passwords; default value is <code>false</code>.
+                        </p>
+                    </li>
+                </ul>
+                <p>Required configuration which will be using for sending messages.</p>
+            </div>
+            <div id="connecting_bot" class="chapter-line">
+                <h2>Connecting your bot</h2>
+                <h2>Slack</h2>
+                <ol>
+                    <li>
+                        <p>Login in into <a href="https://slack.com/" target="_blank">Slack</a></p>
+                    </li>
+                    <li>
+                        <p>Add <a href="https://my.slack.com/services/new/incoming-webhook/" target="_blank">incoming-webhook</a></p>
+                    </li>
+                    <li>
+                        <p>Choose a channel and add press green button :-)</p>
+                    </li>
+                    <li>
+                        <p>Choose the channel again add press green button, again :-)</p>
+                    </li>
+                    <li>
+                        <p>Find the <b>Integration Settings</b> section</p>
+                    </li>
+                    <li>
+                        <p>Find the <b>Webhook URL</b> sub-section and copy token. Example url:
+                            <code>https://hooks.slack.com/services/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</code>
+                            token: <code>TZXG2L132/B56Z6RGR1/AdlsZzn1QGfo2qrEK4jpO4wJ</code>
+                        </p>
+                    </li>
+                    <li>
+                        <p>Add configuration to your project. For this example it is:</p>
+                        <ul>
+                            <li>
+                                <code>DN_SLACK_TOKEN</code> <b> = </b> <code>TZXG2L132/B56Z6RGR1/AdlsZzn1QGfo2qrEK4jpO4wJ</code>
+                            </li>
+                            <li>
+                                <code>DN_SLACK_CHANNEL</code> <b> = </b> <code>general</code>
+                            </li>
+                        </ul>
+                    </li>
+                </ol>
+                <h2>Telegram</h2>
+                <ol>
+                    <li>
+                        <p>Create your <a href="https://core.telegram.org/bots#3-how-do-i-create-a-bot" target="_blank">bot</a></p>
+                    </li>
+                    <li>
+                        <p>Add the Telegram BOT to your chat.</p>
+                    </li>
+                    <li>
+                        <p>Get the list of updates for your BOT:</p>
+                        <code>GET https://api.telegram.org/bot<b>YourBOTToken</b>/getUpdates</code>
+                        <p>example:</p>
+                        <code>GET https://api.telegram.org/bot32031087:pabzcu_j17-jbd78sadvbdy63d37gda37-d8/getUpdates</code>
+                    </li>
+                    <li>
+                        <p>Find object <b>chat</b>. It looks like this:</p>
+                        <pre>
+                            "chat": {
+                                "id": -197235129,
+                                "title": "test group developers notification",
+                                "type": "group",
+                                "all_members_are_administrators": true
+                            },</pre>
+                    </li>
+                    <li>
+                        <p>Add configuration to your project.</p>
+                        <ul>
+                            <li>
+                                <code>DN_TELEGRAM_TOKEN</code> <b> = </b> <code>YourBOTToken</code>
+                            </li>
+                            <li>
+                                <code>DN_TELEGRAM_CHANNEL</code> <b> = </b> <code>chat.id</code>
+                            </li>
+                        </ul>
+                        <p>For this example it is:</p>
+                        <ul>
+                            <li>
+                                <code>DN_TELEGRAM_TOKEN</code> <b> = </b> <code>32031087:pabzcu_j17-jbd78sadvbdy63d37gda37-d8</code>
+                            </li>
+                            <li>
+                                <code>DN_TELEGRAM_CHANNEL</code> <b> = </b> <code>-197235129</code>
+                            </li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+            <div id="usage" class="chapter-line">
+                <h2>Usage</h2>
+                <p>You can set needed environment variables using:</p>
+                <code>DevelopersNotificationUtil.setEnvironmentVariable(key, value);</code>
+                <p>For checking set environment variables which needed this library use:</p>
+                <code>DevelopersNotification.printConfiguration();</code>
+                <p>For sending message to chosen destination you can use methods:</p>
+                <code>DevelopersNotification.send(DevelopersNotificationMessenger.ALL_AVAILABLE,
+                    "your project name", "short description", new IllegalStateException("abcd"));</code>
+                <code>DevelopersNotification.send(
+                    "your project name", "short description", new IllegalStateException("abcd"));</code>
+            </div>
+            <div id="javadoc" class="chapter-line">
+                <h2>Archive and Javadoc</h2>
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Version</th>
+                        <th>Link to Javadoc</th>
+                        <th>Link to Repository</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>v0.1.0 </td>
+                        <td><a href="https://fedorchuck.github.io/developers-notification/javadoc/" target="_blank">javadoc</a></td>
+                        <td><a href="https://oss.sonatype.org/content/repositories/releases/com/github/fedorchuck/developers-notification/0.1.0/" target="_blank">JAR-files</a></td>
+                    </tr>
+                    <tr>
+                        <td>v0.1.1</td>
+                        <td><a href="https://fedorchuck.github.io/developers-notification/javadoc-0.1.1" target="_blank">javadoc</a></td>
+                        <td><a href="https://oss.sonatype.org/content/repositories/releases/com/github/fedorchuck/developers-notification/0.1.1/" target="_blank">JAR-files</a></td>
+                    </tr>
+                    <tr>
+                        <td>v0.1.2</td>
+                        <td><a href="https://fedorchuck.github.io/developers-notification/javadoc-0.1.2" target="_blank">javadoc</a></td>
+                        <td><a href="https://oss.sonatype.org/content/repositories/releases/com/github/fedorchuck/developers-notification/0.1.2/" target="_blank">JAR-files</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="dependencies" class="chapter-line">
+                <h2>Dependencies</h2>
+                <ul>
+                    <li>
+                        <a href="https://projectlombok.org/" target="_blank">org.projectlombok:lombok:1.16.16</a>
+                    </li>
+                    <li>
+                        <a href="https://www.slf4j.org/" target="_blank">org.slf4j:slf4j-api:1.7.25</a>
+                    </li>
+                </ul>
+            </div>
+            <div id="license" class="chapter-line">
+                <h2>License</h2>
+                <p>This software is licensed under <a href="http://www.apache.org/licenses/LICENSE-2.0.html" target="_blank">Apache License 2.0</a> </p>
+                <pre>
+                    Copyright 2017 Volodymyr Fedorchuk vl.fedorchuck@gmail.com
+                    Licensed under the Apache License, Version 2.0 (the "License");
+                    you may not use this file except in compliance with the License.
+                    You may obtain a copy of the License at
+
+                        http://www.apache.org/licenses/LICENSE-2.0
+
+                    Unless required by applicable law or agreed to in writing, software
+                    distributed under the License is distributed on an "AS IS" BASIS,
+                    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+                    See the License for the specific language governing permissions and
+                    limitations under the License.
+                </pre>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="content-nav affix-top" data-spy="affix" data-offset-top="20" style="margin-top: 8%;">
+            <nav id="scrollspy">
+                <ul class="nav nav-pills nav-stacked"><!--nav nav-tabs nav-stacked primary-->
+                    <li><a href="#introduction">Introduction</a></li>
+                    <!--<li><a href="#features">Features</a></li>-->
+                    <li><a href="#download">Download</a></li>
+                    <li><a href="#setup">Setup</a></li>
+                    <li><a href="#connecting_bot">Connecting BOT</a></li>
+                    <li><a href="#usage">Usage</a></li>
+                    <li><a href="#javadoc">Archive and Javadoc</a></li>
+                    <li><a href="#dependencies">Dependencies</a></li>
+                    <li><a href="#license">License</a></li>
+                </ul>
+                <ul class="nav nav-pills nav-stacked secondary">
+                    <li><a href="https://github.com/fedorchuck/developers-notification/blob/master/CHANGELOG.md" target="_blank">Changelog</a></li>
+                </ul>
+            </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

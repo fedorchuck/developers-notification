@@ -1,0 +1,133 @@
+/*
+ * Copyright 2017 Volodymyr Fedorchuk <vl.fedorchuck@gmail.com>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+html, body {
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px;
+}
+
+header {
+    min-height: 80px;
+    background-color: #48b949;
+    color: #f6f6f6;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 99;
+}
+
+header h1 {
+    font-size: 50px;
+    line-height: 60px;
+    font-weight: 100;
+    text-rendering: auto;
+}
+
+pre, code {
+    color: #555;
+}
+code {
+    border: 0;
+    background-color: transparent;
+}
+
+body {
+    background-color: #f6f6f6;
+    padding-bottom: 50px;
+    padding-top: 80px;
+}
+
+.header {
+    padding-top: 1%;
+    background-color: #48B949;
+    color: #f6f6f6;
+    width: 100%;"
+}
+
+h4 {
+    font-weight: 400;
+    text-transform: uppercase;
+    color: #888;
+    font-size: 15px;
+    padding-top: 20px;
+}
+
+h2 {
+    font-weight: 500;
+    font-size: 26px;
+    line-height: 30px;
+    padding: 15px 0;
+    margin: 0;
+}
+
+h2 strong {
+    font-weight: 300;
+}
+
+h3 {
+    font-weight: 300;
+    font-style: italic;
+    color: #101010;
+    font-size: 20px;
+    margin-top: 0;
+}
+
+.content-nav {
+    width: 220px;
+}
+.content-nav.affix {
+    top: 0;
+}
+.content-nav li.active a, .content-nav li.active a:hover {
+    background-color: transparent;
+    color: #2d642d;
+    border-left-width: 2px;
+}
+.content-nav .secondary a {
+    color: #aaa;
+}
+.content-nav .secondary a:hover {
+    color: #888;
+}
+
+.btn-download {
+    display: inline-block;
+    color: #46A046;
+    background: #f6f6f6;
+    border: #2d642d;
+    font-size: 20px;
+    line-height: 45px;
+}
+
+.btn-outline {
+    font-size: 40px;
+    color: #f6f6f6;
+    background: 0 0;
+    transition: all .3s ease-in-out;
+}
+
+.chapter-line {
+    margin-top: -80px;
+    padding-top: 80px;
+}
+
+a {
+    color: #48b949;
+}
+a:hover {
+    color: #2d642d;
+}
