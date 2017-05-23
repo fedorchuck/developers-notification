@@ -14,23 +14,11 @@
  * limitations under the License.
  */
 
-package com.github.fedorchuck.developers_notification.example;
-
-import com.github.fedorchuck.developers_notification.DevelopersNotificationUtil;
-import org.junit.Test;
-
-import java.io.IOException;
-
 /**
+ * Package constrain converting between Java objects and matching JSON constructs
+ *
+ * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
- **/
-public class IntegrationTest {
-    @Test
-    public void test001() throws IOException, IllegalAccessException, InterruptedException {
-
-        A a = new A();
-        a.a();
-        Thread.sleep(10000);
-    }
-
-}
+ * @since 0.1.0
+ */
+package com.github.fedorchuck.developers_notification.json;

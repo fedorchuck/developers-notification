@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.fedorchuck.developers_notification.json.serializer;
+package com.github.fedorchuck.developers_notification.json;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -32,27 +32,29 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * This mapper (or, data binder, or codec) provides functionality for converting between
  * Java objects (instances of JDK provided core classes, beans), and matching JSON constructs.
- * The main conversion API is defined in {@link JsonWriter}.
+ * The main conversion API is defined in {@link JsonWriter} and {@link JsonParser}.
  *
  * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
  * @since 0.1.2
  */
-public class ObjectMapper {
+class JsonSerializer {
     private JsonWriter jsonWriter;
     private Writer writer;
 
-    public ObjectMapper() {
+    JsonSerializer() {
         this.writer = new StringWriter();
         this.jsonWriter = new JsonWriter(writer);
     }
 
     /**
-     * Write inputting object as json string.
+     * Write inputting object as JSON string.
      * @param obj to convert
+     * @throws IOException when cannot write json
+     * @throws IllegalAccessException when cannot get field value
      * @since 0.1.2
      **/
-    public String writeValueAsString(Object obj) throws IOException, IllegalAccessException {
+    String writeValueAsString(Object obj) throws IOException, IllegalAccessException {
         jsonWriter.writeObjectBegin();
 
         List<Field> fields = getNotNullFields(obj);
@@ -95,6 +97,7 @@ public class ObjectMapper {
      * Convert inputting {@link Object} to {@link List} of {@link Field} with not null value
      * @param object to convert
      * @return {@link List} of {@link Field} with not null value
+     * @throws IllegalArgumentException when cannot get field value
      * @since 0.1.2
      **/
     private List<Field> getNotNullFields(Object object) throws IllegalAccessException {
@@ -102,8 +105,7 @@ public class ObjectMapper {
         List<Field> notNullFields = new ArrayList<Field>(0);
         for (Field field : fields) {
             field.setAccessible(true);
-            Object value = field.get(object);
-            if (value != null)
+            if (field.get(object) != null)
                 notNullFields.add(field);
         }
         return notNullFields;
@@ -113,6 +115,8 @@ public class ObjectMapper {
      * Method write value to the {@link JsonWriter}.
      * @param type of field
      * @param value of field
+     * @throws IOException when cannot write json
+     * @throws IllegalAccessException when cannot get field value
      * @since 0.1.2
      **/
     private void writeValue(Type type, Object value) throws IOException, IllegalAccessException {

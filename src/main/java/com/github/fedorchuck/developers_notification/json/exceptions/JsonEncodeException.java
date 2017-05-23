@@ -14,23 +14,25 @@
  * limitations under the License.
  */
 
-package com.github.fedorchuck.developers_notification.example;
-
-import com.github.fedorchuck.developers_notification.DevelopersNotificationUtil;
-import org.junit.Test;
-
-import java.io.IOException;
+package com.github.fedorchuck.developers_notification.json.exceptions;
 
 /**
+ * Instances of this Exception are thrown if failed to encode Object to JSON string.
+ *
+ * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
- **/
-public class IntegrationTest {
-    @Test
-    public void test001() throws IOException, IllegalAccessException, InterruptedException {
+ * @since 0.2.0
+ */
+public class JsonEncodeException extends RuntimeException {
 
-        A a = new A();
-        a.a();
-        Thread.sleep(10000);
-    }
+  public JsonEncodeException() {
+  }
 
+  public JsonEncodeException(String message) {
+    super(message);
+  }
+
+  public JsonEncodeException(Throwable cause) {
+    super(cause);
+  }
 }

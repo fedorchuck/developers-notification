@@ -14,25 +14,21 @@
  * limitations under the License.
  */
 
-package com.github.fedorchuck.developers_notification.json.serializer;
+package com.github.fedorchuck.developers_notification.json.model;
 
 import lombok.*;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
- * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
- * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
- * @since 0.1.0
+ * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>.
  */
 @Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
-@EqualsAndHashCode @ToString
-class Payload implements Serializable {
+@ToString
+@EqualsAndHashCode
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class From {
+    private Integer id;
+    private String first_name;
     private String username;
-    private String icon_url;
-    private String text;
-    private String channel;
-    private List<Attachment> attachments = new ArrayList<Attachment>(0);
 }

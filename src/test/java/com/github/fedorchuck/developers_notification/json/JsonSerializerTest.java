@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package com.github.fedorchuck.developers_notification.json.serializer;
+package com.github.fedorchuck.developers_notification.json;
 
+import com.github.fedorchuck.developers_notification.json.model.Attachment;
+import com.github.fedorchuck.developers_notification.json.model.Payload;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -25,24 +27,25 @@ import java.util.Collections;
 /**
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>.
  */
-public class ObjectMapperTest {
+public class JsonSerializerTest {
 
     @Test
-    public void test001() throws IOException, IllegalAccessException {
+    public void testWriteValueAsString() throws IOException, IllegalAccessException {
         Payload payload = new Payload();
         Attachment attachment = new Attachment();
-        attachment.setFallback("The message isn't supported.");
-        attachment.setColor("#FF0049");
-        attachment.setMrkdwn_in(new String[]{"text","fields"});
-        attachment.setAuthor_name(" some project name ");
+            attachment.setFallback("The message isn't supported.");
+            attachment.setColor("#FF0049");
+            attachment.setMrkdwn_in(new String[]{"text","fields"});
+            attachment.setAuthor_name(" some project name ");
 
-        payload.setChannel("general");
-        payload.setText("it was a wonderful day");
-        payload.setIcon_url("http://placehold.it/48x48");
-        payload.setUsername("developers notification bot");
-        payload.setAttachments(Collections.singletonList(attachment));
-        String actual = new ObjectMapper().writeValueAsString(payload);
+            payload.setChannel("general");
+            payload.setText("it was a wonderful day");
+            payload.setIcon_url("http://placehold.it/48x48");
+            payload.setUsername("developers notification bot");
+            payload.setAttachments(Collections.singletonList(attachment));
+        String actual = new JsonSerializer().writeValueAsString(payload);
         String expected = "{\"username\":\"developers notification bot\",\"icon_url\":\"http://placehold.it/48x48\",\"text\":\"it was a wonderful day\",\"channel\":\"general\",\"attachments\":[{\"fallback\":\"The message isn't supported.\",\"color\":\"#FF0049\",\"author_name\":\" some project name \",\"mrkdwn_in\":[\"text\",\"fields\"]}]}";
+
         Assert.assertEquals(expected, actual);
     }
 }

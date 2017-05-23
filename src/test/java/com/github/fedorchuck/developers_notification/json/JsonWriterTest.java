@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.fedorchuck.developers_notification.json.serializer;
+package com.github.fedorchuck.developers_notification.json;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -38,7 +38,7 @@ public class JsonWriterTest {
     }
 
     @Test
-    public void test001() throws IOException {
+    public void testGeneral() throws IOException {
 
         jsonWriter.writeObjectBegin();
         jsonWriter.writeString("hello");

@@ -14,11 +14,24 @@
  * limitations under the License.
  */
 
+package com.github.fedorchuck.developers_notification.json.model;
+
+import lombok.*;
+import java.io.Serializable;
+
 /**
- * Package constrain converting between Java objects and matching JSON constructs
- *
  * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
  * @since 0.1.0
  */
-package com.github.fedorchuck.developers_notification.json.serializer;
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
+@EqualsAndHashCode @ToString
+public class Attachment implements Serializable {
+    private String fallback;
+    private String title;
+    private String color;
+    private String author_name;
+    private String[] mrkdwn_in;
+    private String text;
+}

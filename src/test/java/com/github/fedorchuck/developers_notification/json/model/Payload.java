@@ -14,23 +14,25 @@
  * limitations under the License.
  */
 
-package com.github.fedorchuck.developers_notification.example;
+package com.github.fedorchuck.developers_notification.json.model;
 
-import com.github.fedorchuck.developers_notification.DevelopersNotificationUtil;
-import org.junit.Test;
-
-import java.io.IOException;
+import lombok.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
+ * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
- **/
-public class IntegrationTest {
-    @Test
-    public void test001() throws IOException, IllegalAccessException, InterruptedException {
-
-        A a = new A();
-        a.a();
-        Thread.sleep(10000);
-    }
-
+ * @since 0.1.0
+ */
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
+@EqualsAndHashCode @ToString
+public class Payload implements Serializable {
+    private String username;
+    private String icon_url;
+    private String text;
+    private String channel;
+    private List<Attachment> attachments = new ArrayList<Attachment>(0);
 }

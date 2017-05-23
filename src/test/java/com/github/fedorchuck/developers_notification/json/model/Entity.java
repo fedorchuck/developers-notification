@@ -14,23 +14,21 @@
  * limitations under the License.
  */
 
-package com.github.fedorchuck.developers_notification.example;
+package com.github.fedorchuck.developers_notification.json.model;
 
-import com.github.fedorchuck.developers_notification.DevelopersNotificationUtil;
-import org.junit.Test;
-
-import java.io.IOException;
+import lombok.*;
 
 /**
- * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
- **/
-public class IntegrationTest {
-    @Test
-    public void test001() throws IOException, IllegalAccessException, InterruptedException {
-
-        A a = new A();
-        a.a();
-        Thread.sleep(10000);
-    }
-
+ * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>.
+ */
+@Getter @Setter
+@ToString
+@EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class Entity {
+    private String type;
+    private Integer offset;
+    private Integer length;
 }

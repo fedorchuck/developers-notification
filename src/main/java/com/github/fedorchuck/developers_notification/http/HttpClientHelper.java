@@ -19,8 +19,7 @@ package com.github.fedorchuck.developers_notification.http;
 import com.github.fedorchuck.developers_notification.DevelopersNotificationUtil;
 
 import javax.net.ssl.HttpsURLConnection;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
