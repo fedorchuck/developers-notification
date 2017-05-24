@@ -14,24 +14,26 @@
  * limitations under the License.
  */
 
-package com.github.fedorchuck.developers_notification.json.serializer;
-
-import lombok.*;
-import java.io.Serializable;
+package com.github.fedorchuck.developers_notification.json.exceptions;
 
 /**
+ * Instances of this Exception are thrown if failed to decode a JSON string, because of invalid JSON.
+ *
  * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
- * @since 0.1.0
+ * @since 0.2.0
  */
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
-@EqualsAndHashCode @ToString
-class Attachment implements Serializable {
-    private String fallback;
-    private String title;
-    private String color;
-    private String author_name;
-    private String[] mrkdwn_in;
-    private String text;
+public class JsonDecodeException extends RuntimeException {
+
+  public JsonDecodeException() {
+  }
+
+  public JsonDecodeException(String message) {
+    super(message);
+  }
+
+  public JsonDecodeException(Throwable cause) {
+    super(cause);
+  }
+
 }

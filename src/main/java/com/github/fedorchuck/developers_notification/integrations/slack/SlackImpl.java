@@ -21,7 +21,7 @@ import com.github.fedorchuck.developers_notification.DevelopersNotificationUtil;
 import com.github.fedorchuck.developers_notification.http.HttpClient;
 import com.github.fedorchuck.developers_notification.http.HttpResponse;
 import com.github.fedorchuck.developers_notification.integrations.Integration;
-import com.github.fedorchuck.developers_notification.json.serializer.ObjectMapper;
+import com.github.fedorchuck.developers_notification.json.Json;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -94,7 +94,6 @@ public class SlackImpl implements Integration {
      **/
     @Override
     public String generateMessage(String projectName, String description, Throwable throwable) {
-        String returningValue = null;
         Payload payload = new Payload();
         Attachment attachment = new Attachment();
             attachment.setFallback("The message isn't supported.");
@@ -115,14 +114,6 @@ public class SlackImpl implements Integration {
         payload.setUsername("developers notification bot");
         payload.setAttachments(Collections.singletonList(attachment));
 
-        try {
-            //created new - for saving memory: probably will not using (example - of using telegram)
-            returningValue = new ObjectMapper().writeValueAsString(payload);
-        } catch (IOException ex) {
-            DevelopersNotificationLogger.errorTaskFailed(this.getClass().getName(), ex);
-        } catch (IllegalAccessException ex) {
-            DevelopersNotificationLogger.errorTaskFailed(this.getClass().getName(), ex);
-        }
-        return returningValue;
+        return Json.encode(payload);
     }
 }

@@ -21,7 +21,7 @@ import com.github.fedorchuck.developers_notification.integrations.Integration;
 import com.github.fedorchuck.developers_notification.http.HttpClient;
 import com.github.fedorchuck.developers_notification.DevelopersNotificationUtil;
 import com.github.fedorchuck.developers_notification.http.HttpResponse;
-import com.github.fedorchuck.developers_notification.json.serializer.ObjectMapper;
+import com.github.fedorchuck.developers_notification.json.Json;
 
 import java.io.IOException;
 
@@ -95,7 +95,6 @@ public class TelegramImpl implements Integration {
      **/
     @Override
     public String generateMessage(String projectName, String description, Throwable throwable) {
-        String returningValue = null;
         Message message = new Message();
         message.setChat_id(channel);
         message.setParse_mode("Markdown");
@@ -114,14 +113,7 @@ public class TelegramImpl implements Integration {
         }
         message.setText(generatedMessage);
 
-        try {
-            returningValue = new ObjectMapper().writeValueAsString(message);
-        } catch (IOException ex) {
-            DevelopersNotificationLogger.errorTaskFailed(this.getClass().getName(), ex);
-        } catch (IllegalAccessException ex) {
-            DevelopersNotificationLogger.errorTaskFailed(this.getClass().getName(), ex);
-        }
-        return returningValue;
+        return Json.encode(message);
     }
 
     /**

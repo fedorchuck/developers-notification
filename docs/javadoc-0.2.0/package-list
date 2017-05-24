@@ -1,0 +1,7 @@
+com.github.fedorchuck.developers_notification
+com.github.fedorchuck.developers_notification.http
+com.github.fedorchuck.developers_notification.integrations
+com.github.fedorchuck.developers_notification.integrations.slack
+com.github.fedorchuck.developers_notification.integrations.telegram
+com.github.fedorchuck.developers_notification.json
+com.github.fedorchuck.developers_notification.json.exceptions

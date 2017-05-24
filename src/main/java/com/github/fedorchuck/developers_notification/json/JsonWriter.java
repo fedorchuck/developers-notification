@@ -14,29 +14,15 @@
  * limitations under the License.
  */
 
-package com.github.fedorchuck.developers_notification.json.serializer;
+package com.github.fedorchuck.developers_notification.json;
 
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Arrays;
 
 /**
- * ObjectMapper for class {@link java.io.Writer}.
+ * Wrapper for class {@link java.io.Writer}.
  * <p>
- * Methods:
- *     <pre>
- *         {@link JsonWriter#writeObjectBegin()}
- *         {@link JsonWriter#writeObjectEnd()}
- *         {@link JsonWriter#writeArrayBegin()}
- *         {@link JsonWriter#writeArrayEnd()}
- *         {@link JsonWriter#writeString(String line)}
- *         {@link JsonWriter#writeNumber(Number writeNumber)}
- *         {@link JsonWriter#writeSeparator()}
- *         {@link JsonWriter#writePropertySeparator()}
- *         {@link JsonWriter#writeBoolean(Boolean value)}
- *         {@link JsonWriter#writeNull()}
- *         {@link JsonWriter#flush()}
- *     </pre>
  * @see <a href="https://tools.ietf.org/html/rfc4627">https://tools.ietf.org/html/rfc4627</a> chapter 2.5
  * @see <a href="http://www.json.org/">http://www.json.org/</a>
  *
@@ -93,7 +79,6 @@ class JsonWriter {
     void writeString(String value) throws IOException {
         value = value.replace("\"","\\\"");
         value = value.replace("\n","\\n");
-//        value = value.replace("\\","\\u005C");
 
         for (int a = 0x0000; a < 0x001F; a++)
             value = value.replace(Arrays.toString(Character.toChars(a)),"\\u"+a);
