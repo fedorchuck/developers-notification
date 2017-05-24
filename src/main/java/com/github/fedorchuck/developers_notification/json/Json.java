@@ -24,10 +24,23 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 
 /**
- * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>.
+ * This class contains method for serialise and deserialize.
+ * The main conversion API is defined in {@link JsonSerializer} and {@link JsonDeserializer}.
+ *
+ * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
+ * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
+ * @since 0.2.0
  */
 public class Json {
 
+    /**
+     * Convert inputting object to JSON string
+     * @param obj to convert
+     * @return JSON as string
+     * @throws JsonEncodeException if the input Object cannot be converted to JSON structure
+     * (or has other mismatch issues)
+     * @since 0.2.0
+     **/
     public static String encode(Object obj) throws JsonEncodeException {
         try {
             return new JsonSerializer().writeValueAsString(obj);
@@ -37,9 +50,14 @@ public class Json {
     }
 
     /**
-    * @throws JsonDecodeException if the input JSON structure does not match structure
-    * expected for result type (or has other mismatch issues)
-    **/
+     * Convert inputted JSON to expected result
+     * @param str JSON as string for mapping
+     * @param clazz expected result type
+     * @return instance of expected type with deserialize JSON value
+     * @throws JsonDecodeException if the input JSON structure does not match structure
+     * expected for result type (or has other mismatch issues)
+     * @since 0.2.0
+     **/
     public static <T> T decodeValue(String str, Class<T> clazz) throws JsonDecodeException {
         try {
             return new JsonDeserializer().readValue(str, clazz);
@@ -49,8 +67,13 @@ public class Json {
     }
 
     /**
+     * Convert inputted JSON to expected result
+     * @param inputStream JSON as {@link InputStream} for mapping
+     * @param clazz expected result type
+     * @return instance of expected type with deserialize JSON value
      * @throws JsonDecodeException if the input JSON structure does not match structure
      * expected for result type (or has other mismatch issues)
+     * @since 0.2.0
      **/
     public static <T> T decodeValue(InputStream inputStream, Class<T> clazz) throws JsonDecodeException {
         try {

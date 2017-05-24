@@ -24,9 +24,10 @@ import java.util.List;
 
 /**
  * Class contain methods for parsing JSON
+ *
  * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
- * @since 0.1.2
+ * @since 0.2.0
  */
 class JsonParser {
     /**
@@ -41,13 +42,25 @@ class JsonParser {
      * equal <code>{@link #json}.length() - 1</code>
      **/
     private final int lastIndexOfString;
+    /**
+     * Results of parsing JSON content
+     **/
     @Getter
     private JsonToken valueToken;
+    /**
+     * Current position in JSON line
+     **/
     @Getter
     private int currentPosition;
+    /**
+     * Results of parsing JSON content
+     **/
     @Getter
     private String parsingContext;
 
+    /**
+    * @param json to parse
+    **/
     JsonParser(String json) {
         this.json = json;
         this.lengthOfString = json.length();
@@ -324,7 +337,6 @@ class JsonParser {
      *     <b>"</b>
      *     <b>]</b>
      *     <b>}</b>
-     *     <b>,</b>
      * </code>
      *
      * @since 0.2.0
@@ -336,8 +348,6 @@ class JsonParser {
             switch (currentChar) {
                 case ' ':
                 case '\"':
-                    moveToNextCharPosition(i);
-                    return;
                 case ']':
                 case '}':
                     moveToNextCharPosition(i);
@@ -537,6 +547,11 @@ class JsonParser {
         }
     }
 
+    /**
+     * Return next character and his position from current position ignoring space.
+     * @return Object array which first element is next character and second element is next character position
+     * @since 0.2.0
+     **/
     private Object[] getNextCharIgnoringSpace(int currentPosition) {
         if (currentPosition - 1 > lastIndexOfString || currentPosition < 0)
             throw new JsonProcessingException("bad index: " + currentPosition);

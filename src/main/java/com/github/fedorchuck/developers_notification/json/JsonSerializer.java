@@ -32,7 +32,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * This mapper (or, data binder, or codec) provides functionality for converting between
  * Java objects (instances of JDK provided core classes, beans), and matching JSON constructs.
- * The main conversion API is defined in {@link JsonWriter} and {@link JsonParser}.
+ * The main conversion API is defined in {@link JsonWriter}.
  *
  * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
