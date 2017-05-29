@@ -66,6 +66,10 @@ public class DevelopersNotificationLogger {
     public static void errorSendTelegramMessage(IOException ex) {
         logger(201).error("TelegramImpl message was not send. ", ex);
     }
+
+    public static void errorScheduler(String val) {
+        logger(300).error(val);
+    }
     //endregion
 
     //region INFO
@@ -95,6 +99,10 @@ public class DevelopersNotificationLogger {
 
     public static void infoTelegramResponse(String val) {
         logger(4201).info("Response from telegram: {}", val);
+    }
+
+    public static void infoScheduler(String val) {
+        logger(4300).info(val);
     }
     //endregion
 }
