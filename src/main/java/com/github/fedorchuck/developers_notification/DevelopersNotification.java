@@ -20,9 +20,13 @@ import com.github.fedorchuck.developers_notification.http.HttpClient;
 import com.github.fedorchuck.developers_notification.integrations.Integration;
 import com.github.fedorchuck.developers_notification.integrations.slack.SlackImpl;
 import com.github.fedorchuck.developers_notification.integrations.telegram.TelegramImpl;
+import com.github.fedorchuck.developers_notification.monitoring.MonitorProcessor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Class contain methods-endpoints for this library. Needed environment configuration.
@@ -51,6 +55,7 @@ import java.util.List;
  * @since 0.1.0
  */
 public class DevelopersNotification {
+    private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     /**
      * Printing environment configuration which needed for this library.
@@ -138,5 +143,35 @@ public class DevelopersNotification {
                 }
             }
         }).start();
+    }
+
+    /**
+     * Launches monitoring process for current application.
+     *
+     * @since 0.2.0
+     **/
+    public static void monitoringStart(){
+        long period = 10;
+        TimeUnit unit = TimeUnit.SECONDS;
+
+        DevelopersNotificationLogger.infoScheduler("Starting scheduler. Period: " + period + "; unit: " + unit);
+        scheduler.scheduleAtFixedRate(new MonitorProcessor(), 0, period, unit);
+
+        DevelopersNotificationLogger.infoScheduler("Background process successfully started.");
+    }
+
+    /**
+     * Initiates an orderly shutdown in which previously submitted tasks are executed,
+     * but no new tasks will be accepted. Invocation has no additional effect if already shut down.
+     *
+     * @since 0.2.0
+     **/
+    public static void monitoringStop() {
+        scheduler.shutdownNow();
+        if (scheduler.isShutdown()) {
+            DevelopersNotificationLogger.infoScheduler("Background process successfully stopped.");
+        } else {
+            DevelopersNotificationLogger.errorScheduler("Background process was not stopped.");
+        }
     }
 }
