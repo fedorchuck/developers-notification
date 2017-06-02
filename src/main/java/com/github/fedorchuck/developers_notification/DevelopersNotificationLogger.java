@@ -39,12 +39,12 @@ public class DevelopersNotificationLogger {
         logger(0).error("Task {} has been failed with ", val, ex);
     }
 
-    public static void errorWrongConfig() {
-        logger(1).error("DN_MESSENGER is null or empty.");
+    public static void error(String val, Exception ex) {
+        logger(1).error(val, ex);
     }
 
-    public static void errorWrongConfig(String val) {
-        logger(2).error("DEVELOPERS_NOTIFICATION_MESSENGER has invalid value: {}", val);
+    public static void errorWrongConfig(String val, String val2) {
+        logger(2).error("DEVELOPERS_NOTIFICATION has invalid config value: {} for {}", val, val2);
     }
 
     public static void errorPrintingConfig() {
@@ -82,7 +82,11 @@ public class DevelopersNotificationLogger {
     }
 
     public static void infoMessageSend(String integration) {
-        logger(4002).info("Sending message to {}. DN_SHOW_WHOLE_LOG_DETAILS is false.", integration);
+        logger(4002).info("Sending message to {}. SHOW_WHOLE_LOG_DETAILS is false.", integration);
+    }
+
+    public static void info(String val) {
+        logger(4003).info(val);
     }
 
     public static void infoSlackSend(String val, String message) {

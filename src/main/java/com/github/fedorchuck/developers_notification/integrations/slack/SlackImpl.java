@@ -16,8 +16,11 @@
 
 package com.github.fedorchuck.developers_notification.integrations.slack;
 
+import com.github.fedorchuck.developers_notification.DevelopersNotification;
 import com.github.fedorchuck.developers_notification.DevelopersNotificationLogger;
+import com.github.fedorchuck.developers_notification.DevelopersNotificationMessenger;
 import com.github.fedorchuck.developers_notification.DevelopersNotificationUtil;
+import com.github.fedorchuck.developers_notification.domainmodel.Messenger;
 import com.github.fedorchuck.developers_notification.http.HttpClient;
 import com.github.fedorchuck.developers_notification.http.HttpResponse;
 import com.github.fedorchuck.developers_notification.integrations.Integration;
@@ -35,30 +38,20 @@ import java.util.Collections;
  */
 public class SlackImpl implements Integration {
     private HttpClient httpClient = new HttpClient();
-    private String token = DevelopersNotificationUtil.getEnvironmentVariable("DN_SLACK_TOKEN");
-    private String channel = DevelopersNotificationUtil.getEnvironmentVariable("DN_SLACK_CHANNEL");
+    private String token;
+    private String channel;
+    private Boolean isHide = DevelopersNotification.config.getShowWholeLogDetails();
 
     private static final String SERVER_ENDPOINT = "https://hooks.slack.com/services/";
 
     public SlackImpl() {
-        if (DevelopersNotificationUtil.isNullOrEmpty(token)) {
-            DevelopersNotificationLogger.errorWrongSlackConfig(token);
-            throw new IllegalArgumentException("DN_SLACK_TOKEN has invalid value: " + token);
+        for (Messenger m : DevelopersNotification.config.getMessenger()) {
+            if (m.getName() == DevelopersNotificationMessenger.SLACK) {
+                token = m.getToken();
+                channel = m.getChannel();
+                break;
+            }
         }
-        if (DevelopersNotificationUtil.isNullOrEmpty(channel)) {
-            DevelopersNotificationLogger.errorWrongSlackConfig(channel);
-            throw new IllegalArgumentException("DN_SLACK_CHANNEL has invalid value: " + channel);
-        }
-    }
-
-    /**
-     * Prints environment variable value with
-     * {@link DevelopersNotificationLogger#infoEnvironmentVariable(String, String)}.
-     * @since 0.1.0
-     **/
-    public static void printConfiguration() {
-        DevelopersNotificationUtil.printToLogEnvironmentVariable("DN_SLACK_TOKEN");
-        DevelopersNotificationUtil.printToLogEnvironmentVariable("DN_SLACK_CHANNEL");
     }
 
     /**
@@ -70,7 +63,6 @@ public class SlackImpl implements Integration {
     @Override
     public void sendMessage(String message) {
         String url = SERVER_ENDPOINT + token;
-        Boolean isHide = Boolean.valueOf(DevelopersNotificationUtil.getEnvironmentVariable("DN_SHOW_WHOLE_LOG_DETAILS"));
         if (isHide) {
             DevelopersNotificationLogger.infoSlackSend(url, message);
         } else {
