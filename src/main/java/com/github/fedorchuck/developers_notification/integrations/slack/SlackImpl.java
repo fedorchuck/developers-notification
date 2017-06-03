@@ -102,7 +102,7 @@ public class SlackImpl implements Integration {
         if (!DevelopersNotificationUtil.isNullOrEmpty(description)) {
             payload.setText(description);
         }
-        payload.setIcon_url("http://placehold.it/48x48");
+        payload.setIcon_url("https://raw.githubusercontent.com/fedorchuck/developers-notification/task/%2317_add_codecov/docs/website/resources/logo/48x48.png");
         payload.setUsername("developers notification bot");
         payload.setAttachments(Collections.singletonList(attachment));
 

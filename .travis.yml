@@ -14,7 +14,13 @@ before_script:
     - export GRADLE_HOME=$PWD/gradle-2.14
     - export PATH=$GRADLE_HOME/bin:$PATH
 
-script: ./gradlew check assemble
+script:
+- ./gradlew assemble
+- ./gradlew check
+- ./gradlew codeCoverageReport
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
 
 branches:
   only:
