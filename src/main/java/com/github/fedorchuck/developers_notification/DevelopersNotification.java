@@ -16,10 +16,13 @@
 
 package com.github.fedorchuck.developers_notification;
 
+import com.github.fedorchuck.developers_notification.domainmodel.Config;
+import com.github.fedorchuck.developers_notification.domainmodel.Messenger;
 import com.github.fedorchuck.developers_notification.http.HttpClient;
 import com.github.fedorchuck.developers_notification.integrations.Integration;
 import com.github.fedorchuck.developers_notification.integrations.slack.SlackImpl;
 import com.github.fedorchuck.developers_notification.integrations.telegram.TelegramImpl;
+import com.github.fedorchuck.developers_notification.json.Json;
 import com.github.fedorchuck.developers_notification.monitoring.MonitorProcessor;
 
 import java.util.ArrayList;
@@ -55,6 +58,7 @@ import java.util.concurrent.TimeUnit;
  * @since 0.1.0
  */
 public class DevelopersNotification {
+    public static final Config config = Json.decodeValue(DevelopersNotificationUtil.getEnvironmentVariable("DN"), Config.class);
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     /**
@@ -63,15 +67,11 @@ public class DevelopersNotification {
      * @since 0.1.0
      **/
     public static void printConfiguration() {
-        DevelopersNotificationUtil.printToLogEnvironmentVariable("DN_MESSENGER");
-        HttpClient.printConfiguration();
-        Boolean isHide = Boolean.valueOf(DevelopersNotificationUtil.getEnvironmentVariable("DN_SHOW_WHOLE_LOG_DETAILS"));
-        if (isHide) {
-            TelegramImpl.printConfiguration();
-            SlackImpl.printConfiguration();
-        } else {
-            DevelopersNotificationLogger.errorPrintingConfig();
-        }
+        if (config.getShowWholeLogDetails()) {
+            DevelopersNotificationUtil.printToLogEnvironmentVariable("DN");
+            DevelopersNotificationLogger.info(config.toString());
+        } else
+            DevelopersNotificationLogger.info(config.getPublicToString());
     }
 
     /**
@@ -80,30 +80,24 @@ public class DevelopersNotification {
      * @param projectName where was method called. Can be <code>null</code>
      * @param description about situation. Can be <code>null</code>
      * @param throwable which happened. Can be <code>null</code>
-     * @throws IllegalArgumentException if <code>DN_MESSENGER</code> has invalid value or is null or empty.
+     * @throws IllegalArgumentException if <code>MESSENGER</code> has invalid value or is null or empty.
      *
      * @since 0.1.0
      **/
     public static void send(final String projectName,
                             final String description, final Throwable throwable) {
-        String stringMessengerDestination =
-                DevelopersNotificationUtil.getEnvironmentVariable("DN_MESSENGER");
-
-        if (DevelopersNotificationUtil.isNullOrEmpty(stringMessengerDestination)){
-            DevelopersNotificationLogger.errorWrongConfig();
-            throw new IllegalArgumentException("DN_MESSENGER is null or empty.");
-        }
-
-        if (DevelopersNotificationMessenger.ALL_AVAILABLE.name().equals(stringMessengerDestination)){
-            send(DevelopersNotificationMessenger.ALL_AVAILABLE, projectName, description, throwable);
-        } else if (DevelopersNotificationMessenger.SLACK.name().equals(stringMessengerDestination)){
-            send(DevelopersNotificationMessenger.SLACK, projectName, description, throwable);
-        } else if (DevelopersNotificationMessenger.TELEGRAM.name().equals(stringMessengerDestination)){
-            send(DevelopersNotificationMessenger.TELEGRAM, projectName, description, throwable);
-        } else {
-            DevelopersNotificationLogger.errorWrongConfig(stringMessengerDestination);
-            throw new IllegalArgumentException("DN_MESSENGER has invalid value: "
-                    + stringMessengerDestination);
+        for (Messenger messenger : config.getMessenger()) {
+            switch (messenger.getName()){
+                case SLACK:
+                    send(DevelopersNotificationMessenger.SLACK, projectName, description, throwable);
+                    break;
+                case TELEGRAM:
+                    send(DevelopersNotificationMessenger.TELEGRAM, projectName, description, throwable);
+                    break;
+                case ALL_AVAILABLE:
+                    send(DevelopersNotificationMessenger.ALL_AVAILABLE, projectName, description, throwable);
+                    break;
+            }
         }
     }
 
@@ -114,7 +108,7 @@ public class DevelopersNotification {
      * @param projectName where was method called. Can be <code>null</code>
      * @param description about situation. Can be <code>null</code>
      * @param throwable which happened. Can be <code>null</code>
-     * @throws IllegalArgumentException if <code>DN_MESSENGER</code> has invalid value or is null or empty.
+     * @throws IllegalArgumentException if <code>MESSENGER</code> has invalid value or is null or empty.
      *
      * @since 0.1.0
      **/
@@ -151,10 +145,10 @@ public class DevelopersNotification {
      * @since 0.2.0
      **/
     public static void monitoringStart(){
-        long period = 10;
-        TimeUnit unit = TimeUnit.SECONDS;
+        long period = config.getMonitoring().getPeriod();
+        TimeUnit unit = config.getMonitoring().getUnit();
 
-        DevelopersNotificationLogger.infoScheduler("Starting scheduler. Period: " + period + "; unit: " + unit);
+        DevelopersNotificationLogger.infoScheduler("Starting scheduler. Period: " + period + "; Unit: " + unit);
         scheduler.scheduleAtFixedRate(new MonitorProcessor(), 0, period, unit);
 
         DevelopersNotificationLogger.infoScheduler("Background process successfully started.");

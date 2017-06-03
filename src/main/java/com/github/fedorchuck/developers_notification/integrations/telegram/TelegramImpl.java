@@ -16,7 +16,10 @@
 
 package com.github.fedorchuck.developers_notification.integrations.telegram;
 
+import com.github.fedorchuck.developers_notification.DevelopersNotification;
 import com.github.fedorchuck.developers_notification.DevelopersNotificationLogger;
+import com.github.fedorchuck.developers_notification.DevelopersNotificationMessenger;
+import com.github.fedorchuck.developers_notification.domainmodel.Messenger;
 import com.github.fedorchuck.developers_notification.integrations.Integration;
 import com.github.fedorchuck.developers_notification.http.HttpClient;
 import com.github.fedorchuck.developers_notification.DevelopersNotificationUtil;
@@ -34,32 +37,21 @@ import java.io.IOException;
  */
 public class TelegramImpl implements Integration {
     private HttpClient httpClient = new HttpClient();
-    private String token = DevelopersNotificationUtil.getEnvironmentVariable("DN_TELEGRAM_TOKEN");
-    private String channel = DevelopersNotificationUtil.getEnvironmentVariable("DN_TELEGRAM_CHANNEL");
+    private String token;
+    private String channel;
+    private Boolean isHide = DevelopersNotification.config.getShowWholeLogDetails();
 
     private static final String SERVER_ENDPOINT = "https://api.telegram.org/bot";
     private static final String SEND_MESSAGE = "/sendMessage";
 
     public TelegramImpl() {
-        if (DevelopersNotificationUtil.isNullOrEmpty(token)) {
-            DevelopersNotificationLogger.errorWrongTelegramConfig(token);
-            throw new IllegalArgumentException("DN_TELEGRAM_TOKEN has invalid value: " + token);
+        for (Messenger m : DevelopersNotification.config.getMessenger()) {
+            if (m.getName() == DevelopersNotificationMessenger.TELEGRAM) {
+                token = m.getToken();
+                channel = m.getChannel();
+                break;
+            }
         }
-        if (DevelopersNotificationUtil.isNullOrEmpty(channel)) {
-            DevelopersNotificationLogger.errorWrongTelegramConfig(channel);
-            throw new IllegalArgumentException("DN_TELEGRAM_CHANNEL has invalid value: " + channel);
-        }
-    }
-
-    /**
-     * Prints environment variable value with
-     * {@link DevelopersNotificationLogger#infoEnvironmentVariable(String, String)}.
-     *
-     * @since 0.1.0
-     **/
-    public static void printConfiguration() {
-        DevelopersNotificationUtil.printToLogEnvironmentVariable("DN_TELEGRAM_TOKEN");
-        DevelopersNotificationUtil.printToLogEnvironmentVariable("DN_TELEGRAM_CHANNEL");
     }
 
     /**
@@ -71,7 +63,7 @@ public class TelegramImpl implements Integration {
     @Override
     public void sendMessage(String message) {
         String url = SERVER_ENDPOINT + token + SEND_MESSAGE;
-        Boolean isHide = Boolean.valueOf(DevelopersNotificationUtil.getEnvironmentVariable("DN_SHOW_WHOLE_LOG_DETAILS"));
+
         if (isHide) {
             DevelopersNotificationLogger.infoTelegramSend(url, message);
         } else {

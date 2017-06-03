@@ -16,6 +16,7 @@
 
 package com.github.fedorchuck.developers_notification.http;
 
+import com.github.fedorchuck.developers_notification.DevelopersNotification;
 import com.github.fedorchuck.developers_notification.DevelopersNotificationLogger;
 import com.github.fedorchuck.developers_notification.DevelopersNotificationUtil;
 
@@ -37,26 +38,8 @@ public class HttpClient {
     private Integer CONNECT_TIMEOUT;
 
     public HttpClient() {
-        USER_AGENT = DevelopersNotificationUtil.getEnvironmentVariable("DN_USER_AGENT");
-        if (DevelopersNotificationUtil.isNullOrEmpty(USER_AGENT)) {
-            USER_AGENT = "Mozilla/5.0";
-        }
-        CONNECT_TIMEOUT = Integer.getInteger(
-                DevelopersNotificationUtil.getEnvironmentVariable("DN_CONNECT_TIMEOUT"));
-        if (CONNECT_TIMEOUT == null) {
-            CONNECT_TIMEOUT = 5000;
-        }
-    }
-
-    /**
-     * Prints environment variable value with
-     * {@link DevelopersNotificationLogger#infoEnvironmentVariable(String, String)}.
-     *
-     * @since 0.1.0
-     **/
-    public static void printConfiguration() {
-        DevelopersNotificationUtil.printToLogEnvironmentVariable("DN_USER_AGENT");
-        DevelopersNotificationUtil.printToLogEnvironmentVariable("DN_CONNECT_TIMEOUT");
+        USER_AGENT = DevelopersNotification.config.getUserAgent();
+        CONNECT_TIMEOUT = DevelopersNotification.config.getConnectTimeout();
     }
 
     /**
