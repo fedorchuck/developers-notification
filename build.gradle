@@ -135,7 +135,7 @@ task codeCoverageReport(type: JacocoReport) {
 }
 
 codeCoverageReport.dependsOn {
-    subprojects*.test
+    subprojects*.task(test)
 }
 
 task wrapper(type: Wrapper) {
