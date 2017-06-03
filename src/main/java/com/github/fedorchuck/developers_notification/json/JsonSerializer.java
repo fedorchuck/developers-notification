@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -57,7 +58,7 @@ class JsonSerializer {
     String writeValueAsString(Object obj) throws IOException, IllegalAccessException {
         jsonWriter.writeObjectBegin();
 
-        List<Field> fields = getNotNullFields(obj);
+        List<Field> fields = getSerializableNotNullFields(obj);
 
         String canonicalField;
         String[] parts;
@@ -94,21 +95,21 @@ class JsonSerializer {
     }
 
     /**
-     * Convert inputting {@link Object} to {@link List} of {@link Field} with not null value
+     * Convert inputting {@link Object} to {@link List} of {@link Field} which is serializable and have not null value
      * @param object to convert
-     * @return {@link List} of {@link Field} with not null value
+     * @return {@link List} of {@link Field} which is serializable and have not null value
      * @throws IllegalArgumentException when cannot get field value
-     * @since 0.1.2
+     * @since 0.2.0
      **/
-    private List<Field> getNotNullFields(Object object) throws IllegalAccessException {
+    private List<Field> getSerializableNotNullFields(Object object) throws IllegalAccessException {
         List<Field> fields = Arrays.asList(object.getClass().getDeclaredFields());
-        List<Field> notNullFields = new ArrayList<Field>(0);
+        List<Field> serializableNotNullFields = new ArrayList<Field>(0);
         for (Field field : fields) {
             field.setAccessible(true);
-            if (field.get(object) != null)
-                notNullFields.add(field);
+            if ((!Modifier.isTransient(field.getModifiers())) && (field.get(object) != null))
+                serializableNotNullFields.add(field);
         }
-        return notNullFields;
+        return serializableNotNullFields;
     }
 
     /**
