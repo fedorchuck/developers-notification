@@ -14,23 +14,15 @@
  * limitations under the License.
  */
 
-package com.github.fedorchuck.developers_notification.monitoring;
-
-import lombok.*;
+package com.github.fedorchuck.developers_notification.antispam;
 
 /**
- * Maximum amount of disk space the application will attempt to use
- *
- * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
- * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
- * @since 0.2.0
+ * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>.
  */
-@Getter @Setter
-@ToString @EqualsAndHashCode
-@NoArgsConstructor @AllArgsConstructor @Builder
-class Disk {
-    private long totalDiskSpace;
-    private long freeDiskSpace;
-    private long usableDiskSpace;
-    private String diskName;
+public enum MessageTypes {
+    USERS_MESSAGE,
+    DISK_LIMIT,
+    DISK_CONSUMPTION_RATE,
+    RAM_LIMIT,
+    ;
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.fedorchuck.developers_notification.domainmodel;
+package com.github.fedorchuck.developers_notification.configuration;
 
 import lombok.*;
 
@@ -27,10 +27,11 @@ import java.util.concurrent.TimeUnit;
 @AllArgsConstructor @NoArgsConstructor
 public class Monitoring {
     @Getter
-    private Long period;
+    private Long period;//TODO nulls
     private String unit;
     private Integer max_ram;
-    private Integer max_write;
+    private Integer max_disk;
+    private Integer disk_consumption_rate;
 
     public TimeUnit getUnit() {
         if (TimeUnit.SECONDS.name().equals(unit.toUpperCase()))
@@ -49,7 +50,11 @@ public class Monitoring {
         return max_ram;
     }
 
-    public Integer getMaxWrite() {
-        return max_write;
+    public Integer getMaxDisk() {
+        return max_disk;
+    }
+
+    public Integer getDiskConsumptionRate() {
+        return disk_consumption_rate;
     }
 }

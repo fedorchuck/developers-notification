@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.fedorchuck.developers_notification.domainmodel;
+package com.github.fedorchuck.developers_notification.configuration;
 
 import com.github.fedorchuck.developers_notification.DevelopersNotificationLogger;
 import com.github.fedorchuck.developers_notification.DevelopersNotificationMessenger;

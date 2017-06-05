@@ -16,7 +16,9 @@
 
 package com.github.fedorchuck.developers_notification.monitoring;
 
+import com.github.fedorchuck.developers_notification.DevelopersNotificationUtil;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.lang.reflect.Method;
@@ -26,11 +28,20 @@ import java.util.List;
 /**
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>.
  */
-public class PhysicalResourceTest {
+public class MonitorProcessorTest {
+    @Before
+    public void setUp() throws Exception {
+        String slackToken = DevelopersNotificationUtil.getEnvironmentVariable("TRAVIS_TEST_SLACK_TOKEN");
+        String slackChannel = DevelopersNotificationUtil.getEnvironmentVariable("TRAVIS_TEST_SLACK_CHANNEL");
+        String telegramToken = DevelopersNotificationUtil.getEnvironmentVariable("TRAVIS_TEST_TELEGRAM_TOKEN");
+        String telegramChannel = DevelopersNotificationUtil.getEnvironmentVariable("TRAVIS_TEST_TELEGRAM_CHANNEL");
+
+        DevelopersNotificationUtil.setEnvironmentVariable("DN", "{\"messenger\":[{\"name\":\"SLACK\",\"token\":\""+slackToken+"\",\"channel\":\""+slackChannel+"\"},{\"name\":\"TELEGRAM\",\"token\":\""+telegramToken+"\",\"channel\":\""+telegramChannel+"\"}],\"show_whole_log_details\":false,\"protection_from_spam\": \"true\",\"project_name\": \"Where this library will be invoked\",\"connect_timeout\":5000,\"user_agent\":\"Mozilla/5.0\",\"monitoring\":{\"period\":5,\"unit\":\"seconds\",\"max_ram\":90,\"max_disk\": 90,\"disk_consumption_rate\":2}}");
+    }
 
     @Test
     public void testGetUsage() {
-        PhysicalResourceUsage physicalResourceUsage = PhysicalResource.getUsage();
+        PhysicalResourceUsage physicalResourceUsage = new MonitorProcessor().getPhysicalResourceUsage();
         JVM jvm = physicalResourceUsage.getJvm();
         List<Disk> disks = physicalResourceUsage.getDisks();
         if (jvm==null)
@@ -49,16 +60,15 @@ public class PhysicalResourceTest {
         for (Method method : instance.getClass().getDeclaredMethods()) {
             if (method.getName().startsWith("get")
                     && Modifier.isPublic(method.getModifiers())) {
-                Double value = 0.0;
+                Object value = null;
                 try {
-                    value = Double.valueOf((Long)  method.invoke(instance));
+                    value = method.invoke(instance);
                 } catch (Exception e) {
                     Assert.fail(method.getName() + " failed with: " + e);
                 }
-                if (value == 0)
+                if (value == null)
                     Assert.fail(method.getName() + " is 0.");
             }
         }
     }
-
 }
