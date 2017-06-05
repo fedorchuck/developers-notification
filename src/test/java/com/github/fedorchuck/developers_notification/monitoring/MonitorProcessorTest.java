@@ -26,11 +26,10 @@ import java.util.List;
 /**
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>.
  */
-public class PhysicalResourceTest {
-
+public class MonitorProcessorTest {
     @Test
     public void testGetUsage() {
-        PhysicalResourceUsage physicalResourceUsage = PhysicalResource.getUsage();
+        PhysicalResourceUsage physicalResourceUsage = new MonitorProcessor().getPhysicalResourceUsage();
         JVM jvm = physicalResourceUsage.getJvm();
         List<Disk> disks = physicalResourceUsage.getDisks();
         if (jvm==null)
@@ -60,5 +59,4 @@ public class PhysicalResourceTest {
             }
         }
     }
-
 }

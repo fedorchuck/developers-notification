@@ -17,8 +17,6 @@
 package com.github.fedorchuck.developers_notification.http;
 
 import com.github.fedorchuck.developers_notification.DevelopersNotification;
-import com.github.fedorchuck.developers_notification.DevelopersNotificationLogger;
-import com.github.fedorchuck.developers_notification.DevelopersNotificationUtil;
 
 import java.io.IOException;
 import java.io.OutputStream;

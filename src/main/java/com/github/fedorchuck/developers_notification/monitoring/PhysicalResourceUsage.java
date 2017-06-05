@@ -28,7 +28,7 @@ import java.util.List;
  */
 @Getter @Setter
 @ToString @EqualsAndHashCode
-@NoArgsConstructor @AllArgsConstructor
+@AllArgsConstructor
 class PhysicalResourceUsage {
     private JVM jvm;
     private List<Disk> disks;

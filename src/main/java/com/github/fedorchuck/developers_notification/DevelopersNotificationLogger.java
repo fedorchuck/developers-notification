@@ -47,8 +47,8 @@ public class DevelopersNotificationLogger {
         logger(2).error("DEVELOPERS_NOTIFICATION has invalid config value: {} for {}", val, val2);
     }
 
-    public static void errorPrintingConfig() {
-        logger(3).error("DN_SHOW_WHOLE_LOG_DETAILS is false.");
+    public static void error(String val) {
+        logger(3).error(val);
     }
 
     public static void errorWrongSlackConfig(String val) {
