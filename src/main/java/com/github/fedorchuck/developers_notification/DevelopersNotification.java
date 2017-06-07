@@ -53,12 +53,13 @@ import java.util.concurrent.TimeUnit;
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
  * @since 0.1.0
  */
-@SuppressWarnings("SameParameterValue")
+@SuppressWarnings({"SameParameterValue", "unused"})
 public class DevelopersNotification {
     static {
         Thread.currentThread().setName("Developers notification");
     }
-    public static final Config config = Json.decodeValue(DevelopersNotificationUtil.getEnvironmentVariable("DN"), Config.class);
+    public static final Config config =
+            Json.decodeValue(DevelopersNotificationUtil.getEnvironmentVariable("DN"), Config.class);
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private static boolean monitoringStateAlive = false;
 

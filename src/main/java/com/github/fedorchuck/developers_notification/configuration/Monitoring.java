@@ -16,6 +16,7 @@
 
 package com.github.fedorchuck.developers_notification.configuration;
 
+import com.github.fedorchuck.developers_notification.DevelopersNotificationLogger;
 import lombok.*;
 
 import java.util.concurrent.TimeUnit;
@@ -27,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 @AllArgsConstructor @NoArgsConstructor
 public class Monitoring {
     @Getter
-    private Long period;//TODO nulls
+    private Long period;
     private String unit;
     private Integer max_ram;
     private Integer max_disk;
@@ -43,7 +44,8 @@ public class Monitoring {
         if (TimeUnit.DAYS.name().equals(unit.toUpperCase()))
             return TimeUnit.DAYS;
 
-        throw new IllegalArgumentException("Bad argument. Current unit value: " + unit + " . Unit should be: SECONDS or MINUTES or HOURS or DAYS. ");
+        DevelopersNotificationLogger.errorWrongConfig(unit, "UNIT", "Unit should be: SECONDS or MINUTES or HOURS or DAYS. ");
+        throw new IllegalArgumentException("Bad argument. Current unit value: " + unit + " . ");
     }
 
     public Integer getMaxRam() {

@@ -14,63 +14,39 @@
  * limitations under the License.
  */
 
-package com.github.fedorchuck.developers_notification.monitoring;
-
-import lombok.ToString;
+package com.github.fedorchuck.developers_notification.helpers;
 
 import java.util.LinkedList;
 
 /**
  * Stack with the lifetime of objects
  * Stack with the lifetime
+ *
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>.
  */
 @SuppressWarnings("WeakerAccess")
 public class Lifetime<V> {
+    private final LinkedList<CacheObject<V>> list = new LinkedList<CacheObject<V>>();
     private long timeToLive;
-    private final LinkedList<V> list;
 
-    @SuppressWarnings("unchecked")
-    @ToString
-    protected class CacheObject {
-        public long lastAccessed = System.currentTimeMillis();
-        public V value;
-
-        CacheObject(V value) {
-            this.value = value;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            CacheObject that = (CacheObject) o;
-            return value.equals(that.value);
-        }
-
-        @Override
-        public int hashCode() {
-            return value.hashCode();
-        }
-    }
-
-    public Lifetime(long timeToLive, final long updateTimerInterval) {
+    public Lifetime(final long timeToLive, final long updateTimerInterval) {
         this.timeToLive = timeToLive * 1000;
-        list = new LinkedList<V>();
 
         if (timeToLive > 0 && updateTimerInterval > 0) {
-
             Thread t = new Thread(
-                new ThreadGroup("Developers notification"),
-                new Runnable() {
-                    public void run() {
-                        while (true) {
-                            try {Thread.sleep(updateTimerInterval * 1000);} catch (InterruptedException ignored) {}
-                            cleanup();
+                    Constants.THREAD_GROUP,
+                    new Runnable() {
+                        public void run() {
+                            while (true) {
+                                try {
+                                    Thread.sleep(updateTimerInterval * 1000);
+                                } catch (InterruptedException ignored) {
+                                }
+                                cleanup();
+                            }
                         }
-                    }
-                },
-            "Stack with the lifetime of objects"
+                    },
+                    Constants.THREAD_NAME_STACK
             );
 
             t.setDaemon(true);
@@ -81,17 +57,22 @@ public class Lifetime<V> {
     @SuppressWarnings("unchecked")
     public void put(V value) {
         synchronized (list) {
-            list.add((V) new CacheObject(value));
+            if (!this.contains(value))
+                list.add(new CacheObject(value));
         }
     }
 
-    @SuppressWarnings("unchecked")
+    public V get(int index) {
+        synchronized (list) {
+            return list.get(index).value;
+        }
+    }
+
     public V getOldest() {
         synchronized (list) {
             if (list.size() == 0)
                 return null;
-            CacheObject c = (CacheObject) list.getFirst();
-            return c.value;
+            return list.getFirst().value;
         }
     }
 
@@ -101,16 +82,28 @@ public class Lifetime<V> {
         }
     }
 
+    @SuppressWarnings({"SimplifiableIfStatement"})
+    public boolean contains(V object) {
+        synchronized (list) {
+            if (list.size() == 0)
+                return false;
+            if (list.getLast().value.equals(object))
+                return true;
+            else
+                return list.contains(new CacheObject<V>(object));
+        }
+    }
+
     @SuppressWarnings({"unchecked", "SuspiciousMethodCalls"})
-    public void cleanup() {
+    private void cleanup() {
         long now = System.currentTimeMillis();
         synchronized (list) {
-            if (list.size()==0)
+            if (list.size() == 0)
                 return;
 
-            CacheObject c;
-            for (V object : list){
-                c = (CacheObject) object;
+            CacheObject<V> c;
+            for (CacheObject<V> object : list) {
+                c = object;
                 if (c != null && (now > (timeToLive + c.lastAccessed))) {
                     list.remove(c);
                 }
