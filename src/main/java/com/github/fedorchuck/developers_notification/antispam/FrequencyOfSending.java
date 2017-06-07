@@ -21,14 +21,26 @@ import com.github.fedorchuck.developers_notification.helpers.Lifetime;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>.
+ * This class regulate frequency of sending messages to messengers
+ *
+ * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
+ * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
+ * @since 0.2.0
  */
-
 @SuppressWarnings("WeakerAccess")
 public class FrequencyOfSending {
     private static final Lifetime<SentMessage> sentMessages = new Lifetime<SentMessage>(
             TimeUnit.MINUTES.toSeconds(10), TimeUnit.MINUTES.toSeconds(1));
 
+    /**
+     * Checking, is able to sending message with it type.
+     *
+     * @param type of message for sending
+     * @return  <code>true</code> if this action available;
+     *          <code>false</code> otherwise.
+     * @throws IllegalArgumentException if method called for {@link MessageTypes#USERS_MESSAGE}
+     * @since 0.2.0
+     **/
     public static boolean canSendMessage(final MessageTypes type) {
         switch (type) {
             case RAM_LIMIT:
@@ -40,10 +52,29 @@ public class FrequencyOfSending {
         }
     }
 
+    /**
+     * Checking, is able to sending this message.
+     *
+     * @param type of message for sending
+     * @param projectName name of project, where this library was invoked
+     * @param description what happened
+     * @return  <code>true</code> if this action available;
+     *          <code>false</code> otherwise.
+     * @since 0.2.0
+     **/
     public static boolean canSendMessage(final MessageTypes type, final String projectName, final String description) {
         return !sentMessages.contains(new SentMessage(type, projectName, description));
     }
 
+    /**
+     * Change status for message to avoid spam.
+     *
+     * @param type of message for sending
+     * @return  <code>true</code> if this action completed successfully;
+     *          <code>false</code> otherwise.
+     * @throws IllegalArgumentException if method called for {@link MessageTypes#USERS_MESSAGE}
+     * @since 0.2.0
+     **/
     public static boolean messageSent(final MessageTypes type) {
         switch (type) {
             case RAM_LIMIT:
@@ -55,6 +86,17 @@ public class FrequencyOfSending {
         }
     }
 
+    /**
+     * Change status for message to avoid spam.
+     *
+     * @param type of message for sending
+     * @param projectName name of project, where this library was invoked
+     * @param description what happened
+     * @return  <code>true</code> if this action completed successfully;
+     *          <code>false</code> otherwise.
+     * @throws IllegalArgumentException if method called for {@link MessageTypes#USERS_MESSAGE}
+     * @since 0.2.0
+     **/
     public static boolean messageSent(final MessageTypes type,
                                       final String projectName,
                                       final String description) {

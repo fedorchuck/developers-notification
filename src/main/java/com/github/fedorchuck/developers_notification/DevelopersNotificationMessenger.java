@@ -18,38 +18,30 @@ package com.github.fedorchuck.developers_notification;
 
 /**
  * Enum of available destinations where the message will be sent.
+ * Required environment
+ * <a href="https://fedorchuck.github.io/developers-notification/website/index.html#configuration">configuration</a>.
  *
+ * @see <a href="https://fedorchuck.github.io/developers-notification/website/index.html#configuration">https://fedorchuck.github.io/developers-notification/website/index.html#configuration</a>
  * <p> <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
  * @since 0.1.0
  */
 public enum DevelopersNotificationMessenger {
     /**
-     * Provide sending messages via Slack messenger. Required environment configuration:
-     * <ul>
-     * <li><b>DN_SLACK_TOKEN</b> - access key; required if you use Slack messages</li>
-     * <li><b>DN_SLACK_CHANNEL</b> - destination chat; required if you use Slack messages</li>
-     * </ul>
+     * Provide sending messages via Slack messenger.
+     *
      * @since 0.1.0
      **/
     SLACK,
     /**
-     * Provide sending messages via Telegram messenger. Required environment configuration:
-     * <ul>
-     * <li><b>DN_TELEGRAM_TOKEN</b> - access key; required if you use Telegram messages</li>
-     * <li><b>DN_TELEGRAM_CHANNEL</b> - destination chat; required if you use Telegram messages</li>
-     * </ul>
+     * Provide sending messages via Telegram messenger.
+     *
      * @since 0.1.0
      **/
     TELEGRAM,
     /**
-     * Provide sending messages via Slack and Telegram messenger. Required environment configuration:
-     * <ul>
-     * <li><b>DN_SLACK_TOKEN</b> - access key; required if you use Slack messages</li>
-     * <li><b>DN_SLACK_CHANNEL</b> - destination chat; required if you use Slack messages</li>
-     * <li><b>DN_TELEGRAM_TOKEN</b> - access key; required if you use Telegram messages</li>
-     * <li><b>DN_TELEGRAM_CHANNEL</b> - destination chat; required if you use Telegram messages</li>
-     * </ul>
+     * Provide sending messages via Slack and Telegram messenger.
+     *
      * @since 0.1.0
      **/
     ALL_AVAILABLE,

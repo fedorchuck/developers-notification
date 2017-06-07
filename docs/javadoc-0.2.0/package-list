@@ -1,0 +1,11 @@
+com.github.fedorchuck.developers_notification
+com.github.fedorchuck.developers_notification.antispam
+com.github.fedorchuck.developers_notification.configuration
+com.github.fedorchuck.developers_notification.helpers
+com.github.fedorchuck.developers_notification.http
+com.github.fedorchuck.developers_notification.integrations
+com.github.fedorchuck.developers_notification.integrations.slack
+com.github.fedorchuck.developers_notification.integrations.telegram
+com.github.fedorchuck.developers_notification.json
+com.github.fedorchuck.developers_notification.json.exceptions
+com.github.fedorchuck.developers_notification.monitoring

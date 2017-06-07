@@ -17,7 +17,11 @@
 package com.github.fedorchuck.developers_notification.monitoring;
 
 /**
- * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>.
+ * Class contains method for generate alert messages.
+ *
+ * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
+ * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
+ * @since 0.2.0
  */
 class AlertMessages {
     static String getAlertRAMLimitMessage(long current, double currentPercent, Integer limit){

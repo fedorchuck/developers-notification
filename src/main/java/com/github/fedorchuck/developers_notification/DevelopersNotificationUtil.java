@@ -28,6 +28,7 @@ import java.util.Map;
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
  * @since 0.1.0
  */
+@SuppressWarnings("SameParameterValue")
 public class DevelopersNotificationUtil {
 
     /**
@@ -39,6 +40,7 @@ public class DevelopersNotificationUtil {
      *     Probably, In your case should use <i>Java system properties</i> -
      *     for it you can use, for example, {@link System#setProperty(String, String)}
      * </p>
+     *
      * @param key name of property
      * @param value of property
      * @throws IllegalStateException if failed to set environment variable
@@ -60,6 +62,7 @@ public class DevelopersNotificationUtil {
 
     /**
      * Getting environment variable value.
+     *
      * @param key name of property
      * @return string value of variable or null, if it is not set
      * @since 0.1.0
@@ -71,6 +74,7 @@ public class DevelopersNotificationUtil {
     /**
      * Prints environment variable value with.
      * {@link DevelopersNotificationLogger#infoEnvironmentVariable(String, String)}.
+     *
      * @param name of property
      * @since 0.1.0
      **/
@@ -81,7 +85,9 @@ public class DevelopersNotificationUtil {
     /**
      * Translates a string into application/x-www-form-urlencoded format using UTF-8 encoding scheme.
      * This method uses the supplied encoding scheme to obtain the bytes for unsafe characters.
+     *
      * @param param string to be translated
+     * @return encoded string
      * @throws UnsupportedEncodingException - If the named encoding is not supported
      * @since 0.1.0
      **/
@@ -90,7 +96,8 @@ public class DevelopersNotificationUtil {
     }
 
     /**
-     * Convert array of {@link StackTraceElement} to string
+     * Convert array of {@link StackTraceElement} to string.
+     *
      * @param stackTrace - array of {@link StackTraceElement} which will be converted
      * @return convert array as string, each element of array start from new line
      * @since 0.1.0
@@ -105,6 +112,7 @@ public class DevelopersNotificationUtil {
 
     /**
      * Check is the given string is null or is the empty string.
+     *
      * @param string to check
      * @return true if the given string is null or is the empty string.
      * @since 0.1.1

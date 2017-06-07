@@ -29,11 +29,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>.
+ * Class contains connection between mechanism witch avoiding spam and mechanism sending messages.
+ *
+ * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
+ * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
+ * @since 0.2.0
  */
 @SuppressWarnings("SameParameterValue")
 public class SpamProtection {
 
+    /**
+     * It provide sending messages into messengers.
+     * <p><b>Note:</b> all needed data will be getting from JSON configuration</p>
+     *
+     * @param protectionFromSpam is needed protection from spam
+     * @param description what happened
+     * @since 0.2.0
+     **/
     public static void sendIntoMessenger(final boolean protectionFromSpam, final String description) {
         for (Messenger messenger : DevelopersNotification.config.getMessenger()) {
             switch (messenger.getName()) {
@@ -53,6 +65,16 @@ public class SpamProtection {
         }
     }
 
+    /**
+     * It provide sending messages to chosen destination.
+     *
+     * @param protectionFromSpam is needed protection from spam
+     * @param messengerDestination where the message will be sent
+     * @param projectName where was method called
+     * @param description about situation
+     * @param throwable which happened. Can be <code>null</code>
+     * @since 0.2.0
+     **/
     public static void sendIntoMessenger(final boolean protectionFromSpam,
                                          final DevelopersNotificationMessenger messengerDestination,
                                          final String projectName,
@@ -80,6 +102,15 @@ public class SpamProtection {
         t.start();
     }
 
+    /**
+     * Sent messages
+     *
+     * @param messengerDestination where the message will be sent
+     * @param projectName where was method called
+     * @param description about situation
+     * @param throwable which happened. Can be <code>null</code>
+     * @since 0.2.0
+     **/
     private static void sendIntoMessenger(final DevelopersNotificationMessenger messengerDestination,
                                           final String projectName,
                                           final String description,

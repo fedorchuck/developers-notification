@@ -19,16 +19,25 @@ package com.github.fedorchuck.developers_notification.helpers;
 import java.util.LinkedList;
 
 /**
- * Stack with the lifetime of objects
- * Stack with the lifetime
+ * Stack with the lifetime of objects. This stack automatic remove objects which are obsolete.
  *
- * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>.
+ * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
+ * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
+ * @since 0.2.0
  */
 @SuppressWarnings("WeakerAccess")
 public class Lifetime<V> {
     private final LinkedList<CacheObject<V>> list = new LinkedList<CacheObject<V>>();
     private long timeToLive;
 
+    /**
+     * Constructor of stack. It receive data about time of living for added objects and time of
+     * interval updating for find and remove obsolete objects.
+     *
+     * @param timeToLive time of living for added objects
+     * @param updateTimerInterval time of interval updating for find and remove obsolete objects
+     * @since 0.2.0
+     **/
     public Lifetime(final long timeToLive, final long updateTimerInterval) {
         this.timeToLive = timeToLive * 1000;
 
@@ -54,6 +63,12 @@ public class Lifetime<V> {
         }
     }
 
+    /**
+     * Appends the specified element to the end of this stack. Append JUST unique elements.
+     *
+     * @param value element to be appended to this stack
+     * @since 0.2.0
+     **/
     @SuppressWarnings("unchecked")
     public void put(V value) {
         synchronized (list) {
@@ -62,12 +77,26 @@ public class Lifetime<V> {
         }
     }
 
+    /**
+     * Returns the element at the specified position in this stack.
+     *
+     * @param index index of the element to return
+     * @return the element at the specified position in this stack
+     * @throws IndexOutOfBoundsException if the index is out of range <code>(index < 0 || index >= size())</code>
+     * @since 0.2.0
+     **/
     public V get(int index) {
         synchronized (list) {
             return list.get(index).value;
         }
     }
 
+    /**
+     * Returns the element at the specified position in this stack.
+     *
+     * @return the first element in this stack or <code>null</code> if this stack is empty
+     * @since 0.2.0
+     **/
     public V getOldest() {
         synchronized (list) {
             if (list.size() == 0)
@@ -76,13 +105,26 @@ public class Lifetime<V> {
         }
     }
 
+    /**
+     * Returns the number of elements in this stack.
+     *
+     * @return the number of elements in this stack
+     * @since 0.2.0
+     **/
     public int size() {
         synchronized (list) {
             return list.size();
         }
     }
 
-    @SuppressWarnings({"SimplifiableIfStatement"})
+    /**
+     * Returns true if this stack contains the specified element.
+     *
+     * @param object element whose presence in this stack is to be tested
+     * @return true if this stack contains the specified element
+     * @since 0.2.0
+     **/
+    @SuppressWarnings("SimplifiableIfStatement")
     public boolean contains(V object) {
         synchronized (list) {
             if (list.size() == 0)
@@ -94,7 +136,11 @@ public class Lifetime<V> {
         }
     }
 
-    @SuppressWarnings({"unchecked", "SuspiciousMethodCalls"})
+    /**
+     * It is provide clean up this stack of objects from objects, which are obsolete.
+     *
+     * @since 0.2.0
+     **/
     private void cleanup() {
         long now = System.currentTimeMillis();
         synchronized (list) {
