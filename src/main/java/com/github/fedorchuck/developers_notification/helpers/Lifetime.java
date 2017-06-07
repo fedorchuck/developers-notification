@@ -82,7 +82,8 @@ public class Lifetime<V> {
      *
      * @param index index of the element to return
      * @return the element at the specified position in this stack
-     * @throws IndexOutOfBoundsException if the index is out of range <code>(index < 0 || index >= size())</code>
+     * @throws IndexOutOfBoundsException if the index is out of range
+     * <pre><code><b>index</b> <i>less than</i> <b>0 || index</b> <i>more or equal</i> <b>size()</b></code></pre>
      * @since 0.2.0
      **/
     public V get(int index) {
