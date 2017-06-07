@@ -16,9 +16,10 @@
 
 package com.github.fedorchuck.developers_notification.integrations.telegram;
 
-import com.github.fedorchuck.developers_notification.DevelopersNotificationUtil;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.lang.reflect.Field;
 
 /**
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>.
@@ -27,10 +28,20 @@ public class TelegramImplTest {
 
     @Test
     public void generateMessage() throws Exception {
-        DevelopersNotificationUtil.setEnvironmentVariable("DN", "{\"messenger\":[{\"name\":\"TELEGRAM\",\"token\":\"TEST\",\"channel\":\"-0123456789\"}]}");
-
         String expected = "{\"chat_id\":\"-0123456789\",\"parse_mode\":\"Markdown\",\"text\":\"*Project*: developers-notification \\n*Message*: test with full method signature \\n\"}";
         TelegramImpl telegram = new TelegramImpl();
+
+        Field field;
+        try {
+            field = telegram.getClass().getDeclaredField("channel");
+            field.setAccessible(true);
+            field.set(telegram, "-0123456789");
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
         String actual = telegram.generateMessage("developers_notification",
                 "test with full method signature", null);
         Assert.assertEquals(expected, actual);

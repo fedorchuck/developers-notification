@@ -16,9 +16,10 @@
 
 package com.github.fedorchuck.developers_notification.integrations.slack;
 
-import com.github.fedorchuck.developers_notification.DevelopersNotificationUtil;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.lang.reflect.Field;
 
 /**
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>.
@@ -26,11 +27,21 @@ import org.junit.Test;
 public class SlackImplTest {
 
     @Test
-    public void generateMessage() throws Exception {
-        DevelopersNotificationUtil.setEnvironmentVariable("DN", "{\"messenger\":[{\"name\":\"SLACK\",\"token\":\"TEST\",\"channel\":\"general\"}]}");
-
+    public void generateMessage() {
         String expected = "{\"username\":\"developers notification bot\",\"icon_url\":\"https://raw.githubusercontent.com/fedorchuck/developers-notification/task/%2317_add_codecov/docs/website/resources/logo/48x48.png\",\"text\":\"test with full method signature\",\"channel\":\"general\",\"attachments\":[{\"fallback\":\"The message isn't supported.\",\"color\":\"#FF0049\",\"author_name\":\"developers_notification\",\"mrkdwn_in\":[\"text\",\"fields\"]}]}";
         SlackImpl slack = new SlackImpl();
+
+        Field field;
+        try {
+            field = slack.getClass().getDeclaredField("channel");
+            field.setAccessible(true);
+            field.set(slack, "general");
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
         String actual = slack.generateMessage("developers_notification",
                 "test with full method signature", null);
         Assert.assertEquals(expected, actual);
