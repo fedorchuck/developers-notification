@@ -14,34 +14,35 @@
  * limitations under the License.
  */
 
-package com.github.fedorchuck.developers_notification.antispam;
+package com.github.fedorchuck.developers_notification.helpers;
 
-import lombok.Getter;
+import lombok.ToString;
 
 /**
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>.
  */
-@Getter
-public class UserMessage {
-    private long lastAccessed = System.currentTimeMillis();
-    private String projectName;
-    private String description;
+@SuppressWarnings("unchecked")
+@ToString
+class CacheObject<T> {
+    public long lastAccessed = System.currentTimeMillis();
+    public T value;
 
-    UserMessage(String projectName, String description) {
-        this.projectName = projectName;
-        this.description = description;
+    CacheObject(T value) {
+        this.value = value;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserMessage that = (UserMessage) o;
-        return projectName.equals(that.projectName) && description.equals(that.description);
+
+        CacheObject<?> that = (CacheObject<?>) o;
+
+        return value != null ? value.equals(that.value) : that.value == null;
     }
 
     @Override
     public int hashCode() {
-        return 42 * projectName.hashCode() + description.hashCode();
+        return value != null ? value.hashCode() : 0;
     }
 }

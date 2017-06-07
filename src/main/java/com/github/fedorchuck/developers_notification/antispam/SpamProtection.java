@@ -20,6 +20,7 @@ import com.github.fedorchuck.developers_notification.DevelopersNotification;
 import com.github.fedorchuck.developers_notification.DevelopersNotificationLogger;
 import com.github.fedorchuck.developers_notification.DevelopersNotificationMessenger;
 import com.github.fedorchuck.developers_notification.configuration.Messenger;
+import com.github.fedorchuck.developers_notification.helpers.Constants;
 import com.github.fedorchuck.developers_notification.integrations.Integration;
 import com.github.fedorchuck.developers_notification.integrations.slack.SlackImpl;
 import com.github.fedorchuck.developers_notification.integrations.telegram.TelegramImpl;
@@ -33,9 +34,9 @@ import java.util.List;
 @SuppressWarnings("SameParameterValue")
 public class SpamProtection {
 
-    public static void sendIntoMessenger(boolean protectionFromSpam, String description) {
+    public static void sendIntoMessenger(final boolean protectionFromSpam, final String description) {
         for (Messenger messenger : DevelopersNotification.config.getMessenger()) {
-            switch (messenger.getName()){
+            switch (messenger.getName()) {
                 case SLACK:
                     sendIntoMessenger(protectionFromSpam, DevelopersNotificationMessenger.SLACK,
                             DevelopersNotification.config.getProjectName(), description, null);
@@ -57,30 +58,32 @@ public class SpamProtection {
                                          final String projectName,
                                          final String description,
                                          final Throwable throwable) {
-        new Thread(
-            new ThreadGroup("Developers notification"),
-            new Runnable() {
-                public void run() {
-                    Thread.currentThread().setName("Send developers notification to " + messengerDestination.name());
-                    if (protectionFromSpam) {
-                        if (!FrequencyOfSending.canSendMessage(MessageTypes.USERS_MESSAGE, projectName, description))
-                            return; //duplicate ignore
+        Thread t = new Thread(
+                Constants.THREAD_GROUP,
+                new Runnable() {
+                    public void run() {
+                        Thread.currentThread().setName("Send developers notification to " + messengerDestination.name());
+                        if (protectionFromSpam) {
+                            if (!FrequencyOfSending.canSendMessage(MessageTypes.USERS_MESSAGE, projectName, description))
+                                return; //duplicate ignore
 
-                        FrequencyOfSending.messageSent(MessageTypes.USERS_MESSAGE, projectName, description);
-                        sendIntoMessenger(messengerDestination, projectName, description, throwable);
-                    } else {
-                        sendIntoMessenger(messengerDestination, projectName, description, throwable);
+                            FrequencyOfSending.messageSent(MessageTypes.USERS_MESSAGE, projectName, description);
+                            sendIntoMessenger(messengerDestination, projectName, description, throwable);
+                        } else {
+                            sendIntoMessenger(messengerDestination, projectName, description, throwable);
+                        }
                     }
-                }
-            },
-            "Send notification"
-        ).start();
+                },
+                Constants.THREAD_NAME_SENDING
+        );
+        t.setDaemon(true);
+        t.start();
     }
 
     private static void sendIntoMessenger(final DevelopersNotificationMessenger messengerDestination,
                                           final String projectName,
                                           final String description,
-                                          final Throwable throwable){
+                                          final Throwable throwable) {
         List<Integration> integrations = new ArrayList<Integration>(0);
         switch (messengerDestination) {
             case SLACK:

@@ -18,6 +18,7 @@ package com.github.fedorchuck.developers_notification.example;
 
 import com.github.fedorchuck.developers_notification.DevelopersNotification;
 import com.github.fedorchuck.developers_notification.DevelopersNotificationMessenger;
+import org.junit.Assert;
 
 /**
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
@@ -25,11 +26,20 @@ import com.github.fedorchuck.developers_notification.DevelopersNotificationMesse
 class B {
     void b() {
         DevelopersNotification.printConfiguration();
+
+//        DevelopersNotification.monitoringStart();
+
         DevelopersNotification.send(DevelopersNotificationMessenger.TELEGRAM, "developers_notification",
                 "test with full method signature", new Throwable("abcd"));
         DevelopersNotification.send(DevelopersNotificationMessenger.SLACK, "developers_notification",
                 "test with full method signature", new Throwable("abcd"));
         DevelopersNotification.send("developers_notification",
                 "test without full method signature", new Throwable());
+
+        /*try {Thread.sleep(10000);} catch (InterruptedException ignored) { }
+
+        Assert.assertEquals(true, DevelopersNotification.isMonitoringStateAlive());
+        DevelopersNotification.monitoringStop();
+        Assert.assertEquals(false, DevelopersNotification.isMonitoringStateAlive());*/
     }
 }

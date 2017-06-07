@@ -94,7 +94,7 @@ public class Config {
 
     public String getPublicToString() {
         StringBuilder res = new StringBuilder();
-        res.append(" Messengers: ");
+        res.append("Messengers: ");
         for (Messenger m : messenger)
             res.append(m.getName()).append(", ");
         res.append("project name: ").append(this.getProjectName()).append(", ");

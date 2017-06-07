@@ -28,7 +28,7 @@ import java.io.IOException;
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
  * @since 0.1.0
  */
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "SameParameterValue"})
 public class DevelopersNotificationLogger {
     private static Logger logger(int code) {
         return LoggerFactory.getLogger("DEVELOPERS_NOTIFICATION_"+code);
@@ -49,6 +49,11 @@ public class DevelopersNotificationLogger {
 
     public static void error(String val) {
         logger(3).error(val);
+    }
+
+    public static void errorWrongConfig(String val, String configField, String description) {
+        logger(4).error("DEVELOPERS_NOTIFICATION has invalid config value: {} for {} . {}",
+                val, configField, description);
     }
 
     public static void errorWrongSlackConfig(String val) {

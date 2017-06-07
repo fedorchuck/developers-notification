@@ -17,10 +17,13 @@
 package com.github.fedorchuck.developers_notification.monitoring;
 
 import com.github.fedorchuck.developers_notification.DevelopersNotification;
+import com.github.fedorchuck.developers_notification.DevelopersNotificationLogger;
 import com.github.fedorchuck.developers_notification.antispam.FrequencyOfSending;
 import com.github.fedorchuck.developers_notification.antispam.MessageTypes;
 import com.github.fedorchuck.developers_notification.antispam.SpamProtection;
 import com.github.fedorchuck.developers_notification.configuration.Monitoring;
+import com.github.fedorchuck.developers_notification.helpers.Constants;
+import com.github.fedorchuck.developers_notification.helpers.Lifetime;
 
 import java.io.File;
 import java.lang.management.ManagementFactory;
@@ -29,6 +32,7 @@ import java.util.List;
 
 /**
  * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
+ *
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
  * @since 0.2.0
  */
@@ -37,10 +41,15 @@ public class MonitorProcessor implements Runnable {
     private final Lifetime<List<Disk>> monitoring;
 
     public MonitorProcessor() {
-        if (monitoringConfig.getPeriod()==null)
+        if (monitoringConfig.getPeriod() == null) {
+            DevelopersNotificationLogger.errorTaskFailed(
+                    "MonitorProcessor", new IllegalArgumentException("Check config. Period can not be null.")
+            );
             throw new IllegalArgumentException("Check config. Period can not be null.");
-        monitoring = new Lifetime<List<Disk>>(
-                getTimeToLiveObject(), getUpdateTimerInterval());
+        }
+        long updateTimerInterval = monitoringConfig.getUnit().toSeconds(monitoringConfig.getPeriod());
+        long timeToLiveObject = updateTimerInterval * 10;
+        monitoring = new Lifetime<List<Disk>>(timeToLiveObject, updateTimerInterval);
     }
 
     /**
@@ -56,11 +65,11 @@ public class MonitorProcessor implements Runnable {
      */
     @Override
     public void run() {
-        Thread.currentThread().setName("developers notification monitoring");
+        Thread.currentThread().setName(Constants.THREAD_NAME_MONITORING);
 
         PhysicalResourceUsage currentMonitoringResult = getPhysicalResourceUsage();
 
-        if ( (monitoringConfig.getMaxRam() != null) && (FrequencyOfSending.canSendMessage(MessageTypes.RAM_LIMIT)) ) {
+        if ((monitoringConfig.getMaxRam() != null) && (FrequencyOfSending.canSendMessage(MessageTypes.RAM_LIMIT))) {
             handleRamUsage(currentMonitoringResult);
         }
 
@@ -70,28 +79,20 @@ public class MonitorProcessor implements Runnable {
             return;
 
         for (Disk currentUsage : currentMonitoringResult.getDisks()) {
-            if ( (monitoringConfig.getMaxDisk() != null) && (FrequencyOfSending.canSendMessage(MessageTypes.DISK_LIMIT) ))
+            if ((monitoringConfig.getMaxDisk() != null) && (FrequencyOfSending.canSendMessage(MessageTypes.DISK_LIMIT)))
                 handleDiskLimitUsage(currentUsage);
 
-            if ( (monitoringConfig.getDiskConsumptionRate() != null) && (FrequencyOfSending.canSendMessage(MessageTypes.DISK_CONSUMPTION_RATE)) )
+            if ((monitoringConfig.getDiskConsumptionRate() != null) && (FrequencyOfSending.canSendMessage(MessageTypes.DISK_CONSUMPTION_RATE)))
                 handleDiskConsumptionRate(currentUsage, oldestMonitoringResult);
         }
     }
 
-    private static long getTimeToLiveObject(){
-        return monitoringConfig.getUnit().toSeconds(monitoringConfig.getPeriod()) * 10;
-    }
-
-    private static long getUpdateTimerInterval(){
-        return monitoringConfig.getUnit().toSeconds(monitoringConfig.getPeriod());
-    }
-
-    private void handleRamUsage(PhysicalResourceUsage currentMonitoringResult){
+    private void handleRamUsage(PhysicalResourceUsage currentMonitoringResult) {
         JVM currentUsageJVM = currentMonitoringResult.getJvm();
         double currentUsageRamInPercent =
                 getUsageInPercent(currentUsageJVM.getUsedRamMemory(), currentUsageJVM.getTotalRamMemory());
 
-        if ( currentUsageRamInPercent >= monitoringConfig.getMaxRam() ) {
+        if (currentUsageRamInPercent >= monitoringConfig.getMaxRam()) {
             SpamProtection.sendIntoMessenger(
                     false,
                     AlertMessages.getAlertRAMLimitMessage(
@@ -108,7 +109,7 @@ public class MonitorProcessor implements Runnable {
         long rate;
         double rateDiskInPercent;
         for (Disk oldestUsage : oldestMonitoringResult) {
-            if (currentUsage.getDiskName().equals(oldestUsage.getDiskName())){
+            if (currentUsage.getDiskName().equals(oldestUsage.getDiskName())) {
 
                 rate = currentUsage.getUsableDiskSpace() - oldestUsage.getUsableDiskSpace();
                 if (rate <= 0)
@@ -116,7 +117,7 @@ public class MonitorProcessor implements Runnable {
                 rateDiskInPercent =
                         getUsageInPercent(rate, currentUsage.getTotalDiskSpace());
 
-                if ( rateDiskInPercent >= monitoringConfig.getDiskConsumptionRate() ) {
+                if (rateDiskInPercent >= monitoringConfig.getDiskConsumptionRate()) {
                     SpamProtection.sendIntoMessenger(
                             false,
                             AlertMessages.getAlertDiskRateMessage(
