@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Class contain methods-endpoints for this
  * <a href="https://fedorchuck.github.io/developers-notification/website/index.html">library</a>. Needed environment
- * <a href="https://fedorchuck.github.io/developers-notification/website/index.html#configuration">configuration</a>.
+ * <a href="https://fedorchuck.github.io/developers-notification/website/index.html#setup">configuration</a>.
  *
  * <p><b>See Also:</b></p>
  * <ul>
