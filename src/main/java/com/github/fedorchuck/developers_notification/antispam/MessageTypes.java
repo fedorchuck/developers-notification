@@ -17,7 +17,12 @@
 package com.github.fedorchuck.developers_notification.antispam;
 
 /**
- * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>.
+ * This enum contain available types messages.
+ * It is necessary for ensure regulation frequency sending messages into messengers and avoid spam.
+ *
+ * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
+ * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
+ * @since 0.2.0
  */
 public enum MessageTypes {
     USERS_MESSAGE,

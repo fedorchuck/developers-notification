@@ -17,7 +17,11 @@
 package com.github.fedorchuck.developers_notification.helpers;
 
 /**
- * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>.
+ * It contains global final static variables for naming threads.
+ *
+ * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
+ * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
+ * @since 0.2.0
  */
 public class Constants {
     public final static ThreadGroup THREAD_GROUP = new ThreadGroup("Developers notification");

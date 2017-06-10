@@ -20,11 +20,31 @@
     <title>Developers Notification</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="Keywords" content="developers notification"/>
+    <meta name="Description" content="Java library which provides developers notification via messengers"/>
+    <meta name="author" content="https://github.com/fedorchuck/developers-notification"/>
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
     <link rel="stylesheet" type="text/css" href="resources/bootstrap-3.3.7-dist/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="resources/bootstrap-3.3.7-dist/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="resources/font-awesome-4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="resources/font-awesome-4.7.0/css/font-awesome.css">
     <link rel="stylesheet" type="text/css" href="resources/custom.css">
+    <link rel="apple-touch-icon" sizes="57x57" href="resources/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="resources/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="resources/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="resources/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="resources/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="resources/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="resources/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="resources/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="resources/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="resources/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="resources/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="resources/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="resources/favicon/favicon-16x16.png">
+    <link rel="manifest" href="resources/favicon/manifest.json">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="resources/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
     <script src="resources/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
@@ -40,8 +60,8 @@
         <div class="col-md-4">
             <ul class="list-inline" style="margin-top: 3%;">
                 <li>
-                    <a href="https://oss.sonatype.org/content/repositories/releases/com/github/fedorchuck/developers-notification/0.1.2/developers-notification-0.1.2.jar"
-                                class="btn btn-success btn-download" role="button">Download v0.1.2 JAR </a>
+                    <a href="https://oss.sonatype.org/content/repositories/releases/com/github/fedorchuck/developers-notification/0.2.0/developers-notification-0.2.0.jar"
+                                class="btn btn-success btn-download" role="button">Download v0.2.0 JAR </a>
                 </li>
                 <li>
                     <a href="https://github.com/fedorchuck/developers-notification" target="_blank"
@@ -76,18 +96,20 @@
                     your team using and that is supported by this library. For now it is Slack and Telegram. Add the library
                     to the project, add it configuration (access keys to the bot that you created), add lines, where it is
                     needed, to send message and you receive messages when something happened.</p>
+                <p>Also, this library have monitoring module. It can monitoring current usage of ram and disk memory,
+                    set limits of their use and in case of overspending - informs in the selected messengers.</p>
                 <p>This library compatible with Java 6+</p>
             </div>
             <div id="download" class="chapter-line">
                 <h2>Download</h2>
-                <a href="https://oss.sonatype.org/content/repositories/releases/com/github/fedorchuck/developers-notification/0.1.2/developers-notification-0.1.2.jar"
-                       class="btn btn-success btn-download" role="button">↓ v0.1.2 JAR </a>
+                <a href="https://oss.sonatype.org/content/repositories/releases/com/github/fedorchuck/developers-notification/0.2.0/developers-notification-0.2.0.jar"
+                       class="btn btn-success btn-download" role="button">↓ v0.2.0 JAR </a>
                 <p>The source code to the developers-notification, its samples, and this website is
                     <a href="https://github.com/fedorchuck/developers-notification" target="_blank"> available on GitHub.</a>
                 </p>
                 <h4>Gradle:</h4>
                 <pre>
-                    compile 'com.github.fedorchuck:developers-notification:0.1.2'
+                    compile 'com.github.fedorchuck:developers-notification:0.2.0'
                 </pre>
                 <p>
                     Another versions and their JAR-files you can find
@@ -96,45 +118,98 @@
             </div>
             <div id="setup" class="chapter-line">
                 <h2>Setup</h2>
-                <p>The library is configured by environment variables or system properties. Supported variables:</p>
+                <p>The library is configured by environment variables or system properties. Supported variable is
+                <code>DN</code>. It is single environment variable witch required if you use this library.
+                    Accepted value is JSON:
+                </p>
+                <pre>
+{
+	"messenger": [{
+		"name": "SLACK",
+		"token": "SLACK_TOKEN",
+		"channel": "SLACK_CHANNEL"
+	}, {
+		"name": "TELEGRAM",
+		"token": "TELEGRAM_TOKEN",
+		"channel": "TELEGRAM_CHANNEL"
+	}],
+	"show_whole_log_details": true,
+	"protection_from_spam": true,
+	"project_name": "Where this library will be invoked",
+	"connect_timeout": 5000,
+	"user_agent": "Mozilla/5.0",
+	"monitoring": {
+		"period": 5,
+		"unit": "seconds",
+		"max_ram": 90,
+		"max_disk": 90,
+		"disk_consumption_rate": 2
+	}
+}
+                        </pre>
                 <ul>
                     <li>
-                        <p><code>DN_MESSENGER</code> where the message will be sent; possible values you can see
-                            in <a href="http://fedorchuck.github.io/developers-notification/javadoc-0.1.2/com/github/fedorchuck/developers_notification/DevelopersNotificationMessenger.html" target="_blank">DevelopersNotificationMessenger</a>
-                            required if you use method <code>send</code> with signature <code>DevelopersNotification.send(String, String, Throwable)</code>;
+                        <p><code>messenger</code> it is array of objects with configure part of messages destination; required;</p>
+                        <ul>
+                            <li><p><code>name</code> contains name of integration. Now available: <code>SLACK</code> and <code>TELEGRAM</code>; </p></li>
+                            <li><p><code>token</code> contains token of integration; </p></li>
+                            <li><p><code>channel</code> contains channel of integration; </p></li>
+                        </ul>
+                        <p><b>Note:</b> If you specify several available messengers, you will be received a messages to
+                            all specified instant messengers.
                         </p>
                     </li>
                     <li>
-                        <p><code>DN_SLACK_TOKEN</code> access key; required if you use Slack messages;</p>
-                    </li>
-                    <li>
-                        <p><code>DN_SLACK_CHANNEL</code> destination chat; required if you use Slack messages;</p>
-                    </li>
-                    <li>
-                        <p><code>DN_TELEGRAM_TOKEN</code> access key; required if you use Telegram messages;</p>
-                    </li>
-                    <li>
-                        <p><code>DN_TELEGRAM_CHANNEL</code> destination chat; required if you use Telegram messages;</p>
-                    </li>
-                    <li>
-                        <p><code>DN_USER_AGENT</code> user agent for
-                            <a href="https://fedorchuck.github.io/developers-notification/javadoc-0.1.2/com/github/fedorchuck/developers_notification/http/HttpClient.html" target="_blank">HttpClient</a>
-                            is not required; default value is <code>Mozilla/5.0</code>;
+                        <p><code>show_whole_log_details</code> receive boolean value; if value is <code>true</code> - at log will be
+                            printed Information containing passwords; is not required; default value is <code>false</code>;
                         </p>
                     </li>
                     <li>
-                        <p><code>DN_CONNECT_TIMEOUT</code> for
-                            <a href="https://fedorchuck.github.io/developers-notification/javadoc-0.1.2/com/github/fedorchuck/developers_notification/http/HttpClient.html" target="_blank">HttpClient</a>
+                        <p><code>protection_from_spam</code> receive boolean value; if value is <code>true</code> - you will be
+                            protected from spam (received the same messages each second). It is necessary for adjust
+                            the frequency of sending messages; is not required; default value is <code>false</code>;
+                        </p>
+                    </li>
+                    <li>
+                        <p><code>project_name</code> where this library will be invoked; required;</p>
+                    </li>
+                    <li>
+                        <p><code>connect_timeout</code> for
+                            <a href="https://fedorchuck.github.io/developers-notification/javadoc-0.2.0/com/github/fedorchuck/developers_notification/http/HttpClient.html" target="_blank">HttpClient</a>
                             is not required; default value is <code>5000</code>;
                         </p>
                     </li>
                     <li>
-                        <p><code>DN_SHOW_WHOLE_LOG_DETAILS</code> receive boolean value; if value is true - at log will be
-                            printed Information containing passwords; default value is <code>false</code>.
+                        <p><code>user_agent</code> user agent for
+                            <a href="https://fedorchuck.github.io/developers-notification/javadoc-0.2.0/com/github/fedorchuck/developers_notification/http/HttpClient.html" target="_blank">HttpClient</a>
+                            is not required; default value is <code>Mozilla/5.0</code>;
                         </p>
                     </li>
+                    <li>
+                        <p><code>monitoring</code> it is object with configure part of monitoring current usage of
+                            ram and disk memory, set limits of their use and in case of overspending - informs
+                            in the selected messengers; required if you use this function;
+                        </p>
+                        <ul>
+                            <li><p><code>period</code> receive integer value; the frequency with which the monitoring
+                                will be carried out;</p></li>
+                            <li><p><code>unit</code> the designation in which units the period is measured; should be: </p>
+                                <ul>
+                                    <li><code>SECONDS</code></li>
+                                    <li><code>MINUTES</code></li>
+                                    <li><code>HOURS</code></li>
+                                    <li><code>DAYS</code></li>
+                                </ul>
+                            </li>
+                            <li><p><code>max_ram</code> receive integer value; determines the permissible limit of use
+                                ram in percent;</p></li>
+                            <li><p><code>max_disk</code> receive integer value; determines the permissible limit of use
+                                disk in percent;</p></li>
+                            <li><p><code>disk_consumption_rate</code> receive integer value; determines the
+                                permissible limit of disk consumption rate in percent;</p></li>
+                        </ul>
+                    </li>
                 </ul>
-                <p>Required configuration which will be using for sending messages.</p>
             </div>
             <div id="connecting_bot" class="chapter-line">
                 <h2>Connecting your bot</h2>
@@ -162,15 +237,13 @@
                         </p>
                     </li>
                     <li>
-                        <p>Add configuration to your project. For this example it is:</p>
-                        <ul>
-                            <li>
-                                <code>DN_SLACK_TOKEN</code> <b> = </b> <code>TZXG2L132/B56Z6RGR1/AdlsZzn1QGfo2qrEK4jpO4wJ</code>
-                            </li>
-                            <li>
-                                <code>DN_SLACK_CHANNEL</code> <b> = </b> <code>general</code>
-                            </li>
-                        </ul>
+                        <p>Messenger configuration to your project should seems like this:</p>
+                        <pre>
+{
+    "name": "SLACK",
+    "token": "TZXG2L132/B56Z6RGR1/AdlsZzn1QGfo2qrEK4jpO4wJ",
+    "channel": "general"
+}</pre>
                     </li>
                 </ol>
                 <h2>Telegram</h2>
@@ -190,46 +263,134 @@
                     <li>
                         <p>Find object <b>chat</b>. It looks like this:</p>
                         <pre>
-                            "chat": {
-                                "id": -197235129,
-                                "title": "test group developers notification",
-                                "type": "group",
-                                "all_members_are_administrators": true
-                            },</pre>
+"chat": {
+    "id": -197235129,
+    "title": "test group developers notification",
+    "type": "group",
+    "all_members_are_administrators": true
+},</pre>
                     </li>
                     <li>
-                        <p>Add configuration to your project.</p>
-                        <ul>
-                            <li>
-                                <code>DN_TELEGRAM_TOKEN</code> <b> = </b> <code>YourBOTToken</code>
-                            </li>
-                            <li>
-                                <code>DN_TELEGRAM_CHANNEL</code> <b> = </b> <code>chat.id</code>
-                            </li>
-                        </ul>
-                        <p>For this example it is:</p>
-                        <ul>
-                            <li>
-                                <code>DN_TELEGRAM_TOKEN</code> <b> = </b> <code>32031087:pabzcu_j17-jbd78sadvbdy63d37gda37-d8</code>
-                            </li>
-                            <li>
-                                <code>DN_TELEGRAM_CHANNEL</code> <b> = </b> <code>-197235129</code>
-                            </li>
-                        </ul>
+                        <p>Messenger configuration to your project should seems like this:</p>
+                        <pre>
+{
+    "name": "TELEGRAM",
+    "token": "32031087:pabzcu_j17-jbd78sadvbdy63d37gda37-d8",
+    "channel": "-197235129"
+}</pre>
                     </li>
                 </ol>
             </div>
             <div id="usage" class="chapter-line">
                 <h2>Usage</h2>
                 <p>You can set needed environment variables using:</p>
-                <code>DevelopersNotificationUtil.setEnvironmentVariable(key, value);</code>
+                <pre>DevelopersNotificationUtil.setEnvironmentVariable(key, value);</pre>
                 <p>For checking set environment variables which needed this library use:</p>
-                <code>DevelopersNotification.printConfiguration();</code>
+                <pre>DevelopersNotification.printConfiguration();</pre>
+                <p><b>Note:</b> If configuration value of field <code>show_whole_log_details</code> is <code>false</code> -
+                    will be printed result of method
+                    <a href="https://fedorchuck.github.io/developers-notification/javadoc-0.2.0/com/github/fedorchuck/developers_notification/configuration/Config.html" target="_blank">Config</a>#getPublicToString()
+                </p>
                 <p>For sending message to chosen destination you can use methods:</p>
-                <code>DevelopersNotification.send(DevelopersNotificationMessenger.ALL_AVAILABLE,
-                    "your project name", "short description", new IllegalStateException("abcd"));</code>
-                <code>DevelopersNotification.send(
-                    "your project name", "short description", new IllegalStateException("abcd"));</code>
+                <ol>
+                    <li><p>Messenger, spam protection and project name will be reading from config.</p>
+                        <table border="0">
+                            <tr>
+                                <th><pre>
+DevelopersNotification.send(
+    description,
+    throwable
+);</pre>
+                                </th>
+                                <th style="width: 100%"><pre>
+DevelopersNotification.send(
+    "short description",
+    new IllegalStateException("abcd")
+);</pre>
+                                </th>
+                            </tr>
+                        </table>
+                    </li>
+                    <li><p>Messenger and spam protection will be reading from config.</p>
+                        <table border="0">
+                            <tr>
+                                <th><pre>
+DevelopersNotification.send(
+    projectName,
+    description,
+    throwable
+);</pre>
+                                </th>
+                                <th style="width: 100%"><pre>
+DevelopersNotification.send(
+    "your project name",
+    "short description",
+    new IllegalStateException("abcd")
+);</pre>
+                                </th>
+                            </tr>
+                        </table>
+                    </li>
+                    <li><p>Spam protection will be reading from config.</p>
+                        <table border="0">
+                            <tr>
+                                <th><pre>
+DevelopersNotification.send(
+    messengerDestination,
+    projectName,
+    description,
+    throwable
+);</pre>
+                                </th>
+                                <th style="width: 100%"><pre>
+DevelopersNotification.send(
+DevelopersNotificationMessenger.ALL_AVAILABLE,
+    "your project name",
+    "short description",
+    new IllegalStateException("abcd")
+);</pre>
+                        </th>
+                            </tr>
+                        </table>
+                    </li>
+                    <li><p>Messenger will be reading from config.</p>
+                        <table border="0">
+                            <tr>
+                                <th><pre>
+DevelopersNotification.send(
+    protectionFromSpam,
+    projectName,
+    description,
+    throwable
+);</pre>
+                                </th>
+                                <th style="width: 100%"><pre>
+DevelopersNotification.send(
+    true,
+    "your project name",
+    "short description",
+    new IllegalStateException("abcd")
+);</pre>
+                            </th>
+                            </tr>
+                            </table>
+                    </li>
+                </ol>
+                <p>For monitoring current usage of ram and disk memory and in case of overspending limits of their
+                    use - get messages in the selected messengers, you can use methods:</p>
+                <ol>
+                    <li><p>Launches monitoring process for current application.</p>
+                    <pre>DevelopersNotification.monitoringStart();</pre>
+                    </li>
+                    <li><p>Initiates an orderly shutdown in which previously submitted tasks are executed,
+                        but no new tasks will be accepted. Invocation has no additional effect if already shut down.</p>
+                        <pre>DevelopersNotification.monitoringStop();</pre>
+                    </li>
+                    <li><p>Check if the monitoring thread is alive. A thread is alive if it has been started
+                        and has not yet died.</p>
+                        <pre>DevelopersNotification.isMonitoringStateAlive();</pre>
+                    </li>
+                </ol>
             </div>
             <div id="javadoc" class="chapter-line">
                 <h2>Archive and Javadoc</h2>
@@ -243,9 +404,14 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <td>v0.1.0 </td>
-                        <td><a href="https://fedorchuck.github.io/developers-notification/javadoc/" target="_blank">javadoc</a></td>
-                        <td><a href="https://oss.sonatype.org/content/repositories/releases/com/github/fedorchuck/developers-notification/0.1.0/" target="_blank">JAR-files</a></td>
+                        <td>v0.2.0</td>
+                        <td><a href="https://fedorchuck.github.io/developers-notification/javadoc-0.2.0" target="_blank">javadoc</a></td>
+                        <td><a href="https://oss.sonatype.org/content/repositories/releases/com/github/fedorchuck/developers-notification/0.2.0/" target="_blank">JAR-files</a></td>
+                    </tr>
+                    <tr>
+                        <td>v0.1.2</td>
+                        <td><a href="https://fedorchuck.github.io/developers-notification/javadoc-0.1.2" target="_blank">javadoc</a></td>
+                        <td><a href="https://oss.sonatype.org/content/repositories/releases/com/github/fedorchuck/developers-notification/0.1.2/" target="_blank">JAR-files</a></td>
                     </tr>
                     <tr>
                         <td>v0.1.1</td>
@@ -253,9 +419,9 @@
                         <td><a href="https://oss.sonatype.org/content/repositories/releases/com/github/fedorchuck/developers-notification/0.1.1/" target="_blank">JAR-files</a></td>
                     </tr>
                     <tr>
-                        <td>v0.1.2</td>
-                        <td><a href="https://fedorchuck.github.io/developers-notification/javadoc-0.1.2" target="_blank">javadoc</a></td>
-                        <td><a href="https://oss.sonatype.org/content/repositories/releases/com/github/fedorchuck/developers-notification/0.1.2/" target="_blank">JAR-files</a></td>
+                        <td>v0.1.0 </td>
+                        <td><a href="https://fedorchuck.github.io/developers-notification/javadoc/" target="_blank">javadoc</a></td>
+                        <td><a href="https://oss.sonatype.org/content/repositories/releases/com/github/fedorchuck/developers-notification/0.1.0/" target="_blank">JAR-files</a></td>
                     </tr>
                     </tbody>
                 </table>
@@ -275,18 +441,18 @@
                 <h2>License</h2>
                 <p>This software is licensed under <a href="http://www.apache.org/licenses/LICENSE-2.0.html" target="_blank">Apache License 2.0</a> </p>
                 <pre>
-                    Copyright 2017 Volodymyr Fedorchuk vl.fedorchuck@gmail.com
-                    Licensed under the Apache License, Version 2.0 (the "License");
-                    you may not use this file except in compliance with the License.
-                    You may obtain a copy of the License at
+        Copyright 2017 Volodymyr Fedorchuk vl.fedorchuck@gmail.com
+        Licensed under the Apache License, Version 2.0 (the "License");
+        you may not use this file except in compliance with the License.
+        You may obtain a copy of the License at
 
-                        http://www.apache.org/licenses/LICENSE-2.0
+            http://www.apache.org/licenses/LICENSE-2.0
 
-                    Unless required by applicable law or agreed to in writing, software
-                    distributed under the License is distributed on an "AS IS" BASIS,
-                    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-                    See the License for the specific language governing permissions and
-                    limitations under the License.
+        Unless required by applicable law or agreed to in writing, software
+        distributed under the License is distributed on an "AS IS" BASIS,
+        WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        See the License for the specific language governing permissions and
+        limitations under the License.
                 </pre>
             </div>
         </div>

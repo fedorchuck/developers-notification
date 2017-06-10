@@ -35,6 +35,7 @@ public class Json {
 
     /**
      * Convert inputting object to JSON string
+     *
      * @param obj to convert
      * @return JSON as string
      * @throws JsonEncodeException if the input Object cannot be converted to JSON structure
@@ -51,8 +52,10 @@ public class Json {
 
     /**
      * Convert inputted JSON to expected result
+     *
      * @param str JSON as string for mapping
-     * @param clazz expected result type
+     * @param <T> expected result type
+     * @param clazz expected result class
      * @return instance of expected type with deserialize JSON value
      * @throws JsonDecodeException if the input JSON structure does not match structure
      * expected for result type (or has other mismatch issues)
@@ -68,8 +71,10 @@ public class Json {
 
     /**
      * Convert inputted JSON to expected result
+     *
      * @param inputStream JSON as {@link InputStream} for mapping
-     * @param clazz expected result type
+     * @param <T> expected result type
+     * @param clazz expected result class
      * @return instance of expected type with deserialize JSON value
      * @throws JsonDecodeException if the input JSON structure does not match structure
      * expected for result type (or has other mismatch issues)

@@ -31,8 +31,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
+ * It collects, analyzes and produces a corresponding reaction to the results of monitoring.
+ * Also, it implementing interface {@link Runnable}
  *
+ * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
  * @since 0.2.0
  */
@@ -53,15 +55,9 @@ public class MonitorProcessor implements Runnable {
     }
 
     /**
-     * When an object implementing interface <code>Runnable</code> is used
-     * to create a thread, starting the thread causes the object's
-     * <code>run</code> method to be called in that separately executing
-     * thread.
-     * <p>
-     * The general contract of the method <code>run</code> is that it may
-     * take any action whatsoever.
+     * Triggers the collection and analysis of data, and sends messages when necessary
      *
-     * @see Thread#run()
+     * @since 0.2.0
      */
     @Override
     public void run() {
@@ -70,7 +66,7 @@ public class MonitorProcessor implements Runnable {
         PhysicalResourceUsage currentMonitoringResult = getPhysicalResourceUsage();
 
         if ((monitoringConfig.getMaxRam() != null) && (FrequencyOfSending.canSendMessage(MessageTypes.RAM_LIMIT))) {
-            handleRamUsage(currentMonitoringResult);
+            handleRamLimitUsage(currentMonitoringResult);
         }
 
         List<Disk> oldestMonitoringResult = monitoring.getOldest();
@@ -87,7 +83,13 @@ public class MonitorProcessor implements Runnable {
         }
     }
 
-    private void handleRamUsage(PhysicalResourceUsage currentMonitoringResult) {
+    /**
+     * Make analysis of ram usage, and sends messages when necessary
+     *
+     * @param currentMonitoringResult results of monitoring
+     * @since 0.2.0
+     */
+    private void handleRamLimitUsage(PhysicalResourceUsage currentMonitoringResult) {
         JVM currentUsageJVM = currentMonitoringResult.getJvm();
         double currentUsageRamInPercent =
                 getUsageInPercent(currentUsageJVM.getUsedRamMemory(), currentUsageJVM.getTotalRamMemory());
@@ -105,6 +107,13 @@ public class MonitorProcessor implements Runnable {
         }
     }
 
+    /**
+     * Make analysis of disk consumption rate, and sends messages when necessary
+     *
+     * @param currentUsage results of disk monitoring
+     * @param oldestMonitoringResult oldest monitoring results
+     * @since 0.2.0
+     */
     private void handleDiskConsumptionRate(Disk currentUsage, List<Disk> oldestMonitoringResult) {
         long rate;
         double rateDiskInPercent;
@@ -133,6 +142,12 @@ public class MonitorProcessor implements Runnable {
         }
     }
 
+    /**
+     * Make analysis of disk usage, and sends messages when necessary
+     *
+     * @param currentUsage results of disk monitoring
+     * @since 0.2.0
+     */
     private void handleDiskLimitUsage(Disk currentUsage) {
         double currentUsageDiskInPercent =
                 getUsageInPercent(currentUsage.getUsableDiskSpace(), currentUsage.getTotalDiskSpace());
@@ -151,6 +166,15 @@ public class MonitorProcessor implements Runnable {
         }
     }
 
+    /**
+     * Calculates percentages of usage
+     * <pre><code>result = usage * 100 / total</code></pre>
+     *
+     * @param usage for which need to calculate percent
+     * @param total what is 100%
+     * @return usage value in percent
+     * @since 0.2.0
+     **/
     private double getUsageInPercent(long usage, long total) {
         return usage * 100.0 / total;
     }

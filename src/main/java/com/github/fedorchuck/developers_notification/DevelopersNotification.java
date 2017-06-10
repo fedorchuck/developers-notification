@@ -28,27 +28,15 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Class contain methods-endpoints for this library. Needed environment configuration.
+ * Class contain methods-endpoints for this
+ * <a href="https://fedorchuck.github.io/developers-notification/website/index.html">library</a>. Needed environment
+ * <a href="https://fedorchuck.github.io/developers-notification/website/index.html#setup">configuration</a>.
  *
- * Supported environment configuration:
+ * <p><b>See Also:</b></p>
  * <ul>
- * <li>DN_MESSENGER - where the message will be sent;
- * possible values you can see in {@link DevelopersNotificationMessenger};
- * required if you use method <code>send</code> with signature
- * {@link DevelopersNotification#send(String, String, Throwable)} </li>
- * <li>DN_SLACK_TOKEN - access key; required if you use Slack messages</li>
- * <li>DN_SLACK_CHANNEL - destination chat; required if you use Slack messages</li>
- * <li>DN_TELEGRAM_TOKEN - access key; required if you use Telegram messages</li>
- * <li>DN_TELEGRAM_CHANNEL - destination chat; required if you use Telegram messages</li>
- * <li>DN_USER_AGENT - user agent for {@link HttpClient#USER_AGENT};
- * is not required; default value is <code>Mozilla/5.0</code></li>
- * <li>DN_CONNECT_TIMEOUT - for {@link HttpClient#CONNECT_TIMEOUT};
- * is not required; default value is <code>5000</code></li>
- * <li>DN_SHOW_WHOLE_LOG_DETAILS - receive {@link Boolean} value; if true - at log will be
- * printed Information containing passwords; default value is <code>false</code> </li>
+ *     <li><a href="https://fedorchuck.github.io/developers-notification/website/index.html">https://fedorchuck.github.io/developers-notification/website/index.html</a></li>
+ *     <li><a href="https://github.com/fedorchuck/developers-notification">https://github.com/fedorchuck/developers-notification</a></li>
  * </ul>
- * Required configuration which will be using for sending messages.
- *
  * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
  * @since 0.1.0
@@ -64,7 +52,9 @@ public class DevelopersNotification {
     private static boolean monitoringStateAlive = false;
 
     /**
-     * Printing environment configuration which needed for this library.
+     * Printing environment configuration to log which needed for this library.
+     * <b>Note:</b> if configuration value of field <code>show_whole_log_details</code> is <code>false</code> -
+     * will be printed result of method {@link Config#getPublicToString()}
      *
      * @since 0.1.0
      **/
@@ -76,6 +66,14 @@ public class DevelopersNotification {
             DevelopersNotificationLogger.info(config.getPublicToString());
     }
 
+    /**
+     * Sending message to chosen destination. <b>Note:</b> Messenger, spam protection and project name
+     * will be reading from config.
+     *
+     * @param description about situation
+     * @param throwable which happened. Can be <code>null</code>
+     * @since 0.2.0
+     **/
     public static void send(final String description, final Throwable throwable) {
         for (Messenger messenger : config.getMessenger()) {
             switch (messenger.getName()){
@@ -96,13 +94,11 @@ public class DevelopersNotification {
     }
 
     /**
-     * Sending message to chosen destination.
+     * Sending message to chosen destination. <b>Note:</b> Messenger and spam protection will be reading from config.
      *
-     * @param projectName where was method called. Can be <code>null</code>
-     * @param description about situation. Can be <code>null</code>
+     * @param projectName where was method called
+     * @param description about situation
      * @param throwable which happened. Can be <code>null</code>
-     * @throws IllegalArgumentException if <code>MESSENGER</code> has invalid value or is null or empty.
-     *
      * @since 0.1.0
      **/
     public static void send(final String projectName,
@@ -127,17 +123,14 @@ public class DevelopersNotification {
     }
 
     /**
-     * Sending message to chosen destination.
+     * Sending message to chosen destination. <b>Note:</b> Spam protection will be reading from config.
      *
-     * @param messengerDestination - where the message will be sent.
-     * @param projectName where was method called. Can be <code>null</code>
-     * @param description about situation. Can be <code>null</code>
+     * @param messengerDestination where the message will be sent.
+     * @param projectName where was method called
+     * @param description about situation
      * @param throwable which happened. Can be <code>null</code>
-     * @throws IllegalArgumentException if <code>MESSENGER</code> has invalid value or is null or empty.
-     *
      * @since 0.1.0
      **/
-    //send with protection from spam
     public static void send(final DevelopersNotificationMessenger messengerDestination,
                             final String projectName,
                             final String description,
@@ -146,6 +139,15 @@ public class DevelopersNotification {
                 messengerDestination, projectName, description, throwable);
     }
 
+    /**
+     * Sending message to chosen destination. <b>Note:</b> Messenger will be reading from config.
+     *
+     * @param protectionFromSpam is the message will be sent with protection from spam
+     * @param projectName where was method called
+     * @param description about situation
+     * @param throwable which happened. Can be <code>null</code>
+     * @since 0.2.0
+     **/
     public static void send(final boolean protectionFromSpam,
                             final String projectName,
                             final String description,
@@ -213,7 +215,7 @@ public class DevelopersNotification {
     }
 
     /**
-     * Tests if the monitoring thread is alive. A thread is alive if it has
+     * Check if the monitoring thread is alive. A thread is alive if it has
      * been started and has not yet died.
      *
      * @return  <code>true</code> if monitoring thread is alive;

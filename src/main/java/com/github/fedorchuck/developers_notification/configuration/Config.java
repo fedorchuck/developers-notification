@@ -22,7 +22,9 @@ import lombok.*;
 import java.util.List;
 
 /**
- * <pre>
+ * Configuration class for this library.
+ * This class is mapped with JSON:
+ * <pre><code>
  {
     "messenger": [
         {
@@ -44,8 +46,11 @@ import java.util.List;
     "connect_timeout": 5000,
     "user_agent": "Mozilla/5.0"
  }
- * </pre>
- * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>.
+ * </code></pre>
+ *
+ * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
+ * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
+ * @since 0.2.0
  */
 @EqualsAndHashCode @ToString
 @AllArgsConstructor @NoArgsConstructor
@@ -92,6 +97,12 @@ public class Config {
             return protection_from_spam;
     }
 
+    /**
+     * It create string with "public" fields
+     *
+     * @return string with "public" fields
+     * @since 0.2.0
+     **/
     public String getPublicToString() {
         StringBuilder res = new StringBuilder();
         res.append("Messengers: ");

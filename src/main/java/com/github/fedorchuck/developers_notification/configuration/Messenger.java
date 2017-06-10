@@ -19,10 +19,17 @@ package com.github.fedorchuck.developers_notification.configuration;
 import com.github.fedorchuck.developers_notification.DevelopersNotificationLogger;
 import com.github.fedorchuck.developers_notification.DevelopersNotificationMessenger;
 import com.github.fedorchuck.developers_notification.DevelopersNotificationUtil;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
- * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>.
+ * Part of configuration for this library.
+ *
+ * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
+ * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
+ * @since 0.2.0
  */
 @EqualsAndHashCode @ToString
 @AllArgsConstructor @NoArgsConstructor
@@ -31,6 +38,13 @@ public class Messenger {
     private String token;
     private String channel;
 
+    /**
+     * Return name of integration
+     *
+     * @return name for integration
+     * @throws IllegalArgumentException if unable to map string to {@link DevelopersNotificationMessenger}
+     * @since 0.2.0
+     **/
     public DevelopersNotificationMessenger getName() {
         if (DevelopersNotificationMessenger.SLACK.name().equals(name.toUpperCase()))
             return DevelopersNotificationMessenger.SLACK;
@@ -42,14 +56,28 @@ public class Messenger {
         throw new IllegalArgumentException("Bad argument. Current name value: " + name + " . Name should be: SLACK or TELEGRAM or ALL_AVAILABLE. ");
     }
 
+    /**
+     * Return token of integration
+     *
+     * @return token for integration
+     * @throws IllegalArgumentException if token is null or empty
+     * @since 0.2.0
+     **/
     public String getToken() {
         if (DevelopersNotificationUtil.isNullOrEmpty(token)) {
-            DevelopersNotificationLogger.errorWrongConfig(token,"token");
+            DevelopersNotificationLogger.errorWrongConfig(token, "token");
             throw new IllegalArgumentException("Bad argument. TOKEN has invalid value: " + token);
         }
         return token;
     }
 
+    /**
+     * Return channel of integration
+     *
+     * @return channel for integration
+     * @throws IllegalArgumentException if channel is null or empty
+     * @since 0.2.0
+     **/
     public String getChannel() {
         if (DevelopersNotificationUtil.isNullOrEmpty(channel)) {
             DevelopersNotificationLogger.errorWrongConfig(channel, "channel");

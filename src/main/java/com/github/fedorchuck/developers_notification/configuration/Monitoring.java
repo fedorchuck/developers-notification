@@ -22,7 +22,11 @@ import lombok.*;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>.
+ * Part of configuration for this library.
+ *
+ * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
+ * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
+ * @since 0.2.0
  */
 @EqualsAndHashCode @ToString
 @AllArgsConstructor @NoArgsConstructor
@@ -34,6 +38,13 @@ public class Monitoring {
     private Integer max_disk;
     private Integer disk_consumption_rate;
 
+    /**
+     * Return TimeUnit
+     *
+     * @return TimeUnit
+     * @throws IllegalArgumentException if unable to map string to {@link TimeUnit}
+     * @since 0.2.0
+     **/
     public TimeUnit getUnit() {
         if (TimeUnit.SECONDS.name().equals(unit.toUpperCase()))
             return TimeUnit.SECONDS;

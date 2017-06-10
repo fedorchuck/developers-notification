@@ -19,7 +19,7 @@ package com.github.fedorchuck.developers_notification.monitoring;
 import lombok.*;
 
 /**
- * Maximum amount of disk space the application will attempt to use
+ * Model for monitoring
  *
  * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
