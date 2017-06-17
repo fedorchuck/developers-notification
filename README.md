@@ -5,13 +5,13 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.fedorchuck/developers-notification/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.fedorchuck/developers-notification)
 
 ## Introduction
-Sometimes every developer needs to know about the event that happened as soon as possible. For example, about irregular work of the server or about changing the third-party rest-api, about anything, depending on the specifics of the project.
+Sometimes every developer needs to know about the event that happened as soon as possible. For example, about incorrect work of the server or about changing the third-party rest-api, about anything, depending on the specifics of the project.
  
 There are many ways to inform developers about such events - all sorts of services, loggers. But most of them send notifications to the mail or a issue tracking system of a different type, which is not always convenient and not always possible to track quickly.
 
 This library sending notifications to messengers. Just create and connect a bot in the messenger that your team using and that is supported by this library. For now it is Slack and Telegram. Add the library to the project, add it configuration (access keys to the bot that you created), add lines, where it is needed, to send message and you receive messages when something happened.
 
-Also, this library have monitoring module. It can monitoring current usage of ram and disk memory, set limits of their use and in case of overspending - informs in the selected messengers.
+Also, this library have monitoring module. It can monitor current usage of RAM and disk memory, set limits of their usage and in case of overspending - informs to the selected messengers.
 
 This library compatible with Java 6+
 
@@ -65,13 +65,13 @@ environment variable witch required if you use this library. Accepted value is J
    * `token` contains token of integration;
    * `channel` contains channel of integration;  
    
-   **Note:** If you specify several available messengers, you will be received a messages to all specified instant messengers.
-* `show_whole_log_details` receive boolean value; if value is `true` - at log will be printed Information containing passwords; is not required; default value is `false`;
-* `protection_from_spam` receive boolean value; if value is `true` - you will be protected from spam (received the same messages each second). It is necessary for adjust the frequency of sending messages; is not required; default value is `false`;
-* `project_name` where this library will be invoked; required;
+   **Note:** If you specify several messengers, you will recive instant messages to all specified messengers.
+* `show_whole_log_details` receive boolean value; if value is `true` - log will contain Information containing passwords; is not required; default value is `false`;
+* `protection_from_spam` receive boolean value; if value is `true` - you will be protected from spam (receiving the same messages each second). It is necessary for adjust the frequency of sending messages; is not required; default value is `false`;
+* `project_name` name of project using this library; required;
 * `connect_timeout` for [HttpClient](https://fedorchuck.github.io/developers-notification/javadoc-0.2.0/com/github/fedorchuck/developers_notification/http/HttpClient.html) is not required; default value is `5000`;
 * `user_agent` user agent for [HttpClient](https://fedorchuck.github.io/developers-notification/javadoc-0.2.0/com/github/fedorchuck/developers_notification/http/HttpClient.html) is not required; default value is `Mozilla/5.0`;
-* `monitoring` it is object with configure part of monitoring current usage of ram and disk memory, set limits of their use and in case of overspending - informs in the selected messengers; required if you use this function;
+* `monitoring` it is object with configure monitoring of current RAM and disk memory usage, set limits of their use and in case of overspending - informs in the selected messengers; required if you use this feature;
    * `period` receive integer value; the frequency with which the monitoring will be carried out;
    * `unit` the designation in which units the period is measured; should be:
       * `SECONDS`
@@ -90,7 +90,7 @@ environment variable witch required if you use this library. Accepted value is J
 3) Choose the channel again add press green button, again :-)
 4) Find the `Integration Settings` section
 5) Find the `Webhook URL` sub-section and copy token. Example url: `https://hooks.slack.com/services/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`, token: `TZXG2L132/B56Z6RGR1/AdlsZzn1QGfo2qrEK4jpO4wJ`
-6) Messenger configuration to your project should seems like this:
+6) Messenger configuration to your project should look like this:
 ```json
 {
     "name": "SLACK",
@@ -100,7 +100,7 @@ environment variable witch required if you use this library. Accepted value is J
 ```
 
 #### Telegram
-1) Create your [bot](https://core.telegram.org/bots#3-how-do-i-create-a-bot)
+1) [Create your bot](https://core.telegram.org/bots#3-how-do-i-create-a-bot)
 2) Add the Telegram BOT to your chat.
 3) Get the list of updates for your BOT:
 ```http
