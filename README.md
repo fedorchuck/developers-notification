@@ -68,7 +68,7 @@ environment variable witch required if you use this library. Accepted value is J
    **Note:** If you specify several messengers, you will recive instant messages to all specified messengers.
 * `show_whole_log_details` receive boolean value; if value is `true` - log will contain Information containing passwords; is not required; default value is `false`;
 * `protection_from_spam` receive boolean value; if value is `true` - you will be protected from spam (receiving the same messages each second). It is necessary for adjust the frequency of sending messages; is not required; default value is `false`;
-* `project_name` Name of project using this library; required;
+* `project_name` name of project using this library; required;
 * `connect_timeout` for [HttpClient](https://fedorchuck.github.io/developers-notification/javadoc-0.2.0/com/github/fedorchuck/developers_notification/http/HttpClient.html) is not required; default value is `5000`;
 * `user_agent` user agent for [HttpClient](https://fedorchuck.github.io/developers-notification/javadoc-0.2.0/com/github/fedorchuck/developers_notification/http/HttpClient.html) is not required; default value is `Mozilla/5.0`;
 * `monitoring` it is object with configure monitoring of current RAM and disk memory usage, set limits of their use and in case of overspending - informs in the selected messengers; required if you use this feature;
