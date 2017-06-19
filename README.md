@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/fedorchuck/developers-notification.svg?branch=master)](https://travis-ci.org/fedorchuck/developers-notification)
 [![Apache License Version 2.0](https://img.shields.io/badge/license-Apache%20License%202.0-brightgreen.svg)](https://github.com/fedorchuck/developers-notification/blob/master/LICENSE.md)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.fedorchuck/developers-notification/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.fedorchuck/developers-notification)
+[![codecov](https://codecov.io/gh/fedorchuck/developers-notification/branch/master/graph/badge.svg)](https://codecov.io/gh/fedorchuck/developers-notification)
 
 ## Introduction
 Sometimes every developer needs to know about the event that happened as soon as possible. For example, about irregular work of the server or about changing the third-party rest-api, about anything, depending on the specifics of the project.
