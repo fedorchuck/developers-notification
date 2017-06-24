@@ -18,8 +18,6 @@ package com.github.fedorchuck.developers_notification.antispam;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
 
 /**
  * Model for mechanism witch avoiding spam.
@@ -28,10 +26,8 @@ import lombok.ToString;
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
  * @since 0.2.0
  */
-@Getter
 @AllArgsConstructor
 @EqualsAndHashCode
-@ToString
 public class SentMessage {
     private MessageTypes type;
     private String projectName;

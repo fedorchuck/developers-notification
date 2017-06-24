@@ -27,7 +27,7 @@ class B {
     void b() {
         DevelopersNotification.printConfiguration();
 
-//        DevelopersNotification.monitoringStart();
+        DevelopersNotification.monitoringStart();
 
         DevelopersNotification.send(DevelopersNotificationMessenger.TELEGRAM, "developers_notification",
                 "test with full method signature", new Throwable("abcd"));
@@ -38,10 +38,10 @@ class B {
 
         Assert.assertTrue("messages was sent without exceptions", true);
 
-        /*try {Thread.sleep(10000);} catch (InterruptedException ignored) { }
+        try {Thread.sleep(10000);} catch (InterruptedException ignored) { }
 
         Assert.assertEquals(true, DevelopersNotification.isMonitoringStateAlive());
         DevelopersNotification.monitoringStop();
-        Assert.assertEquals(false, DevelopersNotification.isMonitoringStateAlive());*/
+        Assert.assertEquals(false, DevelopersNotification.isMonitoringStateAlive());
     }
 }

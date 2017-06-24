@@ -24,9 +24,8 @@ import lombok.*;
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
  * @since 0.1.0
  */
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
-@EqualsAndHashCode @ToString
+@SuppressWarnings("unused")
+@Setter
 class Attachment implements Serializable {
     private String fallback;
     private String title;

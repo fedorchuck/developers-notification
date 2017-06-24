@@ -52,8 +52,8 @@ import java.util.List;
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
  * @since 0.2.0
  */
-@EqualsAndHashCode @ToString
-@AllArgsConstructor @NoArgsConstructor
+@SuppressWarnings({"unused", "MismatchedQueryAndUpdateOfCollection"})
+@ToString
 public class Config {
     @Getter
     private List<Messenger> messenger;

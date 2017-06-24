@@ -24,7 +24,7 @@ package com.github.fedorchuck.developers_notification.monitoring;
  * @since 0.2.0
  */
 class AlertMessages {
-    static String getAlertRAMLimitMessage(long current, double currentPercent, Integer limit){
+    static String getAlertRAMLimitMessage(long current, double currentPercent, Integer limit) {
         return "Alert! Excess of the established limit of resources. " +
                 "Used RAM " + current + " (" + currentPercent + "%). " +
                 "Limit: " + limit + "%";

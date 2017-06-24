@@ -28,10 +28,6 @@ import java.util.Map;
  * @since 0.1.0
  */
 @Getter @Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode
 public class HttpResponse {
     /**
      * The status code of the response

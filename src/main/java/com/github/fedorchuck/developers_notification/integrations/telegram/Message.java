@@ -24,9 +24,8 @@ import lombok.*;
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
  * @since 0.1.2
  */
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
-@EqualsAndHashCode @ToString
+@SuppressWarnings("unused")
+@Setter
 class Message implements Serializable {
     private String chat_id;
     private String parse_mode;

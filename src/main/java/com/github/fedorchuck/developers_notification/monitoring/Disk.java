@@ -25,9 +25,8 @@ import lombok.*;
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
  * @since 0.2.0
  */
-@Getter @Setter
-@ToString @EqualsAndHashCode
-@NoArgsConstructor @AllArgsConstructor @Builder
+@Getter
+@Builder
 class Disk {
     private long totalDiskSpace;
     private long freeDiskSpace;

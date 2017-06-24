@@ -28,8 +28,7 @@ import java.util.concurrent.TimeUnit;
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
  * @since 0.2.0
  */
-@EqualsAndHashCode @ToString
-@AllArgsConstructor @NoArgsConstructor
+@SuppressWarnings("unused")
 public class Monitoring {
     @Getter
     private Long period;

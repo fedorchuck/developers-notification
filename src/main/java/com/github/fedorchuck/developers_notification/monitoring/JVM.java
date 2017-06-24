@@ -26,8 +26,6 @@ import lombok.*;
  * @since 0.2.0
  */
 @Getter @Setter
-@ToString @EqualsAndHashCode
-@NoArgsConstructor @AllArgsConstructor
 class JVM {
     /**
      * Maximum ram memory for JVM (bytes)
