@@ -16,6 +16,21 @@ Also, this library have monitoring module. It can monitor current usage of RAM a
 
 This library compatible with Java 6+
 
+
+## Contents
+
+- [Getting started](#getting-started)
+  - [Download](#download)
+  - [Setup](#setup)
+  - [Connecting your bot](#connecting-your-bot)
+    - [Slack](#slack)
+    - [Telegram](#telegram) 
+- [Available methods](#available-methods)
+- [Usage](#usage) 
+- [Changelog](#changelog)
+- [Dependencies](#dependencies)
+- [License](#license)
+
 ## Getting started
 ### Download
 Gradle:
@@ -128,8 +143,7 @@ GET https://api.telegram.org/bot32031087:pabzcu_j17-jbd78sadvbdy63d37gda37-d8/ge
     "channel": "-197235129"
 }
 ```
-
-## Usage
+## Available methods
 You can set needed environment variables using:
 ```groovy
 DevelopersNotificationUtil.setEnvironmentVariable(key, value);
@@ -214,6 +228,16 @@ DevelopersNotification.monitoringStop();
 * Check if the monitoring thread is alive. A thread is alive if it has been started and has not yet died.
 ```groovy
 DevelopersNotification.isMonitoringStateAlive();
+```
+
+## Usage
+After [setup](#setup), just insert line in your code, for example:
+```groovy
+try {
+// Your code
+} catch (Exception ex) {
+    DevelopersNotification.send("example of usage", ex);   
+}
 ```
 
 ## Changelog

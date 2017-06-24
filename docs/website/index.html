@@ -281,8 +281,8 @@
                     </li>
                 </ol>
             </div>
-            <div id="usage" class="chapter-line">
-                <h2>Usage</h2>
+            <div id="available-methods" class="chapter-line">
+                <h2>Available methods</h2>
                 <p>You can set needed environment variables using:</p>
                 <pre>DevelopersNotificationUtil.setEnvironmentVariable(key, value);</pre>
                 <p>For checking set environment variables which needed this library use:</p>
@@ -392,6 +392,17 @@ DevelopersNotification.send(
                     </li>
                 </ol>
             </div>
+            <div id="usage" class="chapter-line">
+                <h2>Usage</h2>
+                <p>After <a href="#setup">setup</a>, just insert line in your code, for example:</p>
+                <pre>
+        try {
+            // Your code
+        } catch (Exception ex) {
+            DevelopersNotification.send("example of usage", ex);
+        }
+                </pre>
+            </div>
             <div id="javadoc" class="chapter-line">
                 <h2>Archive and Javadoc</h2>
                 <table class="table table-hover">
@@ -465,6 +476,7 @@ DevelopersNotification.send(
                     <li><a href="#download">Download</a></li>
                     <li><a href="#setup">Setup</a></li>
                     <li><a href="#connecting_bot">Connecting BOT</a></li>
+                    <li><a href="#available-methods">Available methods</a></li>
                     <li><a href="#usage">Usage</a></li>
                     <li><a href="#javadoc">Archive and Javadoc</a></li>
                     <li><a href="#dependencies">Dependencies</a></li>
@@ -472,6 +484,7 @@ DevelopersNotification.send(
                 </ul>
                 <ul class="nav nav-pills nav-stacked secondary">
                     <li><a href="https://github.com/fedorchuck/developers-notification/blob/master/CHANGELOG.md" target="_blank">Changelog</a></li>
+                    <li><a href="https://github.com/fedorchuck/developers-notification/blob/master/CONTRIBUTING.md" target="_blank">Contributing</a></li>
                 </ul>
             </nav>
             </div>
