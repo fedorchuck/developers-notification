@@ -27,7 +27,7 @@ import java.lang.reflect.Field;
 public class TelegramImplTest {
 
     @Test
-    public void generateMessage() throws Exception {
+    public void testGenerateMessage() {
         String expected = "{\"chat_id\":\"-0123456789\",\"parse_mode\":\"Markdown\",\"text\":\"*Project*: developers-notification \\n*Message*: test with full method signature \\n\"}";
         TelegramImpl telegram = new TelegramImpl();
 
@@ -37,9 +37,9 @@ public class TelegramImplTest {
             field.setAccessible(true);
             field.set(telegram, "-0123456789");
         } catch (NoSuchFieldException e) {
-            e.printStackTrace();
+            Assert.fail(e.getMessage());
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            Assert.fail(e.getMessage());
         }
 
         String actual = telegram.generateMessage("developers_notification",

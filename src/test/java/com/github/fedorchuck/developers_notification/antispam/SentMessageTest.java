@@ -24,7 +24,7 @@ import org.junit.Test;
  */
 public class SentMessageTest {
     @Test
-    public void equals() {
+    public void testEquals() {
         SentMessage a = new SentMessage(MessageTypes.RAM_LIMIT, "project name", "description");
         SentMessage b = new SentMessage(MessageTypes.RAM_LIMIT, "project name", "description");
         SentMessage c = new SentMessage(MessageTypes.DISK_LIMIT, "project name", "description");

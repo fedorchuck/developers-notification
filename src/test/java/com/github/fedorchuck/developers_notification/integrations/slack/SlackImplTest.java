@@ -27,7 +27,7 @@ import java.lang.reflect.Field;
 public class SlackImplTest {
 
     @Test
-    public void generateMessage() {
+    public void testGenerateMessage() {
         String expected = "{\"username\":\"developers notification bot\",\"icon_url\":\"https://raw.githubusercontent.com/fedorchuck/developers-notification/task/%2317_add_codecov/docs/website/resources/logo/48x48.png\",\"text\":\"test with full method signature\",\"channel\":\"general\",\"attachments\":[{\"fallback\":\"The message isn't supported.\",\"color\":\"#FF0049\",\"author_name\":\"developers_notification\",\"mrkdwn_in\":[\"text\",\"fields\"]}]}";
         SlackImpl slack = new SlackImpl();
 
@@ -37,9 +37,9 @@ public class SlackImplTest {
             field.setAccessible(true);
             field.set(slack, "general");
         } catch (NoSuchFieldException e) {
-            e.printStackTrace();
+            Assert.fail(e.getMessage());
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            Assert.fail(e.getMessage());
         }
 
         String actual = slack.generateMessage("developers_notification",

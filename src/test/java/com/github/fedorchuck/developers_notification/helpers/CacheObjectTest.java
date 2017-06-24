@@ -26,7 +26,7 @@ import org.junit.Test;
  */
 public class CacheObjectTest {
     @Test
-    public void equals() {
+    public void testEquals() {
         CacheObject<SentMessage> a = new CacheObject<SentMessage>(new SentMessage(MessageTypes.RAM_LIMIT, "project name", "description"));
         CacheObject<SentMessage> b = new CacheObject<SentMessage>(new SentMessage(MessageTypes.RAM_LIMIT, "project name", "description"));
         CacheObject<SentMessage> c = new CacheObject<SentMessage>(new SentMessage(MessageTypes.DISK_LIMIT, "project name", "description"));

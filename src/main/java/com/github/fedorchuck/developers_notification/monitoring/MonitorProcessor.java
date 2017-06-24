@@ -175,7 +175,7 @@ public class MonitorProcessor implements Runnable {
      * @return usage value in percent
      * @since 0.2.0
      **/
-    private double getUsageInPercent(long usage, long total) {
+    double getUsageInPercent(long usage, long total) {
         return usage * 100.0 / total;
     }
 

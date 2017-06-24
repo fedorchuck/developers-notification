@@ -30,7 +30,7 @@ import java.util.List;
  */
 public class MonitorProcessorTest {
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         String slackToken = DevelopersNotificationUtil.getEnvironmentVariable("TRAVIS_TEST_SLACK_TOKEN");
         String slackChannel = DevelopersNotificationUtil.getEnvironmentVariable("TRAVIS_TEST_SLACK_CHANNEL");
         String telegramToken = DevelopersNotificationUtil.getEnvironmentVariable("TRAVIS_TEST_TELEGRAM_TOKEN");
@@ -40,7 +40,7 @@ public class MonitorProcessorTest {
     }
 
     @Test
-    public void testGetUsage() {
+    public void testGetPhysicalResourceUsage() {
         PhysicalResourceUsage physicalResourceUsage = new MonitorProcessor().getPhysicalResourceUsage();
         JVM jvm = physicalResourceUsage.getJvm();
         List<Disk> disks = physicalResourceUsage.getDisks();
@@ -54,6 +54,11 @@ public class MonitorProcessorTest {
         checkFields(jvm);
         for (Disk disk : disks)
             checkFields(disk);
+    }
+
+    @Test
+    public void testGetUsageInPercent() {
+        Assert.assertEquals(5, new MonitorProcessor().getUsageInPercent(5,100),0);
     }
 
     private void checkFields(Object instance) {

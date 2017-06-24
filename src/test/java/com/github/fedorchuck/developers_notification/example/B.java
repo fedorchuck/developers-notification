@@ -36,6 +36,8 @@ class B {
         DevelopersNotification.send("developers_notification",
                 "test without full method signature", new Throwable());
 
+        Assert.assertTrue("messages was sent without exceptions", true);
+
         /*try {Thread.sleep(10000);} catch (InterruptedException ignored) { }
 
         Assert.assertEquals(true, DevelopersNotification.isMonitoringStateAlive());
