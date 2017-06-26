@@ -124,6 +124,8 @@ public class SlackImpl implements Integration {
     public void analyseResponse(HttpResponse response) {
         if (response.getException()!=null)
             DevelopersNotificationLogger.errorSendMessageBadConfig("Slack", response.getException());
+        if (!response.getContentType().equals("text/html"))
+            DevelopersNotificationLogger.error("Slack updated their rest api.");
         if (response.getResponseContent()!= null && !response.getResponseContent().toLowerCase().equals("ok"))
             if (showWholeLogDetails)
                 DevelopersNotificationLogger.errorSendMessageBadConfig("Slack",

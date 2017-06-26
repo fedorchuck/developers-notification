@@ -64,11 +64,10 @@ class HttpClientHelper {
         }
 
         HttpURLConnection connection;
-        if (stringUrl.startsWith("http")) {
-            connection = (HttpURLConnection) new URL(url).openConnection();
-        } else {
+        if (stringUrl.startsWith("https"))
             connection = (HttpsURLConnection) new URL(url).openConnection();
-        }
+        else
+            connection = (HttpURLConnection) new URL(url).openConnection();
 
         return connection;
     }

@@ -133,6 +133,8 @@ public class TelegramImpl implements Integration {
     public void analyseResponse(HttpResponse response) {
         if (response.getException()!=null)
             DevelopersNotificationLogger.errorSendMessageBadConfig("Telegram", response.getException());
+        if (!response.getContentType().equals("application/json"))
+            DevelopersNotificationLogger.error("Telegram updated their rest api.");
         if (response.getStatusCode()!=200 || response.getResponseContent() == null) {
             if (showWholeLogDetails)
                 DevelopersNotificationLogger.errorSendMessageBadConfig("Telegram",
