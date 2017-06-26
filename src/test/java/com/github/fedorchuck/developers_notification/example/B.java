@@ -29,12 +29,40 @@ class B {
 
         DevelopersNotification.monitoringStart();
 
-        DevelopersNotification.send(DevelopersNotificationMessenger.TELEGRAM, "developers_notification",
-                "test with full method signature", new Throwable("abcd"));
-        DevelopersNotification.send(DevelopersNotificationMessenger.SLACK, "developers_notification",
-                "test with full method signature", new Throwable("abcd"));
-        DevelopersNotification.send("developers_notification",
-                "test without full method signature", new Throwable());
+        DevelopersNotification.send("test with signature: " +
+                "'DevelopersNotification.send(description, throwable);'",
+                new Throwable("test")
+        );
+        DevelopersNotification.send(
+                "integration test",
+                "test with signature: " +
+                "'DevelopersNotification.send(projectName, description, throwable);'",
+                new Throwable("test")
+        );
+        DevelopersNotification.send(DevelopersNotificationMessenger.TELEGRAM,
+                "integration test",
+                "test with signature: " +
+                "'DevelopersNotification.send(DevelopersNotificationMessenger.TELEGRAM, projectName, description, throwable);'",
+                new Throwable("test")
+        );
+        DevelopersNotification.send(DevelopersNotificationMessenger.SLACK,
+                "integration test",
+                "test with signature: " +
+                "'DevelopersNotification.send(DevelopersNotificationMessenger.SLACK, projectName, description, throwable);'",
+                new Throwable("test")
+        );
+        DevelopersNotification.send("integration test",
+                "test with signature: " +
+                "'DevelopersNotification.send(DevelopersNotificationMessenger.ALL_AVAILABLE, projectName, description, throwable);'",
+                new Throwable("test")
+        );
+        DevelopersNotification.send(
+                true,
+                "integration test",
+                "test with signature: " +
+                "'DevelopersNotification.send(protectionFromSpam, projectName, description, throwable);'",
+                new Throwable("test")
+        );
 
         Assert.assertTrue("messages was sent without exceptions", true);
 

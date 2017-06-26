@@ -16,6 +16,8 @@
 
 package com.github.fedorchuck.developers_notification.integrations;
 
+import com.github.fedorchuck.developers_notification.http.HttpResponse;
+
 /**
  * Decelerate which methods should contain each integration,
  * which allows to send messages to messengers.
@@ -43,4 +45,11 @@ public interface Integration {
      * @since 0.1.0
      **/
     String generateMessage(String projectName, String description, Throwable throwable);
+
+    /**
+     * Analyse response after sent message
+     * @param response response from http client
+     * @since 0.2.1
+     **/
+    void analyseResponse(HttpResponse response);
 }

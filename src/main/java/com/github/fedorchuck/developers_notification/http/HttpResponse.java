@@ -18,6 +18,7 @@ package com.github.fedorchuck.developers_notification.http;
 
 import lombok.*;
 
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -40,15 +41,22 @@ public class HttpResponse {
     private String responseMessage;
 
     /**
-     * The JSON as {@link Map} of the response
-     * */
-    private Map<String, Object> jsonResponse;
+    * Type of response content, like <code>application/json</code> or <code>text/html</code>
+    * */
+    private String contentType;
 
-    @Override
-    public String toString() {
-        return "HttpResponse{" +
-                "statusCode=" + statusCode +
-                ", responseMessage='" + responseMessage + '\'' +
-                '}';
+    private String responseContent;
+
+    private IOException exception;
+
+    public String printResponseHideDetails() {
+        return "Status code: " + statusCode +
+                "; Response message: '" + responseMessage + "\'" +
+                "; Content type: '" + contentType + "\' "
+                ;
+    }
+
+    public String printResponse() {
+        return printResponseHideDetails() + "Response content: '" + responseContent + "\'";
     }
 }

@@ -22,6 +22,8 @@ import com.github.fedorchuck.developers_notification.json.exceptions.JsonEncodeE
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class contains method for serialise and deserialize.
@@ -46,7 +48,7 @@ public class Json {
         try {
             return new JsonSerializer().writeValueAsString(obj);
         } catch (Exception e) {
-            throw new JsonEncodeException("Failed to encode as JSON: " + e.getMessage());
+            throw new JsonEncodeException("Failed to encode as JSON: ", e);
         }
     }
 
@@ -65,7 +67,7 @@ public class Json {
         try {
             return new JsonDeserializer().readValue(str, clazz);
         } catch (Exception e) {
-            throw new JsonDecodeException("Failed to decode:" + e.getMessage());
+            throw new JsonDecodeException("Failed to decode:", e);
         }
     }
 
@@ -92,9 +94,13 @@ public class Json {
                     break;
                 out.append(buffer, 0, rsz);
             }
+
+            if (clazz == String.class)
+                return (T) out.toString();
+
             return decodeValue(out.toString(), clazz);
         } catch (Exception e) {
-            throw new JsonDecodeException("Failed to decode:" + e.getMessage());
+            throw new JsonDecodeException("Failed to decode:", e);
         }
     }
 }

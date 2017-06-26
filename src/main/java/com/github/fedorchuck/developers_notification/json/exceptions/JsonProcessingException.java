@@ -25,14 +25,11 @@ package com.github.fedorchuck.developers_notification.json.exceptions;
  */
 public class JsonProcessingException extends RuntimeException {
 
-  public JsonProcessingException() {
+  public JsonProcessingException(String message, Throwable cause) {
+    super(message, cause);
   }
 
   public JsonProcessingException(String message) {
     super(message);
-  }
-
-  public JsonProcessingException(Throwable cause) {
-    super(cause);
   }
 }
