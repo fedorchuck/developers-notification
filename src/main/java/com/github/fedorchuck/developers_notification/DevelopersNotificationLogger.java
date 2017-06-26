@@ -16,6 +16,7 @@
 
 package com.github.fedorchuck.developers_notification;
 
+import com.github.fedorchuck.developers_notification.http.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,90 +29,85 @@ import java.io.IOException;
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
  * @since 0.1.0
  */
-@SuppressWarnings({"WeakerAccess", "SameParameterValue"})
+
+@SuppressWarnings("WeakerAccess")
 public class DevelopersNotificationLogger {
     private static Logger logger(int code) {
         return LoggerFactory.getLogger("DEVELOPERS_NOTIFICATION_"+code);
     }
 
     //region ERROR
-    public static void errorTaskFailed(String val, Exception ex) {
-        logger(0).error("Task {} has been failed with ", val, ex);
-    }
-
     public static void error(String val, Exception ex) {
-        logger(1).error(val, ex);
-    }
-
-    public static void errorWrongConfig(String val, String val2) {
-        logger(2).error("DEVELOPERS_NOTIFICATION has invalid config value: {} for {}", val, val2);
+        logger(1001).error(val, ex);
     }
 
     public static void error(String val) {
-        logger(3).error(val);
+        logger(1002).error(val);
+    }
+
+    public static void errorWrongConfig(String val, String val2) {
+        logger(1010).error("DEVELOPERS_NOTIFICATION has invalid config value: {} for {}", val, val2);
     }
 
     public static void errorWrongConfig(String val, String configField, String description) {
-        logger(4).error("DEVELOPERS_NOTIFICATION has invalid config value: {} for {} . {}",
+        logger(1011).error("DEVELOPERS_NOTIFICATION has invalid config value: {} for {} . {}",
                 val, configField, description);
     }
 
-    public static void errorWrongSlackConfig(String val) {
-        logger(100).error("SlackImpl config has invalid value: {}", val);
+    public static void errorTaskFailed(String val, Exception ex) {
+        logger(1020).error("Task {} has been failed with ", val, ex);
     }
 
-    public static void errorSendSlackMessage(IOException ex) {
-        logger(101).error("SlackImpl message was not send. ", ex);
+    public static void errorSendMessage(String integration, IOException ex) {
+        logger(1030).error("Message was not send to {}. ", integration, ex);
     }
 
-    public static void errorWrongTelegramConfig(String val) {
-        logger(200).error("TelegramImpl config has invalid value: {}", val);
+    public static void errorSendMessageBadConfig(String integration, IOException ex) {
+        logger(1031).error("Message was not send to {}. Please, check configuration. ", integration, ex);
     }
 
-    public static void errorSendTelegramMessage(IOException ex) {
-        logger(201).error("TelegramImpl message was not send. ", ex);
+    public static void errorSendMessageBadConfig(String integration, String desc) {
+        logger(1032).error(
+                "Message was not send to {}. Please, check configuration. Description: {}", integration, desc
+        );
     }
 
     public static void errorScheduler(String val) {
-        logger(300).error(val);
+        logger(1040).error(val);
     }
     //endregion
 
     //region INFO
+    public static void info(String val) {
+        logger(4001).info(val);
+    }
+
     public static void infoTaskCompleted(String val) {
-        logger(4000).info("Task {} has been completed.", val);
+        logger(4002).info("Task {} has been completed.", val);
     }
 
     public static void infoEnvironmentVariable(String key, String val) {
-        logger(4001).info("Environment property {} is {}. ", key, val);
+        logger(4003).info("Environment property {} is {}. ", key, val);
     }
 
-    public static void infoMessageSend(String integration) {
-        logger(4002).info("Sending message to {}. SHOW_WHOLE_LOG_DETAILS is false.", integration);
+    public static void infoMessageSendHideDetails(String integration) {
+        logger(4011).info("Sending message to {}. show_whole_log_details is false.", integration);
     }
 
-    public static void info(String val) {
-        logger(4003).info(val);
+    public static void infoMessageSend(String integration, String val, String message) {
+        logger(4012).info("Sending message to {} by url: {} with message: {}", integration, val, message);
     }
 
-    public static void infoSlackSend(String val, String message) {
-        logger(4100).info("Sending message to slack by url: {} with message: {}", val, message);
+    public static void infoHttpClientResponseHideDetails(HttpResponse val) {
+        logger(4021).info("Response: {}", val.printResponseHideDetails());
     }
 
-    public static void infoSlackResponse(String val) {
-        logger(4101).info("Response from slack: {}", val);
-    }
-
-    public static void infoTelegramSend(String val, String message) {
-        logger(4200).info("Sending message to telegram by url: {} with message: {}", val, message);
-    }
-
-    public static void infoTelegramResponse(String val) {
-        logger(4201).info("Response from telegram: {}", val);
+    public static void infoHttpClientResponse(HttpResponse val) {
+        logger(4022).info("Response: {}", val.printResponse());
     }
 
     public static void infoScheduler(String val) {
-        logger(4300).info(val);
+        logger(4031).info(val);
     }
     //endregion
 }

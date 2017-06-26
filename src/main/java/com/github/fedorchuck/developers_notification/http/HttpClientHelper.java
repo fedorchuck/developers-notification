@@ -17,6 +17,7 @@
 package com.github.fedorchuck.developers_notification.http;
 
 import com.github.fedorchuck.developers_notification.DevelopersNotificationUtil;
+import com.github.fedorchuck.developers_notification.json.Json;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
@@ -63,11 +64,10 @@ class HttpClientHelper {
         }
 
         HttpURLConnection connection;
-        if (stringUrl.startsWith("http")) {
-            connection = (HttpURLConnection) new URL(url).openConnection();
-        } else {
+        if (stringUrl.startsWith("https"))
             connection = (HttpsURLConnection) new URL(url).openConnection();
-        }
+        else
+            connection = (HttpURLConnection) new URL(url).openConnection();
 
         return connection;
     }
@@ -82,14 +82,25 @@ class HttpClientHelper {
      */
     @SuppressWarnings("unchecked")
     static HttpResponse getResponse(HttpURLConnection connection) throws IOException {
-        InputStream response = connection.getInputStream();
+        InputStream responseInputStream;
         HttpResponse httpResponse = new HttpResponse();
-        httpResponse.setStatusCode((connection).getResponseCode());
+        httpResponse.setStatusCode(connection.getResponseCode());
         httpResponse.setResponseMessage(connection.getResponseMessage());
-//        if ("application/json".equals(connection.getContentType()))
-//            httpResponse.setJsonResponse(new ObjectMapper().readValue(response, Map.class));
+        httpResponse.setContentType(connection.getContentType());
 
-        response.close();
+        if (connection.getResponseCode() != 200)
+            return httpResponse;
+
+        try {
+            responseInputStream = connection.getInputStream();
+        } catch (FileNotFoundException ex) {
+            httpResponse.setException(ex);
+            return httpResponse;
+        }
+
+        httpResponse.setResponseContent(Json.decodeValue(responseInputStream, String.class));
+
+        responseInputStream.close();
         return httpResponse;
     }
 }

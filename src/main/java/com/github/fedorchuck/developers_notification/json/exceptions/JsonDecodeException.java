@@ -25,15 +25,8 @@ package com.github.fedorchuck.developers_notification.json.exceptions;
  */
 public class JsonDecodeException extends RuntimeException {
 
-  public JsonDecodeException() {
-  }
-
-  public JsonDecodeException(String message) {
-    super(message);
-  }
-
-  public JsonDecodeException(Throwable cause) {
-    super(cause);
+  public JsonDecodeException(String message, Throwable cause) {
+    super(message, cause);
   }
 
 }

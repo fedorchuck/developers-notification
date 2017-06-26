@@ -204,7 +204,7 @@ class JsonDeserializer {
                     jsonParser.skipSeparator();
                     break;
                 default:
-                    throw new JsonProcessingException(token.asString());
+                    throw new JsonProcessingException(token.asString(), new IllegalStateException("Invalid token. "));
             }
         }
         jsonParser = null;

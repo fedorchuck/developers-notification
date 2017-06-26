@@ -39,7 +39,7 @@ public class TelegramImpl implements Integration {
     private HttpClient httpClient = new HttpClient();
     private String token;
     private String channel;
-    private Boolean isHide = DevelopersNotification.config.getShowWholeLogDetails();
+    private Boolean showWholeLogDetails = DevelopersNotification.config.getShowWholeLogDetails();
 
     private static final String SERVER_ENDPOINT = "https://api.telegram.org/bot";
     private static final String SEND_MESSAGE = "/sendMessage";
@@ -64,16 +64,22 @@ public class TelegramImpl implements Integration {
     public void sendMessage(String message) {
         String url = SERVER_ENDPOINT + token + SEND_MESSAGE;
 
-        if (isHide) {
-            DevelopersNotificationLogger.infoTelegramSend(url, message);
-        } else {
-            DevelopersNotificationLogger.infoMessageSend("Telegram");
-        }
+        if (showWholeLogDetails)
+            DevelopersNotificationLogger.infoMessageSend("Telegram", url, message);
+        else
+            DevelopersNotificationLogger.infoMessageSendHideDetails("Telegram");
+
         try {
             HttpResponse res = httpClient.post(url, message);
-            DevelopersNotificationLogger.infoTelegramResponse(res.toString());
+
+            if (showWholeLogDetails)
+                DevelopersNotificationLogger.infoHttpClientResponse(res);
+            else
+                DevelopersNotificationLogger.infoHttpClientResponseHideDetails(res);
+
+            analyseResponse(res);
         } catch (IOException e) {
-            DevelopersNotificationLogger.errorSendTelegramMessage(e);
+            DevelopersNotificationLogger.errorSendMessage("Telegram", e);
         }
     }
 
@@ -116,5 +122,39 @@ public class TelegramImpl implements Integration {
      **/
     private String replaceLowLine(String string) {
         return string.replace('_','-');
+    }
+
+    /**
+     * Analyse response after sent message
+     * @param response response from http client
+     * @since 0.2.1
+     **/
+    @Override
+    public void analyseResponse(HttpResponse response) {
+        if (response.getException()!=null)
+            DevelopersNotificationLogger.errorSendMessageBadConfig("Telegram", response.getException());
+        if (!response.getContentType().equals("application/json"))
+            DevelopersNotificationLogger.error("Telegram updated their rest api.");
+        if (response.getStatusCode()!=200 || response.getResponseContent() == null) {
+            if (showWholeLogDetails)
+                DevelopersNotificationLogger.errorSendMessageBadConfig("Telegram",
+                        "response code: " + response.getStatusCode() +
+                                " response content: " + response.getResponseContent());
+            else
+                DevelopersNotificationLogger.errorSendMessageBadConfig("Telegram",
+                        "response code: " + response.getStatusCode() +
+                                " response content: hidden by show_whole_log_details.");
+            return;
+        }
+        Response telegramResponse = Json.decodeValue(response.getResponseContent(), Response.class);
+        if (!telegramResponse.getOk())
+            if (showWholeLogDetails)
+                DevelopersNotificationLogger.errorSendMessageBadConfig("Telegram",
+                        "response code: " + response.getStatusCode() +
+                                " response content: " + response.getResponseContent());
+            else
+                DevelopersNotificationLogger.errorSendMessageBadConfig("Telegram",
+                    "response code: " + response.getStatusCode() +
+                            " response content: hidden by show_whole_log_details.");
     }
 }

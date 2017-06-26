@@ -29,18 +29,54 @@ class B {
 
         DevelopersNotification.monitoringStart();
 
-        DevelopersNotification.send(DevelopersNotificationMessenger.TELEGRAM, "developers_notification",
-                "test with full method signature", new Throwable("abcd"));
-        DevelopersNotification.send(DevelopersNotificationMessenger.SLACK, "developers_notification",
-                "test with full method signature", new Throwable("abcd"));
-        DevelopersNotification.send("developers_notification",
-                "test without full method signature", new Throwable());
+        DevelopersNotification.send("test with signature: " +
+                "'DevelopersNotification.send(description, throwable);'" +
+                        "java: " + Runtime.class.getPackage().getImplementationVersion(),
+                new Throwable("test")
+        );
+        DevelopersNotification.send(
+                "integration test",
+                "test with signature: " +
+                "'DevelopersNotification.send(projectName, description, throwable);'" +
+                        "java: " + Runtime.class.getPackage().getImplementationVersion(),
+                new Throwable("test")
+        );
+        DevelopersNotification.send(DevelopersNotificationMessenger.TELEGRAM,
+                "integration test",
+                "test with signature: " +
+                "'DevelopersNotification.send(DevelopersNotificationMessenger.TELEGRAM, projectName, description, throwable);'" +
+                        "java: " + Runtime.class.getPackage().getImplementationVersion(),
+                new Throwable("test")
+        );
+        DevelopersNotification.send(DevelopersNotificationMessenger.SLACK,
+                "integration test",
+                "test with signature: " +
+                "'DevelopersNotification.send(DevelopersNotificationMessenger.SLACK, projectName, description, throwable);'" +
+                        "java: " + Runtime.class.getPackage().getImplementationVersion(),
+                new Throwable("test")
+        );
+        DevelopersNotification.send(DevelopersNotificationMessenger.ALL_AVAILABLE,
+                "integration test",
+                "test with signature: " +
+                "'DevelopersNotification.send(DevelopersNotificationMessenger.ALL_AVAILABLE, projectName, description, throwable);'" +
+                        "java: " + Runtime.class.getPackage().getImplementationVersion(),
+                new Throwable("test")
+        );
+        DevelopersNotification.send(
+                true,
+                "integration test",
+                "test with signature: " +
+                "'DevelopersNotification.send(protectionFromSpam, projectName, description, throwable);'" +
+                "java: " + Runtime.class.getPackage().getImplementationVersion(),
+                new Throwable("test")
+        );
 
         Assert.assertTrue("messages was sent without exceptions", true);
 
         try {Thread.sleep(10000);} catch (InterruptedException ignored) { }
 
         Assert.assertEquals(true, DevelopersNotification.isMonitoringStateAlive());
+        DevelopersNotification.monitoringStart();
         DevelopersNotification.monitoringStop();
         Assert.assertEquals(false, DevelopersNotification.isMonitoringStateAlive());
     }

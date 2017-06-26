@@ -19,7 +19,6 @@ package com.github.fedorchuck.developers_notification;
 import com.github.fedorchuck.developers_notification.antispam.SpamProtection;
 import com.github.fedorchuck.developers_notification.configuration.Config;
 import com.github.fedorchuck.developers_notification.configuration.Messenger;
-import com.github.fedorchuck.developers_notification.http.HttpClient;
 import com.github.fedorchuck.developers_notification.json.Json;
 import com.github.fedorchuck.developers_notification.monitoring.MonitorProcessor;
 
@@ -41,7 +40,7 @@ import java.util.concurrent.TimeUnit;
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
  * @since 0.1.0
  */
-@SuppressWarnings({"SameParameterValue", "unused"})
+@SuppressWarnings({"SameParameterValue", "UnusedReturnValue"})
 public class DevelopersNotification {
     static {
         Thread.currentThread().setName("Developers notification");

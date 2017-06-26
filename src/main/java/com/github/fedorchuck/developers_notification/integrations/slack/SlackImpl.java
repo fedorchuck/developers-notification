@@ -40,7 +40,7 @@ public class SlackImpl implements Integration {
     private HttpClient httpClient = new HttpClient();
     private String token;
     private String channel;
-    private Boolean isHide = DevelopersNotification.config.getShowWholeLogDetails();
+    private Boolean showWholeLogDetails = DevelopersNotification.config.getShowWholeLogDetails();
 
     private static final String SERVER_ENDPOINT = "https://hooks.slack.com/services/";
 
@@ -63,16 +63,22 @@ public class SlackImpl implements Integration {
     @Override
     public void sendMessage(String message) {
         String url = SERVER_ENDPOINT + token;
-        if (isHide) {
-            DevelopersNotificationLogger.infoSlackSend(url, message);
-        } else {
-            DevelopersNotificationLogger.infoMessageSend("Slack");
-        }
+        if (showWholeLogDetails)
+            DevelopersNotificationLogger.infoMessageSend("Slack", url, message);
+        else
+            DevelopersNotificationLogger.infoMessageSendHideDetails("Slack");
+
         try {
             HttpResponse res = httpClient.post(url, message);
-            DevelopersNotificationLogger.infoSlackResponse(res.toString());
+
+            if (showWholeLogDetails)
+                DevelopersNotificationLogger.infoHttpClientResponse(res);
+            else
+                DevelopersNotificationLogger.infoHttpClientResponseHideDetails(res);
+
+            analyseResponse(res);
         } catch (IOException e) {
-            DevelopersNotificationLogger.errorSendSlackMessage(e);
+            DevelopersNotificationLogger.errorSendMessage("Slack", e);
         }
     }
 
@@ -107,5 +113,27 @@ public class SlackImpl implements Integration {
         payload.setAttachments(Collections.singletonList(attachment));
 
         return Json.encode(payload);
+    }
+
+    /**
+     * Analyse response after sent message
+     * @param response response from http client
+     * @since 0.2.1
+     **/
+    @Override
+    public void analyseResponse(HttpResponse response) {
+        if (response.getException()!=null)
+            DevelopersNotificationLogger.errorSendMessageBadConfig("Slack", response.getException());
+        if (!response.getContentType().equals("text/html"))
+            DevelopersNotificationLogger.error("Slack updated their rest api.");
+        if (response.getResponseContent()!= null && !response.getResponseContent().toLowerCase().equals("ok"))
+            if (showWholeLogDetails)
+                DevelopersNotificationLogger.errorSendMessageBadConfig("Slack",
+                        "response code: " + response.getStatusCode() +
+                                " response content: " + response.getResponseContent());
+            else
+                DevelopersNotificationLogger.errorSendMessageBadConfig("Slack",
+                    "response code: " + response.getStatusCode() +
+                            " response content: hidden by show_whole_log_details.");
     }
 }
