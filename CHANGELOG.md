@@ -1,6 +1,9 @@
 # Java library which provides developers notification via messengers 
 # Changelog
 
+## 0.2.1
+* Fixed minor bug in http client ([#26](https://github.com/fedorchuck/developers-notification/pull/26))
+
 ## 0.2.0
 * Added configuration in format json-object ([#14](https://github.com/fedorchuck/developers-notification/pull/14))
 * Added ability to make monitoring ([#13](https://github.com/fedorchuck/developers-notification/pull/13))
