@@ -35,14 +35,14 @@ This library compatible with Java 6+
 ### Download
 Gradle:
 ```groovy
-compile 'com.github.fedorchuck:developers-notification:0.2.0'
+compile 'com.github.fedorchuck:developers-notification:0.2.1'
 ```
 Maven:
 ```xml
 <dependency>
   <groupId>com.github.fedorchuck</groupId>
   <artifactId>developers-notification</artifactId>
-  <version>0.2.0</version>
+  <version>0.2.1</version>
 </dependency>
 ```
 JAR-files:  
@@ -85,8 +85,8 @@ environment variable witch required if you use this library. Accepted value is J
 * `show_whole_log_details` receive boolean value; if value is `true` - log will contain Information containing passwords; is not required; default value is `false`;
 * `protection_from_spam` receive boolean value; if value is `true` - you will be protected from spam (receiving the same messages each second). It is necessary for adjust the frequency of sending messages; is not required; default value is `false`;
 * `project_name` name of project using this library; required;
-* `connect_timeout` for [HttpClient](https://fedorchuck.github.io/developers-notification/javadoc-0.2.0/com/github/fedorchuck/developers_notification/http/HttpClient.html) is not required; default value is `5000`;
-* `user_agent` user agent for [HttpClient](https://fedorchuck.github.io/developers-notification/javadoc-0.2.0/com/github/fedorchuck/developers_notification/http/HttpClient.html) is not required; default value is `Mozilla/5.0`;
+* `connect_timeout` for [HttpClient](https://fedorchuck.github.io/developers-notification/javadoc-0.2.1/com/github/fedorchuck/developers_notification/http/HttpClient.html) is not required; default value is `5000`;
+* `user_agent` user agent for [HttpClient](https://fedorchuck.github.io/developers-notification/javadoc-0.2.1/com/github/fedorchuck/developers_notification/http/HttpClient.html) is not required; default value is `Mozilla/5.0`;
 * `monitoring` it is object with configure monitoring of current RAM and disk memory usage, set limits of their use and in case of overspending - informs in the selected messengers; required if you use this feature;
    * `period` receive integer value; the frequency with which the monitoring will be carried out;
    * `unit` the designation in which units the period is measured; should be:
@@ -152,7 +152,7 @@ For checking set environment variables which needed this library use:
 ```groovy
 DevelopersNotification.printConfiguration();
 ```
-**Note:** If configuration value of field `show_whole_log_details` is `false` - will be printed result of method [Config#getPublicToString()](https://fedorchuck.github.io/developers-notification/javadoc-0.2.0/com/github/fedorchuck/developers_notification/configuration/Config.html)
+**Note:** If configuration value of field `show_whole_log_details` is `false` - will be printed result of method [Config#getPublicToString()](https://fedorchuck.github.io/developers-notification/javadoc-0.2.1/com/github/fedorchuck/developers_notification/configuration/Config.html)
 For sending message to chosen destination you can use methods:
 1) Messenger, spam protection and project name will be reading from config.</p>
 ```groovy

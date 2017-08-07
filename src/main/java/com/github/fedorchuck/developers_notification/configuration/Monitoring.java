@@ -29,6 +29,7 @@ import java.util.concurrent.TimeUnit;
  * @since 0.2.0
  */
 @SuppressWarnings("unused")
+@ToString
 public class Monitoring {
     @Getter
     private Long period;
