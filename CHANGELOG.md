@@ -1,6 +1,11 @@
 # Java library which provides developers notification via messengers 
 # Changelog
 
+## 0.2.2
+* Fixed minor bug with logger ([#29](https://github.com/fedorchuck/developers-notification/pull/29))
+* Added @ToString for `com.github.fedorchuck.developers_notification.configuration.Monitoring` 
+([#27](https://github.com/fedorchuck/developers-notification/issues/27))
+
 ## 0.2.1
 * Fixed minor bug in http client ([#26](https://github.com/fedorchuck/developers-notification/pull/26))
 

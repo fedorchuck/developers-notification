@@ -6,13 +6,17 @@
 [![codecov](https://codecov.io/gh/fedorchuck/developers-notification/branch/master/graph/badge.svg)](https://codecov.io/gh/fedorchuck/developers-notification)
 
 ## Introduction
-Sometimes every developer needs to know about the event that happened as soon as possible. For example, about incorrect work of the server or about changing the third-party rest-api, about anything, depending on the specifics of the project.
+Sometimes every developer needs to know about the event that happened as soon as possible. For example, about incorrect 
+work of the server or about changing the third-party rest-api, about anything, depending on the specifics of the project.
  
-There are many ways to inform developers about such events - all sorts of services, loggers. But most of them send notifications to the mail or a issue tracking system of a different type, which is not always convenient and not always possible to track quickly.
+There are many ways to inform developers about such events - all sorts of services, loggers. But most of them send 
+notifications to the mail or a issue tracking system of a different type, which is not always convenient and not always possible to track quickly.
 
-This library sending notifications to messengers. Just create and connect a bot in the messenger that your team using and that is supported by this library. For now it is Slack and Telegram. Add the library to the project, add it configuration (access keys to the bot that you created), add lines, where it is needed, to send message and you receive messages when something happened.
+This library sending notifications to messengers. Just create and connect a bot in the messenger that your team using 
+and that is supported by this library. For now it is Slack and Telegram. Add the library to the project, add it configuration (access keys to the bot that you created), add lines, where it is needed, to send message and you receive messages when something happened.
 
-Also, this library have monitoring module. It can monitor current usage of RAM and disk memory, set limits of their usage and in case of overspending - informs to the selected messengers.
+Also, this library have monitoring module. It can monitor current usage of RAM and disk memory, set limits of their 
+usage and in case of overspending - informs to the selected messengers.
 
 This library compatible with Java 6+
 
@@ -35,14 +39,14 @@ This library compatible with Java 6+
 ### Download
 Gradle:
 ```groovy
-compile 'com.github.fedorchuck:developers-notification:0.2.1'
+compile 'com.github.fedorchuck:developers-notification:0.2.2'
 ```
 Maven:
 ```xml
 <dependency>
   <groupId>com.github.fedorchuck</groupId>
   <artifactId>developers-notification</artifactId>
-  <version>0.2.1</version>
+  <version>0.2.2</version>
 </dependency>
 ```
 JAR-files:  
@@ -82,12 +86,17 @@ environment variable witch required if you use this library. Accepted value is J
    * `channel` contains channel of integration;  
    
    **Note:** If you specify several messengers, you will recive instant messages to all specified messengers.
-* `show_whole_log_details` receive boolean value; if value is `true` - log will contain Information containing passwords; is not required; default value is `false`;
-* `protection_from_spam` receive boolean value; if value is `true` - you will be protected from spam (receiving the same messages each second). It is necessary for adjust the frequency of sending messages; is not required; default value is `false`;
+* `show_whole_log_details` receive boolean value; if value is `true` - log will contain Information containing 
+passwords; is not required; default value is `false`;
+* `protection_from_spam` receive boolean value; if value is `true` - you will be protected from spam (receiving the 
+same messages each second). It is necessary for adjust the frequency of sending messages; is not required; default value is `false`;
 * `project_name` name of project using this library; required;
-* `connect_timeout` for [HttpClient](https://fedorchuck.github.io/developers-notification/javadoc-0.2.1/com/github/fedorchuck/developers_notification/http/HttpClient.html) is not required; default value is `5000`;
-* `user_agent` user agent for [HttpClient](https://fedorchuck.github.io/developers-notification/javadoc-0.2.1/com/github/fedorchuck/developers_notification/http/HttpClient.html) is not required; default value is `Mozilla/5.0`;
-* `monitoring` it is object with configure monitoring of current RAM and disk memory usage, set limits of their use and in case of overspending - informs in the selected messengers; required if you use this feature;
+* `connect_timeout` for 
+[HttpClient](https://fedorchuck.github.io/developers-notification/javadoc-0.2.2/com/github/fedorchuck/developers_notification/http/HttpClient.html) is not required; default value is `5000`;
+* `user_agent` user agent for 
+[HttpClient](https://fedorchuck.github.io/developers-notification/javadoc-0.2.2/com/github/fedorchuck/developers_notification/http/HttpClient.html) is not required; default value is `Mozilla/5.0`;
+* `monitoring` it is object with configure monitoring of current RAM and disk memory usage, set limits of their use and 
+in case of overspending - informs in the selected messengers; required if you use this feature;
    * `period` receive integer value; the frequency with which the monitoring will be carried out;
    * `unit` the designation in which units the period is measured; should be:
       * `SECONDS`
@@ -105,7 +114,8 @@ environment variable witch required if you use this library. Accepted value is J
 2) Choose a channel and add press green button :-)
 3) Choose the channel again add press green button, again :-)
 4) Find the `Integration Settings` section
-5) Find the `Webhook URL` sub-section and copy token. Example url: `https://hooks.slack.com/services/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`, token: `TZXG2L132/B56Z6RGR1/AdlsZzn1QGfo2qrEK4jpO4wJ`
+5) Find the `Webhook URL` sub-section and copy token. Example url: 
+`https://hooks.slack.com/services/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`, token: `TZXG2L132/B56Z6RGR1/AdlsZzn1QGfo2qrEK4jpO4wJ`
 6) Messenger configuration to your project should look like this:
 ```json
 {
@@ -152,7 +162,8 @@ For checking set environment variables which needed this library use:
 ```groovy
 DevelopersNotification.printConfiguration();
 ```
-**Note:** If configuration value of field `show_whole_log_details` is `false` - will be printed result of method [Config#getPublicToString()](https://fedorchuck.github.io/developers-notification/javadoc-0.2.1/com/github/fedorchuck/developers_notification/configuration/Config.html)
+**Note:** If configuration value of field `show_whole_log_details` is `false` - will be printed result of method 
+[Config#getPublicToString()](https://fedorchuck.github.io/developers-notification/javadoc-0.2.2/com/github/fedorchuck/developers_notification/configuration/Config.html)
 For sending message to chosen destination you can use methods:
 1) Messenger, spam protection and project name will be reading from config.</p>
 ```groovy
@@ -216,12 +227,14 @@ DevelopersNotification.send(
    new IllegalStateException("abcd")
 );
 ```
-For monitoring current usage of ram and disk memory and in case of overspending limits of their use - get messages in the selected messengers, you can use methods:
+For monitoring current usage of ram and disk memory and in case of overspending limits of their use - get messages in 
+the selected messengers, you can use methods:
 * Launches monitoring process for current application.
 ```groovy
 DevelopersNotification.monitoringStart();
 ```
-* Initiates an orderly shutdown in which previously submitted tasks are executed, but no new tasks will be accepted. Invocation has no additional effect if already shut down.
+* Initiates an orderly shutdown in which previously submitted tasks are executed, but no new tasks will be accepted. 
+Invocation has no additional effect if already shut down.
 ```groovy
 DevelopersNotification.monitoringStop();
 ```
