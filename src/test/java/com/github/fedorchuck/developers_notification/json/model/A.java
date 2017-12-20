@@ -16,17 +16,43 @@
 
 package com.github.fedorchuck.developers_notification.json.model;
 
-import lombok.*;
+import java.util.Objects;
 
 /**
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>.
  */
-@Getter @Setter
-@ToString
-@EqualsAndHashCode
-@NoArgsConstructor @AllArgsConstructor
-@Builder
 public class A {
     private Boolean ok;
     private Result result;
+
+    public Boolean getOk() {
+        return ok;
+    }
+
+    public void setOk(Boolean ok) {
+        this.ok = ok;
+    }
+
+    public Result getResult() {
+        return result;
+    }
+
+    public void setResult(Result result) {
+        this.result = result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        A a = (A) o;
+        return Objects.equals(ok, a.ok) &&
+                Objects.equals(result, a.result);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(ok, result);
+    }
 }

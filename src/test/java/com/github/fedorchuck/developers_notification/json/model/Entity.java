@@ -16,19 +16,38 @@
 
 package com.github.fedorchuck.developers_notification.json.model;
 
-import lombok.*;
+import java.util.Objects;
 
 /**
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>.
  */
-@Getter @Setter
-@ToString
-@EqualsAndHashCode
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class Entity {
     private String type;
     private Integer offset;
     private Integer length;
+
+    public Entity() {
+    }
+
+    public Entity(String type, Integer offset, Integer length) {
+        this.type = type;
+        this.offset = offset;
+        this.length = length;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Entity entity = (Entity) o;
+        return Objects.equals(type, entity.type) &&
+                Objects.equals(offset, entity.offset) &&
+                Objects.equals(length, entity.length);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(type, offset, length);
+    }
 }

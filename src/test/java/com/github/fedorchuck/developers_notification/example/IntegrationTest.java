@@ -28,6 +28,12 @@ public class IntegrationTest {
     @Test
     public void test001() throws IOException, IllegalAccessException, InterruptedException {
 
+        DevelopersNotificationUtil.setEnvironmentVariable("TRAVIS_TEST_SLACK_TOKEN", "T0XG2L132/B51RF69GQ/jxoAWjkBvfiS4hvALuDb6lez");
+        DevelopersNotificationUtil.setEnvironmentVariable("TRAVIS_TEST_SLACK_CHANNEL", "general");
+        DevelopersNotificationUtil.setEnvironmentVariable("TRAVIS_TEST_TELEGRAM_TOKEN", "317208208:AAEZU_J17y5-UnMTjFRrUwtRbBCvuBu2-9U");
+        DevelopersNotificationUtil.setEnvironmentVariable("TRAVIS_TEST_TELEGRAM_CHANNEL", "-197235129");
+//        DevelopersNotificationUtil.setEnvironmentVariable("DN_MESSENGER", "ALL_AVAILABLE");
+
         String slackToken = DevelopersNotificationUtil.getEnvironmentVariable("TRAVIS_TEST_SLACK_TOKEN");
         String slackChannel = DevelopersNotificationUtil.getEnvironmentVariable("TRAVIS_TEST_SLACK_CHANNEL");
         String telegramToken = DevelopersNotificationUtil.getEnvironmentVariable("TRAVIS_TEST_TELEGRAM_TOKEN");

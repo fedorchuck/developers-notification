@@ -200,13 +200,12 @@ public class MonitorProcessor implements Runnable {
         List<Disk> disks = new ArrayList<Disk>(0);
         /*For each filesystem root, get info */
         for (File root : roots) {
-            disks.add(
-                    Disk.builder()
-                            .totalDiskSpace(root.getTotalSpace())
-                            .freeDiskSpace(root.getFreeSpace())
-                            .usableDiskSpace(root.getTotalSpace() - root.getFreeSpace())
-                            .diskName(root.getPath())
-                            .build()
+            disks.add(new Disk(
+                    root.getTotalSpace(),
+                    root.getFreeSpace(),
+                    root.getTotalSpace() - root.getFreeSpace(),
+                    root.getPath()
+                    )
             );
         }
 

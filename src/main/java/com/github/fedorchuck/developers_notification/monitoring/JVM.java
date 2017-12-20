@@ -16,8 +16,6 @@
 
 package com.github.fedorchuck.developers_notification.monitoring;
 
-import lombok.*;
-
 /**
  * Model for monitoring
  *
@@ -25,7 +23,6 @@ import lombok.*;
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
  * @since 0.2.0
  */
-@Getter @Setter
 class JVM {
     /**
      * Maximum ram memory for JVM (bytes)
@@ -43,4 +40,36 @@ class JVM {
      * Free ram memory for JVM (bytes)
      **/
     private long freeRamMemory;
+
+    public long getMaxRamMemory() {
+        return maxRamMemory;
+    }
+
+    public void setMaxRamMemory(long maxRamMemory) {
+        this.maxRamMemory = maxRamMemory;
+    }
+
+    public long getUsedRamMemory() {
+        return usedRamMemory;
+    }
+
+    public void setUsedRamMemory(long usedRamMemory) {
+        this.usedRamMemory = usedRamMemory;
+    }
+
+    public long getTotalRamMemory() {
+        return totalRamMemory;
+    }
+
+    public void setTotalRamMemory(long totalRamMemory) {
+        this.totalRamMemory = totalRamMemory;
+    }
+
+    public long getFreeRamMemory() {
+        return freeRamMemory;
+    }
+
+    public void setFreeRamMemory(long freeRamMemory) {
+        this.freeRamMemory = freeRamMemory;
+    }
 }

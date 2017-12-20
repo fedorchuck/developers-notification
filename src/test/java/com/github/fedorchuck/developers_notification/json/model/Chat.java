@@ -16,20 +16,63 @@
 
 package com.github.fedorchuck.developers_notification.json.model;
 
-import lombok.*;
+import java.util.Objects;
 
 /**
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>.
  */
-@Getter @Setter
-@ToString
-@EqualsAndHashCode
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 public class Chat {
     private Integer id;
     private String title;
     private String type;
     private Boolean all_members_are_administrators;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Boolean getAll_members_are_administrators() {
+        return all_members_are_administrators;
+    }
+
+    public void setAll_members_are_administrators(Boolean all_members_are_administrators) {
+        this.all_members_are_administrators = all_members_are_administrators;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Chat chat = (Chat) o;
+        return Objects.equals(id, chat.id) &&
+                Objects.equals(title, chat.title) &&
+                Objects.equals(type, chat.type) &&
+                Objects.equals(all_members_are_administrators, chat.all_members_are_administrators);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, title, type, all_members_are_administrators);
+    }
 }

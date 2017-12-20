@@ -43,16 +43,18 @@ public class JsonDeserializerTest {
                 "{\"type\":\"pre\",\"offset\":126,\"length\":238}" +
                 "]}";
         Result actual = new JsonDeserializer().readValue(input, Result.class);
-        Result expected = new Result();
+
         List<Entity> entities = new ArrayList<Entity>(0);
-        entities.add(Entity.builder().type("bold").offset(0).length(7).build());
-        entities.add(Entity.builder().type("bold").offset(34).length(7).build());
-        entities.add(Entity.builder().type("bold").offset(76).length(9).build());
-        entities.add(Entity.builder().type("code").offset(86).length(27).build());
-        entities.add(Entity.builder().type("bold").offset(114).length(11).build());
-        entities.add(Entity.builder().type("pre").offset(126).length(238).build());
-        expected.setMessage_id(131);
-        expected.setEntities(entities);
+            entities.add(new Entity("bold", 0, 7));
+            entities.add(new Entity("bold", 34, 7));
+            entities.add(new Entity("bold", 76, 9));
+            entities.add(new Entity("code", 86, 27));
+            entities.add(new Entity("bold", 114, 11));
+            entities.add(new Entity("pre", 126, 238));
+
+        Result expected = new Result();
+            expected.setMessage_id(131);
+            expected.setEntities(entities);
 
         Assert.assertEquals(expected, actual);
     }

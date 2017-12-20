@@ -17,7 +17,6 @@
 package com.github.fedorchuck.developers_notification.integrations.slack;
 
 import java.io.Serializable;
-import lombok.*;
 
 /**
  * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
@@ -25,7 +24,6 @@ import lombok.*;
  * @since 0.1.0
  */
 @SuppressWarnings("unused")
-@Setter
 class Attachment implements Serializable {
     private String fallback;
     private String title;
@@ -33,4 +31,28 @@ class Attachment implements Serializable {
     private String author_name;
     private String[] mrkdwn_in;
     private String text;
+
+    public void setFallback(String fallback) {
+        this.fallback = fallback;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public void setAuthor_name(String author_name) {
+        this.author_name = author_name;
+    }
+
+    public void setMrkdwn_in(String[] mrkdwn_in) {
+        this.mrkdwn_in = mrkdwn_in;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
 }

@@ -16,8 +16,6 @@
 
 package com.github.fedorchuck.developers_notification.monitoring;
 
-import lombok.*;
-
 /**
  * Model for monitoring
  *
@@ -25,11 +23,32 @@ import lombok.*;
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
  * @since 0.2.0
  */
-@Getter
-@Builder
 class Disk {
     private long totalDiskSpace;
     private long freeDiskSpace;
     private long usableDiskSpace;
     private String diskName;
+
+    public Disk(long totalDiskSpace, long freeDiskSpace, long usableDiskSpace, String diskName) {
+        this.totalDiskSpace = totalDiskSpace;
+        this.freeDiskSpace = freeDiskSpace;
+        this.usableDiskSpace = usableDiskSpace;
+        this.diskName = diskName;
+    }
+
+    public long getTotalDiskSpace() {
+        return totalDiskSpace;
+    }
+
+    public long getFreeDiskSpace() {
+        return freeDiskSpace;
+    }
+
+    public long getUsableDiskSpace() {
+        return usableDiskSpace;
+    }
+
+    public String getDiskName() {
+        return diskName;
+    }
 }
