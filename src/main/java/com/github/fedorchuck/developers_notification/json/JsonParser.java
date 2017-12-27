@@ -17,7 +17,6 @@
 package com.github.fedorchuck.developers_notification.json;
 
 import com.github.fedorchuck.developers_notification.json.exceptions.JsonProcessingException;
-import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,17 +44,14 @@ class JsonParser {
     /**
      * Results of parsing JSON content
      **/
-    @Getter
     private JsonToken valueToken;
     /**
      * Current position in JSON line
      **/
-    @Getter
     private int currentPosition;
     /**
      * Results of parsing JSON content
      **/
-    @Getter
     private String parsingContext;
 
     /**
@@ -65,6 +61,18 @@ class JsonParser {
         this.json = json;
         this.lengthOfString = json.length();
         this.lastIndexOfString = lengthOfString - 1;
+    }
+
+    public JsonToken getValueToken() {
+        return valueToken;
+    }
+
+    public int getCurrentPosition() {
+        return currentPosition;
+    }
+
+    public String getParsingContext() {
+        return parsingContext;
     }
 
     /**

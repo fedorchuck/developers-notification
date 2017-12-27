@@ -19,7 +19,6 @@ package com.github.fedorchuck.developers_notification.configuration;
 import com.github.fedorchuck.developers_notification.DevelopersNotificationLogger;
 import com.github.fedorchuck.developers_notification.DevelopersNotificationMessenger;
 import com.github.fedorchuck.developers_notification.DevelopersNotificationUtil;
-import lombok.ToString;
 
 /**
  * Part of configuration for this library.
@@ -29,7 +28,6 @@ import lombok.ToString;
  * @since 0.2.0
  */
 @SuppressWarnings("unused")
-@ToString
 public class Messenger {
     private String name;
     private String token;

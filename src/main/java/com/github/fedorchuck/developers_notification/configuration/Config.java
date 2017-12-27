@@ -17,7 +17,6 @@
 package com.github.fedorchuck.developers_notification.configuration;
 
 import com.github.fedorchuck.developers_notification.DevelopersNotificationUtil;
-import lombok.*;
 
 import java.util.List;
 
@@ -53,17 +52,22 @@ import java.util.List;
  * @since 0.2.0
  */
 @SuppressWarnings({"unused", "MismatchedQueryAndUpdateOfCollection"})
-@ToString
 public class Config {
-    @Getter
     private List<Messenger> messenger;
-    @Getter
     private Monitoring monitoring;
     private String project_name;
     private Boolean protection_from_spam;
     private Boolean show_whole_log_details;
     private Integer connect_timeout;
     private String user_agent;
+
+    public List<Messenger> getMessenger() {
+        return messenger;
+    }
+
+    public Monitoring getMonitoring() {
+        return monitoring;
+    }
 
     public Boolean getShowWholeLogDetails() {
         if (show_whole_log_details == null)

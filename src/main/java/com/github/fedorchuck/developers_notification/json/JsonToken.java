@@ -16,8 +16,6 @@
 
 package com.github.fedorchuck.developers_notification.json;
 
-import lombok.Getter;
-
 /**
  * Enumeration for basic token types used for returning results of parsing JSON content.
  *
@@ -87,7 +85,7 @@ enum JsonToken {
     ;
     
     private final String serialized;
-    @Getter private final int id;
+    private final int id;
     private final boolean isNumber;
     private final boolean isBoolean;
 
@@ -103,6 +101,10 @@ enum JsonToken {
 
         isBoolean = (id == JsonTokenId.ID_FALSE || id == JsonTokenId.ID_TRUE);
         isNumber = (id == JsonTokenId.ID_NUMBER_INT || id == JsonTokenId.ID_NUMBER_FLOAT);
+    }
+
+    public int getId() {
+        return id;
     }
 
     /**

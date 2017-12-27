@@ -17,7 +17,6 @@
 package com.github.fedorchuck.developers_notification.integrations.telegram;
 
 import java.io.Serializable;
-import lombok.*;
 
 /**
  * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
@@ -25,9 +24,20 @@ import lombok.*;
  * @since 0.1.2
  */
 @SuppressWarnings("unused")
-@Setter
 class Message implements Serializable {
     private String chat_id;
     private String parse_mode;
     private String text;
+
+    public void setChat_id(String chat_id) {
+        this.chat_id = chat_id;
+    }
+
+    public void setParse_mode(String parse_mode) {
+        this.parse_mode = parse_mode;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
 }

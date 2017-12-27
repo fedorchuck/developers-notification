@@ -8,13 +8,11 @@ apply(plugin: 'maven')
 apply(plugin: 'signing')
 apply(plugin: 'jacoco')
 
-setSourceCompatibility(1.6)
-setTargetCompatibility(1.6)
+setSourceCompatibility(7.0)
+setTargetCompatibility(7.0)
 compileJava.options.encoding = 'UTF-8'
 
 dependencies {
-    compile 'org.projectlombok:lombok:1.16.16'
-
     compile 'org.slf4j:slf4j-simple:1.7.25'
     compile 'org.slf4j:slf4j-api:1.7.25'
 
@@ -26,12 +24,6 @@ if(project.hasProperty('signing.keyId'))
     signing {
         sign configurations.archives
     }
-
-task([type: Copy], 'backup') {
-    delete "${backup}/developers-notification/"
-    from projectDir.canonicalPath
-    into "${backup}/developers-notification/"
-}
 
 task([type: Copy], 'copyDocs') {
     delete "$projectDir/docs/javadoc-${version}"
@@ -154,5 +146,5 @@ jacocoTestReport {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.14'
+    gradleVersion = '4.4'
 }

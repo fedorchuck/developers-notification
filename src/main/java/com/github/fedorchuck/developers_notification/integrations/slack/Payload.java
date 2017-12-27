@@ -19,7 +19,6 @@ package com.github.fedorchuck.developers_notification.integrations.slack;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.*;
 
 /**
  * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
@@ -27,11 +26,30 @@ import lombok.*;
  * @since 0.1.0
  */
 @SuppressWarnings("unused")
-@Setter
 class Payload implements Serializable {
     private String username;
     private String icon_url;
     private String text;
     private String channel;
     private List<Attachment> attachments = new ArrayList<Attachment>(0);
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setIcon_url(String icon_url) {
+        this.icon_url = icon_url;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setChannel(String channel) {
+        this.channel = channel;
+    }
+
+    public void setAttachments(List<Attachment> attachments) {
+        this.attachments = attachments;
+    }
 }

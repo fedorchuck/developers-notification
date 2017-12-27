@@ -16,8 +16,6 @@
 
 package com.github.fedorchuck.developers_notification.monitoring;
 
-import lombok.*;
-
 import java.util.List;
 
 /**
@@ -27,9 +25,20 @@ import java.util.List;
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
  * @since 0.2.0
  */
-@Getter
-@AllArgsConstructor
 class PhysicalResourceUsage {
     private JVM jvm;
     private List<Disk> disks;
+
+    public PhysicalResourceUsage(JVM jvm, List<Disk> disks) {
+        this.jvm = jvm;
+        this.disks = disks;
+    }
+
+    public JVM getJvm() {
+        return jvm;
+    }
+
+    public List<Disk> getDisks() {
+        return disks;
+    }
 }

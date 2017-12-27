@@ -16,19 +16,53 @@
 
 package com.github.fedorchuck.developers_notification.json.model;
 
-import lombok.*;
+import java.util.Objects;
 
 /**
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>.
  */
-@Getter @Setter
-@ToString
-@EqualsAndHashCode
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 public class From {
     private Integer id;
     private String first_name;
     private String username;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getFirst_name() {
+        return first_name;
+    }
+
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        From from = (From) o;
+        return Objects.equals(id, from.id) &&
+                Objects.equals(first_name, from.first_name) &&
+                Objects.equals(username, from.username);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, first_name, username);
+    }
 }

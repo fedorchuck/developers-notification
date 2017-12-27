@@ -32,14 +32,13 @@ public class JsonWriterTest {
     private StringWriter stringWriter;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         stringWriter = new StringWriter();
         jsonWriter = new JsonWriter(stringWriter);
     }
 
     @Test
     public void testGeneral() throws IOException {
-
         jsonWriter.writeObjectBegin();
         jsonWriter.writeString("hello");
         jsonWriter.writePropertySeparator();

@@ -16,8 +16,7 @@
 
 package com.github.fedorchuck.developers_notification.antispam;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
+import java.util.Objects;
 
 /**
  * Model for mechanism witch avoiding spam.
@@ -26,10 +25,30 @@ import lombok.EqualsAndHashCode;
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
  * @since 0.2.0
  */
-@AllArgsConstructor
-@EqualsAndHashCode
 public class SentMessage {
     private MessageTypes type;
     private String projectName;
     private String description;
+
+    public SentMessage(MessageTypes type, String projectName, String description) {
+        this.type = type;
+        this.projectName = projectName;
+        this.description = description;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SentMessage that = (SentMessage) o;
+        return type == that.type &&
+                Objects.equals(projectName, that.projectName) &&
+                Objects.equals(description, that.description);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(type, projectName, description);
+    }
 }

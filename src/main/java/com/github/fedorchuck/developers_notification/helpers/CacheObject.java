@@ -16,8 +16,6 @@
 
 package com.github.fedorchuck.developers_notification.helpers;
 
-import lombok.ToString;
-
 /**
  * Model for {@link Lifetime} - stack with the lifetime of objects.
  *
@@ -25,7 +23,6 @@ import lombok.ToString;
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
  * @since 0.2.0
  */
-@ToString
 class CacheObject<T> {
     public long lastAccessed = System.currentTimeMillis();
     public T value;

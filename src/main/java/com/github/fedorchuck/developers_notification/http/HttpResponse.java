@@ -16,10 +16,7 @@
 
 package com.github.fedorchuck.developers_notification.http;
 
-import lombok.*;
-
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * Represents a client-side HTTP response.
@@ -28,7 +25,6 @@ import java.util.Map;
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
  * @since 0.1.0
  */
-@Getter @Setter
 public class HttpResponse {
     /**
      * The status code of the response
@@ -48,6 +44,46 @@ public class HttpResponse {
     private String responseContent;
 
     private IOException exception;
+
+    public int getStatusCode() {
+        return statusCode;
+    }
+
+    public void setStatusCode(int statusCode) {
+        this.statusCode = statusCode;
+    }
+
+    public String getResponseMessage() {
+        return responseMessage;
+    }
+
+    public void setResponseMessage(String responseMessage) {
+        this.responseMessage = responseMessage;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    public String getResponseContent() {
+        return responseContent;
+    }
+
+    public void setResponseContent(String responseContent) {
+        this.responseContent = responseContent;
+    }
+
+    public IOException getException() {
+        return exception;
+    }
+
+    public void setException(IOException exception) {
+        this.exception = exception;
+    }
 
     public String printResponseHideDetails() {
         return "Status code: " + statusCode +
