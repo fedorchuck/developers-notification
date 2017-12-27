@@ -25,12 +25,6 @@ if(project.hasProperty('signing.keyId'))
         sign configurations.archives
     }
 
-task([type: Copy], 'backup') {
-    delete "${backup}/developers-notification/"
-    from projectDir.canonicalPath
-    into "${backup}/developers-notification/"
-}
-
 task([type: Copy], 'copyDocs') {
     delete "$projectDir/docs/javadoc-${version}"
     from buildDir.canonicalPath + "/docs/javadoc"
