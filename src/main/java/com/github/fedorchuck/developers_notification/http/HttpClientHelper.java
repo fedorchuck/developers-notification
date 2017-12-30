@@ -88,8 +88,19 @@ class HttpClientHelper {
         httpResponse.setResponseMessage(connection.getResponseMessage());
         httpResponse.setContentType(connection.getContentType());
 
-        if (connection.getResponseCode() != 200)
+        if (connection.getResponseCode() != 200) {
+            if (httpResponse.getContentType().equals("application/json")) {
+                responseInputStream = connection.getErrorStream();
+                httpResponse.setResponseContent(Json.decodeValue(responseInputStream, String.class));
+                responseInputStream.close();
+            } else {
+                responseInputStream = connection.getErrorStream();
+                httpResponse.setResponseContent(Json.decodeValue(responseInputStream, String.class));
+                responseInputStream.close();
+            }
+
             return httpResponse;
+        }
 
         try {
             responseInputStream = connection.getInputStream();

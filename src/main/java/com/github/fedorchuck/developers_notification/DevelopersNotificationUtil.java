@@ -41,12 +41,15 @@ public class DevelopersNotificationUtil {
      *     for it you can use, for example, {@link System#setProperty(String, String)}
      * </p>
      *
+     * Method is deprecated. Will be removed at v 0.4.0
+     *
      * @param key name of property
      * @param value of property
      * @throws IllegalStateException if failed to set environment variable
      * @since 0.1.0
      **/
     @SuppressWarnings("unchecked")
+    @Deprecated
     public static void setEnvironmentVariable(String key, String value) {
         try {
             Map<String, String> env = System.getenv();
