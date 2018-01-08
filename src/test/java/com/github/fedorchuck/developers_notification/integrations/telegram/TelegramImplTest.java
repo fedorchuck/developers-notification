@@ -46,23 +46,18 @@ public class TelegramImplTest {
     @Test
     public void testGenerateMessage() {
         String telegramChannel = DevelopersNotificationUtil.getEnvironmentVariable("TRAVIS_TEST_TELEGRAM_CHANNEL");
-        String expected = "{\"chat_id\":"+telegramChannel+",\"parse_mode\":\"Markdown\",\"text\":\"*Project*: developers-notification \\n*Message*: test with full method signature \\n\"}";
+        String expected = "{\"chat_id\":"+telegramChannel+",\"parse_mode\":\"Markdown\",\"text\":\"*Project*: Where this library will be invoked \\n*Message*: test generate telegram message \\n\"}";
         TelegramImpl telegram = new TelegramImpl();
 
-        DNMessage actual = telegram.generateMessage("developers_notification",
-                "test with full method signature", null);
+        DNMessage actual = telegram.generateMessage("Where this library will be invoked",
+                "test generate telegram message", null);
         Assert.assertEquals(expected, actual.getJsonGeneratedMessages());
     }
 
     @Test
     public void testSendMessage() {
-        String telegramToken = DevelopersNotificationUtil.getEnvironmentVariable("TRAVIS_TEST_TELEGRAM_TOKEN");
-
         TelegramImpl telegram = new TelegramImpl();
 
-        String url = "https://api.telegram.org/bot" + telegramToken + "/sendMessage";
-        HttpClient httpClient = new HttpClient();
-        HttpResponse res;
         DNMessage messageToSend;
 
         messageToSend = telegram.generateMessage(
@@ -71,27 +66,17 @@ public class TelegramImplTest {
                 "java: " + Runtime.class.getPackage().getImplementationVersion(),
                 null);
 
-        try {
-            res = httpClient.post(url, messageToSend.getJsonGeneratedMessages());
-            telegram.analyseResponse(res);
-            Assert.assertTrue("test for short message is success",true);
-        } catch (IOException e) {
-            Assert.fail(e.getMessage());
-        }
+        telegram.sendMessage(messageToSend);
 
         messageToSend = telegram.generateMessage(
                 "test " + this.getClass().getCanonicalName() + "#testSendMessage",
                 "test for long message" +
                         "java: " + Runtime.class.getPackage().getImplementationVersion(),
-                new Throwable(new Throwable(new Throwable("test"))));
-        url = "https://api.telegram.org/bot" + telegramToken + "/sendDocument";
+                new Throwable(new Throwable(new Throwable("test for long message"))));
 
-        try {
-            res = httpClient.sendMultipartFromData(url, messageToSend.getMultipartEntityBuilder());
-            telegram.analyseResponse(res);
-        } catch (IOException e) {
-            Assert.fail(e.getMessage());
-        }
+        telegram.sendMessage(messageToSend);
+
+        //TODO: looking for errors in logs
     }
 
     @After
