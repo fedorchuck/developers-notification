@@ -64,6 +64,7 @@ public class Json {
      * @since 0.2.0
      **/
     public static <T> T decodeValue(String str, Class<T> clazz) throws JsonDecodeException {
+        //todo check is str is null or empty
         try {
             return new JsonDeserializer().readValue(str, clazz);
         } catch (Exception e) {

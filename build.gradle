@@ -16,6 +16,11 @@ dependencies {
     compile 'org.slf4j:slf4j-simple:1.7.25'
     compile 'org.slf4j:slf4j-api:1.7.25'
 
+    // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient
+    compile 'org.apache.httpcomponents:httpclient:4.5.4'
+    // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpmime
+    compile 'org.apache.httpcomponents:httpmime:4.5.4'
+
     testRuntime 'org.slf4j:slf4j-log4j12:1.7.5'
     testCompile 'junit:junit:4.12'
 }
@@ -147,4 +152,18 @@ jacocoTestReport {
 
 task wrapper(type: Wrapper) {
     gradleVersion = '4.4'
+}
+
+test {
+    if(project.hasProperty('TRAVIS_TEST_TELEGRAM_TOKEN')
+            && project.hasProperty('TRAVIS_TEST_TELEGRAM_CHANNEL')
+            && project.hasProperty('TRAVIS_TEST_SLACK_TOKEN')
+            && project.hasProperty('TRAVIS_TEST_SLACK_CHANNEL')) {
+        environment "TRAVIS_TEST_TELEGRAM_TOKEN", project.getProperty('TRAVIS_TEST_TELEGRAM_TOKEN')
+        environment "TRAVIS_TEST_TELEGRAM_CHANNEL", project.getProperty('TRAVIS_TEST_TELEGRAM_CHANNEL')
+        environment "TRAVIS_TEST_SLACK_TOKEN", project.getProperty('TRAVIS_TEST_SLACK_TOKEN')
+        environment "TRAVIS_TEST_SLACK_CHANNEL", project.getProperty('TRAVIS_TEST_SLACK_CHANNEL')
+
+        environment "DN", "{\"messenger\":[{\"name\":\"SLACK\",\"token\":\"${project.getProperty('TRAVIS_TEST_SLACK_TOKEN')}\",\"channel\":\"${project.getProperty('TRAVIS_TEST_SLACK_CHANNEL')}\"},{\"name\":\"TELEGRAM\",\"token\":\"${project.getProperty('TRAVIS_TEST_TELEGRAM_TOKEN')}\",\"channel\":\"${project.getProperty('TRAVIS_TEST_TELEGRAM_CHANNEL')}\"}],\"show_whole_log_details\":false,\"protection_from_spam\": \"true\",\"project_name\": \"Where this library will be invoked\",\"connect_timeout\":5000,\"user_agent\":\"Mozilla/5.0\",\"monitoring\":{\"period\":5,\"unit\":\"seconds\",\"max_ram\":90,\"max_disk\": 90,\"disk_consumption_rate\":2}}"
+    }
 }

@@ -16,9 +16,14 @@
 
 package com.github.fedorchuck.developers_notification;
 
+import com.github.fedorchuck.developers_notification.configuration.Messenger;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.URLEncoder;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -114,6 +119,19 @@ public class DevelopersNotificationUtil {
     }
 
     /**
+     * Convert {@link Throwable} stack trace to byte[] array
+     *
+     * @param throwable - which will be converted
+     * @return convert throwable as byte array
+     * @since 0.3.0
+     **/
+    public static byte[] getThrowableStackTraceBytes(Throwable throwable) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        throwable.printStackTrace(new PrintStream(baos));
+        return baos.toByteArray();
+    }
+
+    /**
      * Check is the given string is null or is the empty string.
      *
      * @param string to check
@@ -124,4 +142,33 @@ public class DevelopersNotificationUtil {
         return string == null || string.isEmpty();
     }
 
+    /**
+     * Check does the necessary messenger configuration exist
+     *
+     * @return  <code>true</code> if configuration exist;
+     *          <code>false</code> otherwise.
+     * @since 0.3.0
+     **/
+    public static boolean checkTheNecessaryConfigurationExists(DevelopersNotificationMessenger messenger) {
+        if (DevelopersNotification.config == null)
+            return false;
+
+        List<Messenger> messengers = DevelopersNotification.config.getMessenger();
+
+        if (messengers == null || messengers.isEmpty())
+            return false;
+
+        if (messenger.equals(DevelopersNotificationMessenger.ALL_AVAILABLE)) {
+            return checkTheNecessaryConfigurationExists(DevelopersNotificationMessenger.TELEGRAM) &
+                    checkTheNecessaryConfigurationExists(DevelopersNotificationMessenger.SLACK);
+        }
+
+        for (Messenger m : messengers) {
+            if (m.getName().equals(messenger)) {
+                return !isNullOrEmpty(m.getChannel()) && !isNullOrEmpty(m.getToken());
+            }
+        }
+
+        return false;
+    }
 }

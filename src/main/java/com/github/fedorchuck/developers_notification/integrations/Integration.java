@@ -17,12 +17,14 @@
 package com.github.fedorchuck.developers_notification.integrations;
 
 import com.github.fedorchuck.developers_notification.http.HttpResponse;
+import com.github.fedorchuck.developers_notification.integrations.developers_notification.DNMessage;
 
 /**
  * Decelerate which methods should contain each integration,
  * which allows to send messages to messengers.
- *
+ * <p>
  * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
+ *
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
  * @since 0.1.0
  */
@@ -30,24 +32,26 @@ public interface Integration {
 
     /**
      * Provides sending messages to specified messenger
-     * @param message to send
      *
+     * @param message to send
      * @since 0.1.0
      **/
-    void sendMessage(String message);
+    void sendMessage(DNMessage message);
 
     /**
      * Generate message to send by specified params
+     *
      * @param projectName where was method called. Can be <code>null</code>
      * @param description about situation. Can be <code>null</code>
-     * @param throwable which happened. Can be <code>null</code>
-     * @return generated message as JSON
+     * @param throwable   which happened. Can be <code>null</code>
+     * @return generated message as {@link DNMessage } JSON
      * @since 0.1.0
      **/
-    String generateMessage(String projectName, String description, Throwable throwable);
+    DNMessage generateMessage(String projectName, String description, Throwable throwable);
 
     /**
      * Analyse response after sent message
+     *
      * @param response response from http client
      * @since 0.2.1
      **/

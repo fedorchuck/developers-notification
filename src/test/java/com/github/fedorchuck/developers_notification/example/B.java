@@ -32,7 +32,7 @@ class B {
         DevelopersNotification.send("test with signature: " +
                 "'DevelopersNotification.send(description, throwable);'" +
                         "java: " + Runtime.class.getPackage().getImplementationVersion(),
-                new Throwable("test")
+                new Throwable(new Throwable(new Throwable(new Throwable("test"))))
         );
         DevelopersNotification.send(
                 "integration test",
