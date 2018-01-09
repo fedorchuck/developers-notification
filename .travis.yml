@@ -23,10 +23,13 @@ before_script:
 
 script:
  - gradle wrapper
- - gradle build
+ - gradle build -i -d
  - gradle assemble
- - gradle check
+ - gradle check -i -d
  - gradle codeCoverageReport
+
+#    gradle wrapper -i | gradle build -i | gradle assemble -i | gradle check -i | gradle codeCoverageReport -i
+#    gradle wrapper | gradle build -i -d | gradle assemble | gradle check -i -d | gradle codeCoverageReport
 
 after_success:
 - bash <(curl -s https://codecov.io/bash)

@@ -145,6 +145,7 @@ public class DevelopersNotificationUtil {
     /**
      * Check does the necessary messenger configuration exist
      *
+     * @param messenger to check
      * @return  <code>true</code> if configuration exist;
      *          <code>false</code> otherwise.
      * @since 0.3.0

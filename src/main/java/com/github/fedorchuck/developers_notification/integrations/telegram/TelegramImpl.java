@@ -166,7 +166,6 @@ public class TelegramImpl implements Integration {
             builder.addTextBody("chat_id", channel);
 
             dnMessage.setMultipartEntityBuilder(builder);
-
         }
         message.setText(generatedMessage.toString());
         dnMessage.setJsonGeneratedMessages(Json.encode(message));
