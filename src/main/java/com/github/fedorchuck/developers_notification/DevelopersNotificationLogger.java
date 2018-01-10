@@ -17,6 +17,7 @@
 package com.github.fedorchuck.developers_notification;
 
 import com.github.fedorchuck.developers_notification.http.HttpResponse;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +30,6 @@ import java.io.IOException;
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
  * @since 0.1.0
  */
-
 @SuppressWarnings("WeakerAccess")
 public class DevelopersNotificationLogger {
     private static Logger logger(int code) {
@@ -72,8 +72,21 @@ public class DevelopersNotificationLogger {
         );
     }
 
+    public static void errorSendMessageBadConfig(String integration) {
+        logger(1033).error(
+                "Message was not send to {}. Integration has not got configuration. Please, check configuration.",
+                integration
+        );
+    }
+
     public static void errorScheduler(String val) {
         logger(1040).error(val);
+    }
+    //endregion
+
+    //region WARN
+    public static void warnSendMessageBadConfig(String integration) {
+        logger(3001).warn("Integration {} has not got configuration. Please, check configuration.", integration);
     }
     //endregion
 
@@ -96,6 +109,10 @@ public class DevelopersNotificationLogger {
 
     public static void infoMessageSend(String integration, String val, String message) {
         logger(4012).info("Sending message to {} by url: {} with message: {}", integration, val, message);
+    }
+
+    public static void infoMessageSend(String integration, String val, MultipartEntityBuilder message) {
+        logger(4013).info("Sending message to {} by url: {} with message: {}", integration, val, message.toString());
     }
 
     public static void infoHttpClientResponseHideDetails(HttpResponse val) {

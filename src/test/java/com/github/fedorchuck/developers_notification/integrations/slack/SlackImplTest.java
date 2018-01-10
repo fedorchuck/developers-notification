@@ -16,7 +16,11 @@
 
 package com.github.fedorchuck.developers_notification.integrations.slack;
 
+import com.github.fedorchuck.developers_notification.DevelopersNotificationUtil;
+import com.github.fedorchuck.developers_notification.Utils;
+import com.github.fedorchuck.developers_notification.integrations.developers_notification.DNMessage;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
@@ -25,6 +29,15 @@ import java.lang.reflect.Field;
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>.
  */
 public class SlackImplTest {
+
+    @Before
+    public void setUp() {
+        String slackToken = DevelopersNotificationUtil.getEnvironmentVariable("TRAVIS_TEST_SLACK_TOKEN");
+        String slackChannel = DevelopersNotificationUtil.getEnvironmentVariable("TRAVIS_TEST_SLACK_CHANNEL");
+
+        String stringFullConfig = "{\"messenger\":[{\"name\":\"SLACK\",\"token\":\""+slackToken+"\",\"channel\":\""+slackChannel+"\"}],\"show_whole_log_details\":false,\"protection_from_spam\": \"true\",\"project_name\": \"Where this library will be invoked\",\"connect_timeout\":5000,\"user_agent\":\"Mozilla/5.0\",\"monitoring\":{\"period\":5,\"unit\":\"seconds\",\"max_ram\":90,\"max_disk\": 90,\"disk_consumption_rate\":2}}";
+        Utils.setConfig(stringFullConfig);
+    }
 
     @Test
     public void testGenerateMessage() {
@@ -36,14 +49,12 @@ public class SlackImplTest {
             field = slack.getClass().getDeclaredField("channel");
             field.setAccessible(true);
             field.set(slack, "general");
-        } catch (NoSuchFieldException e) {
-            Assert.fail(e.getMessage());
-        } catch (IllegalAccessException e) {
+        } catch (NoSuchFieldException | IllegalAccessException e) {
             Assert.fail(e.getMessage());
         }
 
-        String actual = slack.generateMessage("developers_notification",
+        DNMessage actual = slack.generateMessage("developers_notification",
                 "test with full method signature", null);
-        Assert.assertEquals(expected, actual);
+        Assert.assertEquals(expected, actual.getJsonGeneratedMessages());
     }
 }

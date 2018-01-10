@@ -45,8 +45,8 @@ public class DevelopersNotification {
     static {
         Thread.currentThread().setName("Developers notification");
     }
-    public static final Config config =
-            Json.decodeValue(DevelopersNotificationUtil.getEnvironmentVariable("DN"), Config.class);
+
+    public static Config config;
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private static boolean monitoringStateAlive = false;
 
@@ -58,6 +58,8 @@ public class DevelopersNotification {
      * @since 0.1.0
      **/
     public static void printConfiguration() {
+        loadConfig();
+
         if (config.getShowWholeLogDetails()) {
             DevelopersNotificationUtil.printToLogEnvironmentVariable("DN");
             DevelopersNotificationLogger.info(config.toString());
@@ -74,6 +76,8 @@ public class DevelopersNotification {
      * @since 0.2.0
      **/
     public static void send(final String description, final Throwable throwable) {
+        loadConfig();
+
         for (Messenger messenger : config.getMessenger()) {
             switch (messenger.getName()){
                 case SLACK:
@@ -103,6 +107,8 @@ public class DevelopersNotification {
     public static void send(final String projectName,
                             final String description,
                             final Throwable throwable) {
+        loadConfig();
+
         for (Messenger messenger : config.getMessenger()) {
             switch (messenger.getName()){
                 case SLACK:
@@ -134,6 +140,8 @@ public class DevelopersNotification {
                             final String projectName,
                             final String description,
                             final Throwable throwable) {
+        loadConfig();
+
         SpamProtection.sendIntoMessenger(config.getProtectionFromSpam(),
                 messengerDestination, projectName, description, throwable);
     }
@@ -151,6 +159,8 @@ public class DevelopersNotification {
                             final String projectName,
                             final String description,
                             final Throwable throwable) {
+        loadConfig();
+
         for (Messenger messenger : config.getMessenger()) {
             switch (messenger.getName()){
                 case SLACK:
@@ -176,7 +186,9 @@ public class DevelopersNotification {
      *          <code>false</code> otherwise.
      * @since 0.2.0
      **/
-    public static boolean monitoringStart(){
+    public static boolean monitoringStart() {
+        loadConfig();
+
         if (monitoringStateAlive) {
             DevelopersNotificationLogger.error("Monitoring process is already running.");
             return false;
@@ -225,4 +237,20 @@ public class DevelopersNotification {
         return monitoringStateAlive;
     }
 
+    /**
+     * Load Developers Notification configuration from environment variable <code>DN</code>.
+     * <p><b>Note: </b></p>
+     * <p>If configuration was loaded before - new configuration will not be uploaded.</p>
+     *
+     * @since 0.3.0
+     */
+    private static void loadConfig() {
+        if (config != null)
+            return;
+
+        if (!DevelopersNotificationUtil.isNullOrEmpty(DevelopersNotificationUtil.getEnvironmentVariable("DN")))
+            config = Json.decodeValue(DevelopersNotificationUtil.getEnvironmentVariable("DN"), Config.class);
+        else
+            config = null;
+    }
 }

@@ -20,7 +20,9 @@ import com.github.fedorchuck.developers_notification.DevelopersNotificationUtil;
 import com.github.fedorchuck.developers_notification.json.Json;
 
 import javax.net.ssl.HttpsURLConnection;
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
@@ -28,8 +30,9 @@ import java.util.Map;
 /**
  * A HTTP client. It allows you to make requests to HTTP servers,
  * and a single client can make requests to any server.
- *
+ * <p>
  * <p> <b>Author</b>: <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a> </p>
+ *
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
  * @since 0.1.0
  */
@@ -38,10 +41,10 @@ class HttpClientHelper {
     /**
      * Create and <b> open </b> an HTTP of HTTPS connection request to send to the server at the specified url,
      * specifying arguments to receive the response
+     *
      * @param stringUrl the url
      * @param arguments of url
-     * @return  an HTTP connection as {@link HttpURLConnection}
-     *
+     * @return an HTTP connection as {@link HttpURLConnection}
      * @since 0.1.0
      */
     static HttpURLConnection getConnection(String stringUrl, Map<String, String> arguments) throws IOException {
@@ -77,10 +80,8 @@ class HttpClientHelper {
      *
      * @param connection which will be converted
      * @return an HTTP response as {@link HttpResponse}
-     *
      * @since 0.1.0
      */
-    @SuppressWarnings("unchecked")
     static HttpResponse getResponse(HttpURLConnection connection) throws IOException {
         InputStream responseInputStream;
         HttpResponse httpResponse = new HttpResponse();
@@ -88,11 +89,63 @@ class HttpClientHelper {
         httpResponse.setResponseMessage(connection.getResponseMessage());
         httpResponse.setContentType(connection.getContentType());
 
-        if (connection.getResponseCode() != 200)
+        if (connection.getResponseCode() != 200) {
+            if (httpResponse.getContentType().equals("application/json")) {
+                responseInputStream = connection.getErrorStream();
+                httpResponse.setResponseContent(Json.decodeValue(responseInputStream, String.class));
+                responseInputStream.close();
+            } else {
+                responseInputStream = connection.getErrorStream();
+                httpResponse.setResponseContent(Json.decodeValue(responseInputStream, String.class));
+                responseInputStream.close();
+            }
+
             return httpResponse;
+        }
 
         try {
             responseInputStream = connection.getInputStream();
+        } catch (FileNotFoundException ex) {
+            httpResponse.setException(ex);
+            return httpResponse;
+        }
+
+        httpResponse.setResponseContent(Json.decodeValue(responseInputStream, String.class));
+
+        responseInputStream.close();
+        return httpResponse;
+    }
+
+    /**
+     * Convert an {@link org.apache.http.HttpResponse} to {@link HttpResponse}
+     *
+     * @param apacheHttpResponse which will be converted
+     * @return an HTTP response as {@link HttpResponse}
+     * @since 0.3.0
+     */
+    static HttpResponse getResponse(org.apache.http.HttpResponse apacheHttpResponse) throws IOException {
+        InputStream responseInputStream;
+        HttpResponse httpResponse = new HttpResponse();
+        httpResponse.setStatusCode(apacheHttpResponse.getStatusLine().getStatusCode());
+        httpResponse.setResponseMessage(apacheHttpResponse.getStatusLine().getReasonPhrase());
+        httpResponse.setContentType(apacheHttpResponse.getEntity().getContentType().getValue());
+
+        if (httpResponse.getStatusCode() != 200) {
+            if (httpResponse.getContentType().equals("application/json")) {
+                responseInputStream = apacheHttpResponse.getEntity().getContent();
+                httpResponse.setResponseContent(Json.decodeValue(responseInputStream, String.class));
+                responseInputStream.close();
+            } else {
+                responseInputStream = apacheHttpResponse.getEntity().getContent();
+                httpResponse.setResponseContent(Json.decodeValue(responseInputStream, String.class));
+                responseInputStream.close();
+            }
+
+            return httpResponse;
+        }
+
+        try {
+            responseInputStream = apacheHttpResponse.getEntity().getContent();
         } catch (FileNotFoundException ex) {
             httpResponse.setException(ex);
             return httpResponse;

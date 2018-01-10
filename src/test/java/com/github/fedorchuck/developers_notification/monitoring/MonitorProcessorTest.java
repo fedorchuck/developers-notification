@@ -16,7 +16,8 @@
 
 package com.github.fedorchuck.developers_notification.monitoring;
 
-import com.github.fedorchuck.developers_notification.DevelopersNotificationUtil;
+import com.github.fedorchuck.developers_notification.Utils;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,12 +32,8 @@ import java.util.List;
 public class MonitorProcessorTest {
     @Before
     public void setUp() {
-        String slackToken = DevelopersNotificationUtil.getEnvironmentVariable("TRAVIS_TEST_SLACK_TOKEN");
-        String slackChannel = DevelopersNotificationUtil.getEnvironmentVariable("TRAVIS_TEST_SLACK_CHANNEL");
-        String telegramToken = DevelopersNotificationUtil.getEnvironmentVariable("TRAVIS_TEST_TELEGRAM_TOKEN");
-        String telegramChannel = DevelopersNotificationUtil.getEnvironmentVariable("TRAVIS_TEST_TELEGRAM_CHANNEL");
-
-        DevelopersNotificationUtil.setEnvironmentVariable("DN", "{\"messenger\":[{\"name\":\"SLACK\",\"token\":\""+slackToken+"\",\"channel\":\""+slackChannel+"\"},{\"name\":\"TELEGRAM\",\"token\":\""+telegramToken+"\",\"channel\":\""+telegramChannel+"\"}],\"show_whole_log_details\":false,\"protection_from_spam\": \"true\",\"project_name\": \"Where this library will be invoked\",\"connect_timeout\":5000,\"user_agent\":\"Mozilla/5.0\",\"monitoring\":{\"period\":5,\"unit\":\"seconds\",\"max_ram\":90,\"max_disk\": 90,\"disk_consumption_rate\":2}}");
+        String stringHttpConfig = "{\"monitoring\":{\"period\":5,\"unit\":\"seconds\",\"max_ram\":90,\"max_disk\": 90,\"disk_consumption_rate\":2}}";
+        Utils.setConfig(stringHttpConfig);
     }
 
     @Test
@@ -75,5 +72,10 @@ public class MonitorProcessorTest {
                     Assert.fail(method.getName() + " is 0.");
             }
         }
+    }
+
+    @After
+    public void tearDown() {
+        Utils.resetConfig();
     }
 }
