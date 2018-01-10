@@ -46,7 +46,7 @@ public class TelegramImplTest {
     @Test
     public void testGenerateMessage() {
         String telegramChannel = DevelopersNotificationUtil.getEnvironmentVariable("TRAVIS_TEST_TELEGRAM_CHANNEL");
-        String expected = "{\"chat_id\":"+telegramChannel+",\"parse_mode\":\"Markdown\",\"text\":\"*Project*: Where this library will be invoked \\n*Message*: test generate telegram message \\n\"}";
+        String expected = "{\"chat_id\":\""+telegramChannel+"\",\"parse_mode\":\"Markdown\",\"text\":\"*Project*: Where this library will be invoked \\n*Message*: test generate telegram message \\n\"}";
         TelegramImpl telegram = new TelegramImpl();
 
         DNMessage actual = telegram.generateMessage("Where this library will be invoked",
