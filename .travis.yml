@@ -12,6 +12,8 @@ jdk:
 before_install:
  - chmod +x continuousIntegrationBuild.sh
  - ./continuousIntegrationBuild.sh
+ - sudo apt-get install jq
+ - wget -O ~/codacy-coverage-reporter-assembly-latest.jar $(curl https://api.github.com/repos/codacy/codacy-coverage-reporter/releases/latest | jq -r .assets[0].browser_download_url)
 
 before_script:
  - wget https://services.gradle.org/distributions/gradle-4.4-bin.zip
@@ -26,10 +28,9 @@ script:
  - gradle build -i -d
  - gradle assemble
  - gradle check -i -d
- - gradle codeCoverageReport
 
 #    gradle wrapper -i | gradle build -i | gradle assemble -i | gradle check -i | gradle codeCoverageReport -i
 #    gradle wrapper | gradle build -i -d | gradle assemble | gradle check -i -d | gradle codeCoverageReport
 
 after_success:
-- bash <(curl -s https://codecov.io/bash)
+ - java -cp ~/codacy-coverage-reporter-assembly-latest.jar com.codacy.CodacyCoverageReporter -l Java -r build/test-results/jacoco/test/jacocoTestReport.xml
