@@ -1,5 +1,6 @@
 # Java library which provides developers notification via messengers 
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/303c60ee26a14d1ead7c6c1473ab25cc)](https://www.codacy.com/app/vl.fedorchuck/developers-notification?utm_source=github.com&utm_medium=referral&utm_content=fedorchuck/developers-notification&utm_campaign=badger)
 [![Build Status](https://travis-ci.org/fedorchuck/developers-notification.svg?branch=master)](https://travis-ci.org/fedorchuck/developers-notification)
 [![Apache License Version 2.0](https://img.shields.io/badge/license-Apache%20License%202.0-brightgreen.svg)](https://github.com/fedorchuck/developers-notification/blob/master/LICENSE.md)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.fedorchuck/developers-notification/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.fedorchuck/developers-notification)
