@@ -1,7 +1,7 @@
 package com.github.fedorchuck.developers_notification;
 
 import com.github.fedorchuck.developers_notification.configuration.Config;
-import com.github.fedorchuck.developers_notification.json.Json;
+import com.github.fedorchuck.dnjson.Json;
 import org.junit.Assert;
 
 import java.lang.reflect.Field;
@@ -28,7 +28,9 @@ public class Utils {
             field = dn.getClass().getDeclaredField("config");
             field.setAccessible(true);
             field.set(dn, config);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
+        } catch (NoSuchFieldException e) {
+            Assert.fail(e.getMessage());
+        } catch (IllegalAccessException e) {
             Assert.fail(e.getMessage());
         }
     }

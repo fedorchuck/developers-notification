@@ -16,8 +16,6 @@
 
 package com.github.fedorchuck.developers_notification.antispam;
 
-import java.util.Objects;
-
 /**
  * Model for mechanism witch avoiding spam.
  *
@@ -41,14 +39,19 @@ public class SentMessage {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SentMessage that = (SentMessage) o;
-        return type == that.type &&
-                Objects.equals(projectName, that.projectName) &&
-                Objects.equals(description, that.description);
+
+        return (
+                type == that.type &&
+                (projectName == null ? that.projectName == null : projectName.equals(that.projectName)) &&
+                (description == null ? that.description == null : description.equals(that.description))
+        );
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(type, projectName, description);
+        return ((type != null ? type.hashCode() : 0) +
+                (projectName != null ? projectName.hashCode() : 0) +
+                (description != null ? description.hashCode() : 0)
+        );
     }
 }

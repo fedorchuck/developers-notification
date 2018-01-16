@@ -25,7 +25,7 @@ import com.github.fedorchuck.developers_notification.http.HttpClient;
 import com.github.fedorchuck.developers_notification.http.HttpResponse;
 import com.github.fedorchuck.developers_notification.integrations.Integration;
 import com.github.fedorchuck.developers_notification.integrations.developers_notification.DNMessage;
-import com.github.fedorchuck.developers_notification.json.Json;
+import com.github.fedorchuck.dnjson.Json;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;

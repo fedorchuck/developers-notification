@@ -19,8 +19,8 @@ package com.github.fedorchuck.developers_notification;
 import com.github.fedorchuck.developers_notification.antispam.SpamProtection;
 import com.github.fedorchuck.developers_notification.configuration.Config;
 import com.github.fedorchuck.developers_notification.configuration.Messenger;
-import com.github.fedorchuck.developers_notification.json.Json;
 import com.github.fedorchuck.developers_notification.monitoring.MonitorProcessor;
+import com.github.fedorchuck.dnjson.Json;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;

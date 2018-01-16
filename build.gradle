@@ -8,8 +8,8 @@ apply(plugin: 'maven')
 apply(plugin: 'signing')
 apply(plugin: 'jacoco')
 
-setSourceCompatibility(1.7)
-setTargetCompatibility(1.7)
+setSourceCompatibility(1.6)
+setTargetCompatibility(1.6)
 compileJava.options.encoding = 'UTF-8'
 
 configurations {
@@ -24,6 +24,7 @@ dependencies {
     compile 'org.apache.httpcomponents:httpclient:4.5.4'
     // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpmime
     compile 'org.apache.httpcomponents:httpmime:4.5.4'
+    compile 'com.github.fedorchuck:dnjson:0.1.0'
 
     testRuntime 'org.slf4j:slf4j-log4j12:1.7.5'
     testCompile 'junit:junit:4.12'
@@ -140,32 +141,6 @@ if(project.hasProperty('signing.keyId'))
             }
         }
     }
-
-//task codeCoverageReport(type: JacocoReport) {
-//    executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
-//
-//    subprojects.each {
-//        sourceSets it.sourceSets.main
-//    }
-//
-//    reports {
-//        xml.enabled true
-//        xml.destination "${buildDir}/reports/jacoco/report.xml"
-//        html.enabled false
-//        csv.enabled false
-//    }
-//}
-//
-//codeCoverageReport.dependsOn {
-//    subprojects*.task(test)
-//}
-//
-//jacocoTestReport {
-//    reports {
-//        xml.enabled true
-//        html.enabled false
-//    }
-//}
 
 jacoco {
     toolVersion = "0.7.7.201606060606"

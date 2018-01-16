@@ -45,6 +45,14 @@ public class DevelopersNotificationUtilTest {
         Assert.assertTrue(checkTheNecessaryConfigurationExists(ALL_AVAILABLE));
     }
 
+    @Test
+    public void testIsBlank() {
+        Assert.assertTrue(DevelopersNotificationUtil.isBlank(null));
+        Assert.assertTrue(DevelopersNotificationUtil.isBlank(""));
+        Assert.assertTrue(DevelopersNotificationUtil.isBlank(" "));
+        Assert.assertFalse(DevelopersNotificationUtil.isBlank("Hello world!"));
+    }
+
     @After
     public void tearDown() {
         Utils.resetConfig();
