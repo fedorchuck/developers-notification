@@ -52,9 +52,6 @@ public class TelegramImplTest {
         DNMessage actual = telegram.generateMessage("Where this library will be invoked",
                 "test generate telegram message", null);
 
-        System.out.println("expected: \t" + expected);
-        System.out.println("actual:   \t" + actual.getJsonGeneratedMessages());
-        System.out.println("expected.equals(actual): " + expected.equals(actual.getJsonGeneratedMessages()));
         Assert.assertEquals(expected, actual.getJsonGeneratedMessages());
     }
 

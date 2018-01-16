@@ -17,7 +17,7 @@
 package com.github.fedorchuck.developers_notification.http;
 
 import com.github.fedorchuck.developers_notification.DevelopersNotificationUtil;
-import com.github.fedorchuck.developers_notification.json.Json;
+import com.github.fedorchuck.dnjson.Json;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.FileNotFoundException;

@@ -143,6 +143,19 @@ public class DevelopersNotificationUtil {
     }
 
     /**
+     * Check is the given string is blank.
+     *
+     * <code>isBlank(null): true; isBlank(""): true; isBlank(" "): true; isBlank("Hello world!"): false</code>
+     *
+     * @param string to check
+     * @return true if the given string is blank.
+     * @since 0.3.0
+     **/
+    public static boolean isBlank(final String string) {
+        return string == null || string.isEmpty() || string.trim().isEmpty();
+    }
+
+    /**
      * Check does the necessary messenger configuration exist
      *
      * @param messenger to check

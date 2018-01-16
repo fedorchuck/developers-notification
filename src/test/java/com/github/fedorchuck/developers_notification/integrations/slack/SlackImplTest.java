@@ -49,7 +49,9 @@ public class SlackImplTest {
             field = slack.getClass().getDeclaredField("channel");
             field.setAccessible(true);
             field.set(slack, "general");
-        } catch (NoSuchFieldException | IllegalAccessException e) {
+        } catch (NoSuchFieldException e) {
+            Assert.fail(e.getMessage());
+        } catch (IllegalAccessException e) {
             Assert.fail(e.getMessage());
         }
 
