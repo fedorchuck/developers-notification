@@ -46,7 +46,7 @@ public class FrequencyOfSending {
             case RAM_LIMIT:
             case DISK_LIMIT:
             case DISK_CONSUMPTION_RATE:
-                return canSendMessage(type, "developers_notification", "123");
+                return canSendMessage(new SentMessage(type));
             default:
                 throw new IllegalArgumentException("Type " + type + " can not use this method.");
         }
@@ -55,15 +55,14 @@ public class FrequencyOfSending {
     /**
      * Checking, is able to sending this message.
      *
-     * @param type of message for sending
-     * @param projectName name of project, where this library was invoked
-     * @param description what happened
+     * @param sentMessage for sending
      * @return  <code>true</code> if this action available;
      *          <code>false</code> otherwise.
+     * @throws IllegalArgumentException if method called for {@link MessageTypes#USERS_MESSAGE}
      * @since 0.2.0
      **/
-    public static boolean canSendMessage(final MessageTypes type, final String projectName, final String description) {
-        return !sentMessages.contains(new SentMessage(type, projectName, description));
+    public static boolean canSendMessage(final SentMessage sentMessage) {
+        return !sentMessages.contains(sentMessage);
     }
 
     /**
@@ -80,7 +79,7 @@ public class FrequencyOfSending {
             case RAM_LIMIT:
             case DISK_LIMIT:
             case DISK_CONSUMPTION_RATE:
-                return messageSent(type, "developers_notification", "123");
+                return messageSent(new SentMessage(type));
             default:
                 throw new IllegalArgumentException("Type " + type + " can not use this method.");
         }
@@ -89,21 +88,17 @@ public class FrequencyOfSending {
     /**
      * Change status for message to avoid spam.
      *
-     * @param type of message for sending
-     * @param projectName name of project, where this library was invoked
-     * @param description what happened
+     * @param sentMessage for sending
      * @return  <code>true</code> if this action completed successfully;
      *          <code>false</code> otherwise.
      * @throws IllegalArgumentException if method called for {@link MessageTypes#USERS_MESSAGE}
      * @since 0.2.0
      **/
-    public static boolean messageSent(final MessageTypes type,
-                                      final String projectName,
-                                      final String description) {
-        if (sentMessages.contains(new SentMessage(type, projectName, description)))
+    public static boolean messageSent(final SentMessage sentMessage) {
+        if (sentMessages.contains(sentMessage))
             return false;
 
-        sentMessages.put(new SentMessage(type, projectName, description));
+        sentMessages.put(sentMessage);
         return true;
     }
 }

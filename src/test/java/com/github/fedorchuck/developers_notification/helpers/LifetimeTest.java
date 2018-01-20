@@ -16,6 +16,7 @@
 
 package com.github.fedorchuck.developers_notification.helpers;
 
+import com.github.fedorchuck.developers_notification.DevelopersNotificationMessenger;
 import com.github.fedorchuck.developers_notification.antispam.MessageTypes;
 import com.github.fedorchuck.developers_notification.antispam.SentMessage;
 import org.junit.Assert;
@@ -29,13 +30,13 @@ public class LifetimeTest {
     @Test
     public void testPut() {
         Lifetime<SentMessage> l = new Lifetime<SentMessage>(100,10);
-        SentMessage um = new SentMessage(MessageTypes.USERS_MESSAGE, "123","qwe");
+        SentMessage um = new SentMessage(MessageTypes.USERS_MESSAGE);
         Assert.assertEquals(0, l.size());
         l.put(um);
         Assert.assertEquals(1, l.size());
         l.put(um);
         Assert.assertEquals(1, l.size());
-        um = new SentMessage(MessageTypes.RAM_LIMIT, "123","qwe");
+        um = new SentMessage(MessageTypes.RAM_LIMIT);
         l.put(um);
         Assert.assertEquals(2, l.size());
         l.put(um);
@@ -46,10 +47,10 @@ public class LifetimeTest {
     public void testGet() {
         MessageTypes type = MessageTypes.USERS_MESSAGE;
         Lifetime<SentMessage> l = new Lifetime<SentMessage>(100,10);
-        l.put(new SentMessage(type, "123","1"));
-        SentMessage um2 = new SentMessage(type, "123","2");
+        l.put(new SentMessage(type, null, "123","1"));
+        SentMessage um2 = new SentMessage(type, null, "123","2");
         l.put(um2);
-        l.put(new SentMessage(type, "123","3"));
+        l.put(new SentMessage(type, null, "123","3"));
         Assert.assertEquals(l.get(1),um2);
     }
 
@@ -57,8 +58,8 @@ public class LifetimeTest {
     public void testGetOldest() {
         MessageTypes type = MessageTypes.USERS_MESSAGE;
         Lifetime<SentMessage> l = new Lifetime<SentMessage>(100,10);
-        SentMessage um1 = new SentMessage(type, "123","1");
-        SentMessage um2 = new SentMessage(type, "123","2");
+        SentMessage um1 = new SentMessage(type, null, "123","1");
+        SentMessage um2 = new SentMessage(type, null, "123","2");
         l.put(um1);
         l.put(um2);
         Assert.assertEquals(2, l.size());
@@ -69,7 +70,7 @@ public class LifetimeTest {
     public void testSize() {
         MessageTypes type = MessageTypes.USERS_MESSAGE;
         Lifetime<SentMessage> l = new Lifetime<SentMessage>(2,1);
-        SentMessage um = new SentMessage(type, "123","qwe");
+        SentMessage um = new SentMessage(type, DevelopersNotificationMessenger.ALL_AVAILABLE ,"123","qwe");
         Assert.assertEquals(0, l.size());
         l.put(um);
         Assert.assertEquals(1, l.size());
@@ -84,8 +85,8 @@ public class LifetimeTest {
     @Test
     public void testContains() {
         Lifetime<SentMessage> l = new Lifetime<SentMessage>(100,10);
-        SentMessage um1 = new SentMessage(MessageTypes.USERS_MESSAGE, "123","qwe");
-        SentMessage um2 = new SentMessage(MessageTypes.DISK_LIMIT, "123","qwe");
+        SentMessage um1 = new SentMessage(MessageTypes.USERS_MESSAGE, null,"123","qwe");
+        SentMessage um2 = new SentMessage(MessageTypes.DISK_LIMIT, null,"123","qwe");
         Assert.assertEquals(false, l.contains(um1));
         l.put(um1);
         Assert.assertEquals(true, l.contains(um1));

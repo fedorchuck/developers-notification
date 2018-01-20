@@ -27,12 +27,12 @@ import org.junit.Test;
 public class CacheObjectTest {
     @Test
     public void testEquals() {
-        CacheObject<SentMessage> a = new CacheObject<SentMessage>(new SentMessage(MessageTypes.RAM_LIMIT, "project name", "description"));
-        CacheObject<SentMessage> b = new CacheObject<SentMessage>(new SentMessage(MessageTypes.RAM_LIMIT, "project name", "description"));
-        CacheObject<SentMessage> c = new CacheObject<SentMessage>(new SentMessage(MessageTypes.DISK_LIMIT, "project name", "description"));
-        CacheObject<SentMessage> d = new CacheObject<SentMessage>(new SentMessage(MessageTypes.DISK_LIMIT, "project", "description"));
-        CacheObject<SentMessage> e = new CacheObject<SentMessage>(new SentMessage(MessageTypes.DISK_LIMIT, "project name", "description"));
-        CacheObject<SentMessage> f = new CacheObject<SentMessage>(new SentMessage(MessageTypes.DISK_LIMIT, "project", "name"));
+        CacheObject<SentMessage> a = new CacheObject<SentMessage>(new SentMessage(MessageTypes.RAM_LIMIT, null, "project name", "description"));
+        CacheObject<SentMessage> b = new CacheObject<SentMessage>(new SentMessage(MessageTypes.RAM_LIMIT, null, "project name", "description"));
+        CacheObject<SentMessage> c = new CacheObject<SentMessage>(new SentMessage(MessageTypes.DISK_LIMIT, null, "project name", "description"));
+        CacheObject<SentMessage> d = new CacheObject<SentMessage>(new SentMessage(MessageTypes.DISK_LIMIT, null, "project", "description"));
+        CacheObject<SentMessage> e = new CacheObject<SentMessage>(new SentMessage(MessageTypes.DISK_LIMIT, null, "project name", "description"));
+        CacheObject<SentMessage> f = new CacheObject<SentMessage>(new SentMessage(MessageTypes.DISK_LIMIT, null, "project", "name"));
 
         Assert.assertEquals(true, a.equals(b));
         Assert.assertEquals(true, b.equals(a));
