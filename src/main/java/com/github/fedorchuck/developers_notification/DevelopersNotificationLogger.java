@@ -16,6 +16,7 @@
 
 package com.github.fedorchuck.developers_notification;
 
+import com.github.fedorchuck.developers_notification.antispam.SentMessage;
 import com.github.fedorchuck.developers_notification.http.HttpResponse;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.slf4j.Logger;
@@ -115,16 +116,24 @@ public class DevelopersNotificationLogger {
         logger(4013).info("Sending message to {} by url: {} with message: {}", integration, val, message.toString());
     }
 
+    public static void infoSentMessage(SentMessage sentMessage) {
+        logger(4021).info("[SPAM PROTECTION] Sent message: {}.", sentMessage.getAboutMessage());
+    }
+
+    public static void infoTryToSentDuplicateMessage(SentMessage sentMessage) {
+        logger(4022).info("[SPAM PROTECTION] Try to sent duplicated message: {}.", sentMessage.getAboutMessage());
+    }
+
     public static void infoHttpClientResponseHideDetails(HttpResponse val) {
-        logger(4021).info("Response: {}", val.printResponseHideDetails());
+        logger(4051).info("Response: {}", val.printResponseHideDetails());
     }
 
     public static void infoHttpClientResponse(HttpResponse val) {
-        logger(4022).info("Response: {}", val.printResponse());
+        logger(4052).info("Response: {}", val.printResponse());
     }
 
     public static void infoScheduler(String val) {
-        logger(4031).info(val);
+        logger(4071).info(val);
     }
     //endregion
 }

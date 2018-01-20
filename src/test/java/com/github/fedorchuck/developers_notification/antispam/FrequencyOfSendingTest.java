@@ -34,10 +34,10 @@ public class FrequencyOfSendingTest {
         Assert.assertEquals(true, FrequencyOfSending.canSendMessage(MessageTypes.DISK_CONSUMPTION_RATE));
 
         description = "FrequencyOfSendingTest#testCanSendMessage";
-        Assert.assertEquals(true, FrequencyOfSending.canSendMessage(MessageTypes.USERS_MESSAGE, projectName, description));
-        Assert.assertEquals(true, FrequencyOfSending.canSendMessage(MessageTypes.RAM_LIMIT, projectName, description));
-        Assert.assertEquals(true, FrequencyOfSending.canSendMessage(MessageTypes.DISK_LIMIT, projectName, description));
-        Assert.assertEquals(true, FrequencyOfSending.canSendMessage(MessageTypes.DISK_CONSUMPTION_RATE, projectName, description));
+        Assert.assertEquals(true, FrequencyOfSending.canSendMessage(new SentMessage(MessageTypes.USERS_MESSAGE, null, projectName, description)));
+        Assert.assertEquals(true, FrequencyOfSending.canSendMessage(new SentMessage(MessageTypes.RAM_LIMIT, null, projectName, description)));
+        Assert.assertEquals(true, FrequencyOfSending.canSendMessage(new SentMessage(MessageTypes.DISK_LIMIT, null, projectName, description)));
+        Assert.assertEquals(true, FrequencyOfSending.canSendMessage(new SentMessage(MessageTypes.DISK_CONSUMPTION_RATE, null, projectName, description)));
     }
 
     @Test(expected=IllegalArgumentException.class)
@@ -64,8 +64,8 @@ public class FrequencyOfSendingTest {
         Assert.assertEquals(false, FrequencyOfSending.messageSent(MessageTypes.DISK_CONSUMPTION_RATE));
 
         description = "FrequencyOfSendingTest#testMessageSent";
-        Assert.assertEquals(true, FrequencyOfSending.messageSent(MessageTypes.USERS_MESSAGE, projectName, description));
-        Assert.assertEquals(false, FrequencyOfSending.messageSent(MessageTypes.USERS_MESSAGE, projectName, description));
+        Assert.assertEquals(true, FrequencyOfSending.messageSent(new SentMessage(MessageTypes.USERS_MESSAGE, null, projectName, description)));
+        Assert.assertEquals(false, FrequencyOfSending.messageSent(new SentMessage(MessageTypes.USERS_MESSAGE, null, projectName, description)));
     }
 
     @Test

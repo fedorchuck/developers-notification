@@ -25,12 +25,12 @@ import org.junit.Test;
 public class SentMessageTest {
     @Test
     public void testEquals() {
-        SentMessage a = new SentMessage(MessageTypes.RAM_LIMIT, "project name", "description");
-        SentMessage b = new SentMessage(MessageTypes.RAM_LIMIT, "project name", "description");
-        SentMessage c = new SentMessage(MessageTypes.DISK_LIMIT, "project name", "description");
-        SentMessage d = new SentMessage(MessageTypes.DISK_LIMIT, "project", "description");
-        SentMessage e = new SentMessage(MessageTypes.DISK_LIMIT, "project name", "description");
-        SentMessage f = new SentMessage(MessageTypes.DISK_LIMIT, "project", "name");
+        SentMessage a = new SentMessage(MessageTypes.RAM_LIMIT, null,"project name", "description");
+        SentMessage b = new SentMessage(MessageTypes.RAM_LIMIT, null,"project name", "description");
+        SentMessage c = new SentMessage(MessageTypes.DISK_LIMIT, null, "project name", "description");
+        SentMessage d = new SentMessage(MessageTypes.DISK_LIMIT, null, "project", "description");
+        SentMessage e = new SentMessage(MessageTypes.DISK_LIMIT, null, "project name", "description");
+        SentMessage f = new SentMessage(MessageTypes.DISK_LIMIT, null, "project", "name");
 
         Assert.assertEquals(true, a.equals(b));
         Assert.assertEquals(true, b.equals(a));

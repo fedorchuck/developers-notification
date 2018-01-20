@@ -85,11 +85,17 @@ public class SpamProtection {
                 new Runnable() {
                     public void run() {
                         Thread.currentThread().setName("Send developers notification to " + messengerDestination.name());
-                        if (protectionFromSpam) {
-                            if (!FrequencyOfSending.canSendMessage(MessageTypes.USERS_MESSAGE, projectName, description))
-                                return; //duplicate ignore
+                        SentMessage sentMessage =
+                                new SentMessage(MessageTypes.USERS_MESSAGE, messengerDestination, projectName, description);
 
-                            FrequencyOfSending.messageSent(MessageTypes.USERS_MESSAGE, projectName, description);
+                        if (protectionFromSpam) {
+                            if (!FrequencyOfSending.canSendMessage(sentMessage)) {
+                                DevelopersNotificationLogger.infoTryToSentDuplicateMessage(sentMessage);
+                                return; //duplicate ignore
+                            }
+
+                            FrequencyOfSending.messageSent(sentMessage);
+                            DevelopersNotificationLogger.infoSentMessage(sentMessage);
                             sendIntoMessenger(messengerDestination, projectName, description, throwable);
                         } else {
                             sendIntoMessenger(messengerDestination, projectName, description, throwable);
