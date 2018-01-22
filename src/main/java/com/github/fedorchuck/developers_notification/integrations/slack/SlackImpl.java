@@ -24,7 +24,7 @@ import com.github.fedorchuck.developers_notification.configuration.Messenger;
 import com.github.fedorchuck.developers_notification.http.HttpClient;
 import com.github.fedorchuck.developers_notification.http.HttpResponse;
 import com.github.fedorchuck.developers_notification.integrations.Integration;
-import com.github.fedorchuck.developers_notification.integrations.developers_notification.DNMessage;
+import com.github.fedorchuck.developers_notification.model.Task;
 import com.github.fedorchuck.dnjson.Json;
 
 import java.io.IOException;
@@ -60,6 +60,11 @@ public class SlackImpl implements Integration {
             DevelopersNotificationLogger.warnSendMessageBadConfig("SLACK");
     }
 
+    @Override
+    public DevelopersNotificationMessenger name() {
+        return DevelopersNotificationMessenger.SLACK;
+    }
+
     /**
      * Provides sending messages to Slack messenger
      *
@@ -67,7 +72,7 @@ public class SlackImpl implements Integration {
      * @since 0.1.0
      **/
     @Override
-    public void sendMessage(DNMessage message) {
+    public void sendMessage(Task message) {
         if (!configurationExist) {
             DevelopersNotificationLogger.errorSendMessageBadConfig("SLACK");
             return;
@@ -103,8 +108,8 @@ public class SlackImpl implements Integration {
      * @since 0.1.0
      **/
     @Override
-    public DNMessage generateMessage(String projectName, String description, Throwable throwable) {
-        DNMessage dnMessage = new DNMessage();
+    public Task generateMessage(String projectName, String description, Throwable throwable) {
+        Task task = new Task(new SlackImpl(), projectName, description, throwable);
 
         Payload payload = new Payload();
         Attachment attachment = new Attachment();
@@ -126,8 +131,8 @@ public class SlackImpl implements Integration {
         payload.setUsername("developers notification bot");
         payload.setAttachments(Collections.singletonList(attachment));
 
-        dnMessage.setJsonGeneratedMessages(Json.encode(payload));
-        return dnMessage;
+        task.setJsonGeneratedMessages(Json.encode(payload));
+        return task;
     }
 
     /**

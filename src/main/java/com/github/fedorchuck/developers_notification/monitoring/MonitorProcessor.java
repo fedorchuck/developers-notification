@@ -40,6 +40,7 @@ import java.util.List;
  */
 public class MonitorProcessor implements Runnable {
     private static Monitoring monitoringConfig = DevelopersNotification.config.getMonitoring();
+    private static boolean protectionFromSpam = DevelopersNotification.config.getProtectionFromSpam();
     private final Lifetime<List<Disk>> monitoring;
 
     public MonitorProcessor() {
@@ -95,15 +96,15 @@ public class MonitorProcessor implements Runnable {
                 getUsageInPercent(currentUsageJVM.getUsedRamMemory(), currentUsageJVM.getTotalRamMemory());
 
         if (currentUsageRamInPercent >= monitoringConfig.getMaxRam()) {
-            SpamProtection.sendIntoMessenger(
-                    false,
+            SpamProtection.sendMonitoringResultsIntoMessenger(
+                    protectionFromSpam,
+                    MessageTypes.RAM_LIMIT,
                     AlertMessages.getAlertRAMLimitMessage(
                             currentUsageJVM.getUsedRamMemory(),
                             currentUsageRamInPercent,
                             monitoringConfig.getMaxRam()
                     )
             );
-            FrequencyOfSending.messageSent(MessageTypes.RAM_LIMIT);
         }
     }
 
@@ -127,8 +128,9 @@ public class MonitorProcessor implements Runnable {
                         getUsageInPercent(rate, currentUsage.getTotalDiskSpace());
 
                 if (rateDiskInPercent >= monitoringConfig.getDiskConsumptionRate()) {
-                    SpamProtection.sendIntoMessenger(
-                            false,
+                    SpamProtection.sendMonitoringResultsIntoMessenger(
+                            protectionFromSpam,
+                            MessageTypes.DISK_CONSUMPTION_RATE,
                             AlertMessages.getAlertDiskRateMessage(
                                     currentUsage.getDiskName(),
                                     rate,
@@ -136,7 +138,6 @@ public class MonitorProcessor implements Runnable {
                                     monitoringConfig.getDiskConsumptionRate()
                             )
                     );
-                    FrequencyOfSending.messageSent(MessageTypes.DISK_CONSUMPTION_RATE);
                 }
             }
         }
@@ -153,8 +154,9 @@ public class MonitorProcessor implements Runnable {
                 getUsageInPercent(currentUsage.getUsableDiskSpace(), currentUsage.getTotalDiskSpace());
 
         if (currentUsageDiskInPercent >= monitoringConfig.getMaxDisk()) {
-            SpamProtection.sendIntoMessenger(
-                    false,
+            SpamProtection.sendMonitoringResultsIntoMessenger(
+                    protectionFromSpam,
+                    MessageTypes.DISK_LIMIT,
                     AlertMessages.getAlertDiskLimitMessage(
                             currentUsage.getDiskName(),
                             currentUsage.getUsableDiskSpace(),
@@ -162,7 +164,6 @@ public class MonitorProcessor implements Runnable {
                             monitoringConfig.getMaxDisk()
                     )
             );
-            FrequencyOfSending.messageSent(MessageTypes.DISK_LIMIT);
         }
     }
 

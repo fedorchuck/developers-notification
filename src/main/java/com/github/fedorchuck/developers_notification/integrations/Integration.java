@@ -16,8 +16,9 @@
 
 package com.github.fedorchuck.developers_notification.integrations;
 
+import com.github.fedorchuck.developers_notification.DevelopersNotificationMessenger;
 import com.github.fedorchuck.developers_notification.http.HttpResponse;
-import com.github.fedorchuck.developers_notification.integrations.developers_notification.DNMessage;
+import com.github.fedorchuck.developers_notification.model.Task;
 
 /**
  * Decelerate which methods should contain each integration,
@@ -30,13 +31,15 @@ import com.github.fedorchuck.developers_notification.integrations.developers_not
  */
 public interface Integration {
 
+    DevelopersNotificationMessenger name();
+
     /**
      * Provides sending messages to specified messenger
      *
      * @param message to send
      * @since 0.1.0
      **/
-    void sendMessage(DNMessage message);
+    void sendMessage(Task message);
 
     /**
      * Generate message to send by specified params
@@ -44,10 +47,10 @@ public interface Integration {
      * @param projectName where was method called. Can be <code>null</code>
      * @param description about situation. Can be <code>null</code>
      * @param throwable   which happened. Can be <code>null</code>
-     * @return generated message as {@link DNMessage } JSON
+     * @return generated message as {@link Task } JSON
      * @since 0.1.0
      **/
-    DNMessage generateMessage(String projectName, String description, Throwable throwable);
+    Task generateMessage(String projectName, String description, Throwable throwable);
 
     /**
      * Analyse response after sent message

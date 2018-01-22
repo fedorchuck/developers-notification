@@ -16,12 +16,17 @@
 
 package com.github.fedorchuck.developers_notification;
 
+import com.github.fedorchuck.developers_notification.antispam.MessageTypes;
 import com.github.fedorchuck.developers_notification.antispam.SpamProtection;
 import com.github.fedorchuck.developers_notification.configuration.Config;
-import com.github.fedorchuck.developers_notification.configuration.Messenger;
+import com.github.fedorchuck.developers_notification.helpers.InternalUtil;
+import com.github.fedorchuck.developers_notification.integrations.Integration;
+import com.github.fedorchuck.developers_notification.model.Task;
 import com.github.fedorchuck.developers_notification.monitoring.MonitorProcessor;
 import com.github.fedorchuck.dnjson.Json;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -78,21 +83,13 @@ public class DevelopersNotification {
     public static void send(final String description, final Throwable throwable) {
         loadConfig();
 
-        for (Messenger messenger : config.getMessenger()) {
-            switch (messenger.getName()){
-                case SLACK:
-                    SpamProtection.sendIntoMessenger(config.getProtectionFromSpam(),
-                            DevelopersNotificationMessenger.SLACK, config.getProjectName(), description, throwable);
-                    break;
-                case TELEGRAM:
-                    SpamProtection.sendIntoMessenger(config.getProtectionFromSpam(),
-                            DevelopersNotificationMessenger.TELEGRAM, config.getProjectName(), description, throwable);
-                    break;
-                case ALL_AVAILABLE:
-                    SpamProtection.sendIntoMessenger(config.getProtectionFromSpam(),
-                            DevelopersNotificationMessenger.ALL_AVAILABLE, config.getProjectName(), description, throwable);
-                    break;
-            }
+        List<Task> tasks = new ArrayList<Task>(0);
+        for (Integration integration : InternalUtil.getIntegrations()) {
+            tasks.add(InternalUtil.generateTask(config.getProjectName(), description, throwable, integration));
+        }
+
+        for (Task task : tasks) {
+            SpamProtection.sendIntoMessenger(config.getProtectionFromSpam(), MessageTypes.USERS_MESSAGE, task);
         }
     }
 
@@ -109,21 +106,13 @@ public class DevelopersNotification {
                             final Throwable throwable) {
         loadConfig();
 
-        for (Messenger messenger : config.getMessenger()) {
-            switch (messenger.getName()){
-                case SLACK:
-                    SpamProtection.sendIntoMessenger(config.getProtectionFromSpam(),
-                            DevelopersNotificationMessenger.SLACK, projectName, description, throwable);
-                    break;
-                case TELEGRAM:
-                    SpamProtection.sendIntoMessenger(config.getProtectionFromSpam(),
-                            DevelopersNotificationMessenger.TELEGRAM, projectName, description, throwable);
-                    break;
-                case ALL_AVAILABLE:
-                    SpamProtection.sendIntoMessenger(config.getProtectionFromSpam(),
-                            DevelopersNotificationMessenger.ALL_AVAILABLE, projectName, description, throwable);
-                    break;
-            }
+        List<Task> tasks = new ArrayList<Task>(0);
+        for (Integration integration : InternalUtil.getIntegrations()) {
+            tasks.add(InternalUtil.generateTask(projectName, description, throwable, integration));
+        }
+
+        for (Task task : tasks) {
+            SpamProtection.sendIntoMessenger(config.getProtectionFromSpam(), MessageTypes.USERS_MESSAGE, task);
         }
     }
 
@@ -142,8 +131,14 @@ public class DevelopersNotification {
                             final Throwable throwable) {
         loadConfig();
 
-        SpamProtection.sendIntoMessenger(config.getProtectionFromSpam(),
-                messengerDestination, projectName, description, throwable);
+        List<Task> tasks = new ArrayList<Task>(0);
+        for (Integration integration : InternalUtil.getIntegrations(messengerDestination)) {
+            tasks.add(InternalUtil.generateTask(projectName, description, throwable, integration));
+        }
+
+        for (Task task : tasks) {
+            SpamProtection.sendIntoMessenger(config.getProtectionFromSpam(), MessageTypes.USERS_MESSAGE, task);
+        }
     }
 
     /**
@@ -161,21 +156,13 @@ public class DevelopersNotification {
                             final Throwable throwable) {
         loadConfig();
 
-        for (Messenger messenger : config.getMessenger()) {
-            switch (messenger.getName()){
-                case SLACK:
-                    SpamProtection.sendIntoMessenger(protectionFromSpam,
-                            DevelopersNotificationMessenger.SLACK, projectName, description, throwable);
-                    break;
-                case TELEGRAM:
-                    SpamProtection.sendIntoMessenger(protectionFromSpam,
-                            DevelopersNotificationMessenger.TELEGRAM, projectName, description, throwable);
-                    break;
-                case ALL_AVAILABLE:
-                    SpamProtection.sendIntoMessenger(protectionFromSpam,
-                            DevelopersNotificationMessenger.ALL_AVAILABLE, projectName, description, throwable);
-                    break;
-            }
+        List<Task> tasks = new ArrayList<Task>(0);
+        for (Integration integration : InternalUtil.getIntegrations()) {
+            tasks.add(InternalUtil.generateTask(projectName, description, throwable, integration));
+        }
+
+        for (Task task : tasks) {
+            SpamProtection.sendIntoMessenger(protectionFromSpam, MessageTypes.USERS_MESSAGE, task);
         }
     }
 

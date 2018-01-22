@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
-
 /**
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>.
  */

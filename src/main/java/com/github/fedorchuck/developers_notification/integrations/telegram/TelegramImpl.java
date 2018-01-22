@@ -24,7 +24,7 @@ import com.github.fedorchuck.developers_notification.configuration.Messenger;
 import com.github.fedorchuck.developers_notification.http.HttpClient;
 import com.github.fedorchuck.developers_notification.http.HttpResponse;
 import com.github.fedorchuck.developers_notification.integrations.Integration;
-import com.github.fedorchuck.developers_notification.integrations.developers_notification.DNMessage;
+import com.github.fedorchuck.developers_notification.model.Task;
 import com.github.fedorchuck.dnjson.Json;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
@@ -66,6 +66,11 @@ public class TelegramImpl implements Integration {
             DevelopersNotificationLogger.warnSendMessageBadConfig("TELEGRAM");
     }
 
+    @Override
+    public DevelopersNotificationMessenger name() {
+        return DevelopersNotificationMessenger.TELEGRAM;
+    }
+
     /**
      * Provides sending messages to Telegram messenger
      *
@@ -73,7 +78,7 @@ public class TelegramImpl implements Integration {
      * @since 0.1.0
      **/
     @Override
-    public void sendMessage(DNMessage message) {
+    public void sendMessage(Task message) {
         if (!configurationExist) {
             DevelopersNotificationLogger.errorSendMessageBadConfig("TELEGRAM");
             return;
@@ -133,11 +138,11 @@ public class TelegramImpl implements Integration {
      * @since 0.1.0
      **/
     @Override
-    public DNMessage generateMessage(String projectName, String description, Throwable throwable) {
+    public Task generateMessage(String projectName, String description, Throwable throwable) {
         if (DevelopersNotificationUtil.isNullOrEmpty(channel))
             return null;//it will be handled on TelegramImpl#sendMessage
 
-        DNMessage dnMessage = new DNMessage();
+        Task task = new Task(new TelegramImpl(), projectName, description, throwable);
         Message message = new Message();
 
         message.setChat_id(channel);
@@ -165,12 +170,12 @@ public class TelegramImpl implements Integration {
             builder.addBinaryBody("document", stackTrace, ContentType.MULTIPART_FORM_DATA, "StackTrace-" + new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(Calendar.getInstance().getTime()));
             builder.addTextBody("chat_id", channel);
 
-            dnMessage.setMultipartEntityBuilder(builder);
+            task.setMultipartEntityBuilder(builder);
         }
         message.setText(generatedMessage.toString());
-        dnMessage.setJsonGeneratedMessages(Json.encode(message));
+        task.setJsonGeneratedMessages(Json.encode(message));
 
-        return dnMessage;
+        return task;
     }
 
     /**

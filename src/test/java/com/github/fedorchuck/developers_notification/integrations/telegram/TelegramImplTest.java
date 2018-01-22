@@ -18,16 +18,11 @@ package com.github.fedorchuck.developers_notification.integrations.telegram;
 
 import com.github.fedorchuck.developers_notification.DevelopersNotificationUtil;
 import com.github.fedorchuck.developers_notification.Utils;
-import com.github.fedorchuck.developers_notification.http.HttpClient;
-import com.github.fedorchuck.developers_notification.http.HttpResponse;
-import com.github.fedorchuck.developers_notification.integrations.developers_notification.DNMessage;
+import com.github.fedorchuck.developers_notification.model.Task;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.io.IOException;
-import java.lang.reflect.Field;
 
 /**
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>.
@@ -49,7 +44,7 @@ public class TelegramImplTest {
         String expected = "{\"chat_id\":\""+telegramChannel+"\",\"parse_mode\":\"Markdown\",\"text\":\"*Project*: Where this library will be invoked \\n*Message*: test generate telegram message \\n\"}";
         TelegramImpl telegram = new TelegramImpl();
 
-        DNMessage actual = telegram.generateMessage("Where this library will be invoked",
+        Task actual = telegram.generateMessage("Where this library will be invoked",
                 "test generate telegram message", null);
 
         Assert.assertEquals(expected, actual.getJsonGeneratedMessages());
@@ -59,7 +54,7 @@ public class TelegramImplTest {
     public void testSendMessage() {
         TelegramImpl telegram = new TelegramImpl();
 
-        DNMessage messageToSend;
+        Task messageToSend;
 
         messageToSend = telegram.generateMessage(
                 "test " + this.getClass().getCanonicalName() + "#testSendMessage",
