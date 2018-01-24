@@ -64,10 +64,14 @@ public class DevelopersNotification {
      **/
     public static void printConfiguration() {
         loadConfig();
+        if (config==null) {
+            DevelopersNotificationLogger.fatalConfigNotFound();
+            return;
+        }
 
         if (config.getShowWholeLogDetails()) {
             DevelopersNotificationUtil.printToLogEnvironmentVariable("DN");
-            DevelopersNotificationLogger.info(config.toString());
+            DevelopersNotificationLogger.info(config.getPrivateToString());
         } else
             DevelopersNotificationLogger.info(config.getPublicToString());
     }
@@ -82,6 +86,10 @@ public class DevelopersNotification {
      **/
     public static void send(final String description, final Throwable throwable) {
         loadConfig();
+        if (config==null) {
+            DevelopersNotificationLogger.fatalConfigNotFound();
+            return;
+        }
 
         List<Task> tasks = new ArrayList<Task>(0);
         for (Integration integration : InternalUtil.getIntegrations()) {
@@ -105,6 +113,10 @@ public class DevelopersNotification {
                             final String description,
                             final Throwable throwable) {
         loadConfig();
+        if (config==null) {
+            DevelopersNotificationLogger.fatalConfigNotFound();
+            return;
+        }
 
         List<Task> tasks = new ArrayList<Task>(0);
         for (Integration integration : InternalUtil.getIntegrations()) {
@@ -130,6 +142,10 @@ public class DevelopersNotification {
                             final String description,
                             final Throwable throwable) {
         loadConfig();
+        if (config==null) {
+            DevelopersNotificationLogger.fatalConfigNotFound();
+            return;
+        }
 
         List<Task> tasks = new ArrayList<Task>(0);
         for (Integration integration : InternalUtil.getIntegrations(messengerDestination)) {
@@ -155,6 +171,10 @@ public class DevelopersNotification {
                             final String description,
                             final Throwable throwable) {
         loadConfig();
+        if (config==null) {
+            DevelopersNotificationLogger.fatalConfigNotFound();
+            return;
+        }
 
         List<Task> tasks = new ArrayList<Task>(0);
         for (Integration integration : InternalUtil.getIntegrations()) {
@@ -175,6 +195,10 @@ public class DevelopersNotification {
      **/
     public static boolean monitoringStart() {
         loadConfig();
+        if (config==null) {
+            DevelopersNotificationLogger.fatalConfigNotFound();
+            return false;
+        }
 
         if (monitoringStateAlive) {
             DevelopersNotificationLogger.error("Monitoring process is already running.");

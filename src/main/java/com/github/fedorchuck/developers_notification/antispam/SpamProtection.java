@@ -22,6 +22,7 @@ import com.github.fedorchuck.developers_notification.helpers.Constants;
 import com.github.fedorchuck.developers_notification.helpers.InternalUtil;
 import com.github.fedorchuck.developers_notification.integrations.Integration;
 import com.github.fedorchuck.developers_notification.model.Task;
+import org.apache.log4j.spi.LoggingEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +55,32 @@ public class SpamProtection {
 
         for (Task task : tasks) {
             sendIntoMessenger(protectionFromSpam, types, task);
+        }
+    }
+
+    /**
+     * It provide sending messages into messengers.
+     * <p><b>Note:</b> all needed data will be getting from JSON configuration</p>
+     *
+     * @param protectionFromSpam is needed protection from spam
+     * @param event what happened
+     * @since 0.3.0
+     **/
+    public void sendLogEventIntoMessenger(final boolean protectionFromSpam,
+                                          final LoggingEvent event) {
+        List<Task> tasks = new ArrayList<Task>(0);
+        for (Integration integration : InternalUtil.getIntegrations()) {
+            tasks.add(
+                    InternalUtil.generateTaskFromLoggingEvent(
+                            DevelopersNotification.config.getProjectName(),
+                            event,
+                            integration
+                    )
+            );
+        }
+
+        for (Task task : tasks) {
+            sendIntoMessenger(protectionFromSpam, MessageTypes.LOGGING_EVENT, task);
         }
     }
 
@@ -96,6 +123,12 @@ public class SpamProtection {
         t.start();
     }
 
+    /**
+     * This method complete the {@link Task} by sending messages to destination.
+     *
+     * @param task to compete
+     * @since 0.3.0
+     **/
     private static void complete(Task task) {
         task.getIntegration().sendMessage(task);
         DevelopersNotificationLogger.infoTaskCompleted(task.getIntegration().getClass().getSimpleName());

@@ -26,7 +26,7 @@ package com.github.fedorchuck.developers_notification.antispam;
  */
 public enum MessageTypes {
     USERS_MESSAGE,
-    LOG_EVENT,
+    LOGGING_EVENT,
     DISK_LIMIT,
     DISK_CONSUMPTION_RATE,
     RAM_LIMIT,

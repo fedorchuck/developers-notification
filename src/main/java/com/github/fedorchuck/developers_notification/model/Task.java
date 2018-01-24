@@ -4,7 +4,9 @@ import com.github.fedorchuck.developers_notification.integrations.Integration;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 
 /**
+ * <p> <b>Author</b>: @author <a href="https://vl-fedorchuck.firebaseapp.com/">Volodymyr Fedorchuk</a>. </p>
  * @author <a href="https://vl-fedorchuck.firebaseapp.com/">Volodymyr Fedorchuk</a>.
+ * @since 0.3.0
  */
 public class Task {
     private Integration integration;
