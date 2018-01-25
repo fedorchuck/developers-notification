@@ -47,6 +47,7 @@ public class Lifetime<V> {
                     Constants.THREAD_GROUP,
                     new Runnable() {
                         public void run() {
+                            //noinspection InfiniteLoopStatement
                             while (true) {
                                 try {
                                     Thread.sleep(updateTimerInterval * 1000);

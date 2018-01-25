@@ -20,19 +20,23 @@ import com.github.fedorchuck.developers_notification.DevelopersNotification;
 import com.github.fedorchuck.developers_notification.DevelopersNotificationLogger;
 import com.github.fedorchuck.developers_notification.DevelopersNotificationMessenger;
 import com.github.fedorchuck.developers_notification.DevelopersNotificationUtil;
+import com.github.fedorchuck.developers_notification.configuration.Config;
 import com.github.fedorchuck.developers_notification.configuration.Messenger;
 import com.github.fedorchuck.developers_notification.http.HttpClient;
 import com.github.fedorchuck.developers_notification.http.HttpResponse;
 import com.github.fedorchuck.developers_notification.integrations.Integration;
-import com.github.fedorchuck.developers_notification.integrations.developers_notification.DNMessage;
+import com.github.fedorchuck.developers_notification.model.Task;
 import com.github.fedorchuck.dnjson.Json;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.log4j.spi.LoggingEvent;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Provides sending messages via Telegram messenger
@@ -49,12 +53,13 @@ public class TelegramImpl implements Integration {
     private HttpClient httpClient = new HttpClient();
     private String token;
     private String channel;
-    private Boolean showWholeLogDetails = DevelopersNotification.config.getShowWholeLogDetails();
+    private boolean showWholeLogDetails;
     private Boolean configurationExist =
             DevelopersNotificationUtil.checkTheNecessaryConfigurationExists(DevelopersNotificationMessenger.TELEGRAM);
 
     public TelegramImpl() {
-        for (Messenger m : DevelopersNotification.config.getMessenger()) {
+        Config config = DevelopersNotification.getConfiguration();
+        for (Messenger m : config.getMessenger()) {
             if (m.getName() == DevelopersNotificationMessenger.TELEGRAM) {
                 token = m.getToken();
                 channel = m.getChannel();
@@ -62,8 +67,15 @@ public class TelegramImpl implements Integration {
             }
         }
 
+        showWholeLogDetails = config.getShowWholeLogDetails();
+
         if (!configurationExist)
             DevelopersNotificationLogger.warnSendMessageBadConfig("TELEGRAM");
+    }
+
+    @Override
+    public DevelopersNotificationMessenger name() {
+        return DevelopersNotificationMessenger.TELEGRAM;
     }
 
     /**
@@ -73,7 +85,7 @@ public class TelegramImpl implements Integration {
      * @since 0.1.0
      **/
     @Override
-    public void sendMessage(DNMessage message) {
+    public void sendMessage(Task message) {
         if (!configurationExist) {
             DevelopersNotificationLogger.errorSendMessageBadConfig("TELEGRAM");
             return;
@@ -81,22 +93,24 @@ public class TelegramImpl implements Integration {
 
         String url = SERVER_ENDPOINT + token + SEND_MESSAGE;
 
-        if (showWholeLogDetails)
-            DevelopersNotificationLogger.infoMessageSend("Telegram", url, message.getJsonGeneratedMessages());
-        else
-            DevelopersNotificationLogger.infoMessageSendHideDetails("Telegram");
-
-        try {
-            HttpResponse sendMessageResult = httpClient.post(url, message.getJsonGeneratedMessages());
-
+        if (!DevelopersNotificationUtil.isBlank(message.getJsonGeneratedMessages())) {
             if (showWholeLogDetails)
-                DevelopersNotificationLogger.infoHttpClientResponse(sendMessageResult);
+                DevelopersNotificationLogger.infoMessageSend("Telegram", url, message.getJsonGeneratedMessages());
             else
-                DevelopersNotificationLogger.infoHttpClientResponseHideDetails(sendMessageResult);
+                DevelopersNotificationLogger.infoMessageSendHideDetails("Telegram");
 
-            analyseResponse(sendMessageResult);
-        } catch (IOException e) {
-            DevelopersNotificationLogger.errorSendMessage("Telegram", e);
+            try {
+                HttpResponse sendMessageResult = httpClient.post(url, message.getJsonGeneratedMessages());
+
+                if (showWholeLogDetails)
+                    DevelopersNotificationLogger.infoHttpClientResponse(sendMessageResult);
+                else
+                    DevelopersNotificationLogger.infoHttpClientResponseHideDetails(sendMessageResult);
+
+                analyseResponse(sendMessageResult);
+            } catch (IOException e) {
+                DevelopersNotificationLogger.errorSendMessage("Telegram", e);
+            }
         }
 
         if (message.getMultipartEntityBuilder() == null)
@@ -133,11 +147,11 @@ public class TelegramImpl implements Integration {
      * @since 0.1.0
      **/
     @Override
-    public DNMessage generateMessage(String projectName, String description, Throwable throwable) {
+    public Task generateMessage(String projectName, String description, Throwable throwable) {
         if (DevelopersNotificationUtil.isNullOrEmpty(channel))
             return null;//it will be handled on TelegramImpl#sendMessage
 
-        DNMessage dnMessage = new DNMessage();
+        Task task = new Task(this, projectName, description, throwable);
         Message message = new Message();
 
         message.setChat_id(channel);
@@ -165,23 +179,41 @@ public class TelegramImpl implements Integration {
             builder.addBinaryBody("document", stackTrace, ContentType.MULTIPART_FORM_DATA, "StackTrace-" + new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss").format(Calendar.getInstance().getTime()));
             builder.addTextBody("chat_id", channel);
 
-            dnMessage.setMultipartEntityBuilder(builder);
+            task.setMultipartEntityBuilder(builder);
         }
         message.setText(generatedMessage.toString());
-        dnMessage.setJsonGeneratedMessages(Json.encode(message));
+        task.setJsonGeneratedMessages(Json.encode(message));
 
-        return dnMessage;
+        return task;
     }
 
     /**
-     * Replace <code>_</code> to <code>-</code>
+     * Generate {@link Task} to send by specified params
      *
-     * @param string that possible contains <code>_</code>
-     * @return handled string
-     * @since 1.0.2
+     * @param projectName where was method called. Can be <code>null</code>
+     * @param event from logger
+     * @return generated message as {@link Task } JSON
+     * @since 0.3.0
      **/
-    private String replaceLowLine(String string) {
-        return string.replace('_', '-');
+    @Override
+    public Task generateMessageFromLoggingEvent(String projectName, LoggingEvent event) {
+        if (DevelopersNotificationUtil.isNullOrEmpty(channel))
+            return null;//it will be handled on TelegramImpl#sendMessage
+
+        String filename = event.getLevel() + "_" + projectName + "_" +
+                new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss_z(Z)").format(new Date(event.getTimeStamp()));
+
+        Task task = new Task(this, projectName, event.getMessage().toString(), null);
+
+        byte[] stackTrace = handleInformation(event, projectName);
+        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+            builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+            builder.addBinaryBody("document", stackTrace, ContentType.MULTIPART_FORM_DATA, filename);
+            builder.addTextBody("chat_id", channel);
+
+        task.setMultipartEntityBuilder(builder);
+
+        return task;
     }
 
     /**
@@ -207,5 +239,71 @@ public class TelegramImpl implements Integration {
                         "response code: " + response.getStatusCode() +
                                 " response content: hidden by show_whole_log_details.");
         }
+    }
+
+    /**
+     * Replace <code>_</code> to <code>-</code>
+     *
+     * @param string that possible contains <code>_</code>
+     * @return handled string
+     * @since 1.0.2
+     **/
+    private String replaceLowLine(String string) {
+        return string.replace('_', '-');
+    }
+
+
+    /**
+     * Convert input {@link LoggingEvent} to byte array
+     *
+     * @param event that will be converted
+     * @return handled byte array
+     * @since 0.3.0
+     **/
+    private byte[] handleInformation(LoggingEvent event, String projectName) {
+        StringBuffer result = new StringBuffer();
+            result.append("level: \t\t\t");
+            result.append(event.getLevel());
+            result.append("\n");
+            result.append("projectName: \t\t");
+            result.append(projectName);
+            result.append("\n");
+            result.append("loggerName: \t\t");
+            result.append(event.getLoggerName());
+            result.append("\n");
+            result.append("message: \t\t");
+            result.append(event.getMessage());
+            result.append("\n");
+            result.append("renderedMessage: \t");
+            result.append(event.getRenderedMessage());
+            result.append("\n");
+            result.append("threadName: \t\t");
+            result.append(event.getThreadName());
+            result.append("\n");
+            result.append("millis: \t\t");
+            result.append(event.getTimeStamp());
+            result.append("\n");
+            result.append("date: \t\t\t");
+            result.append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z(Z)").format(new Date(event.getTimeStamp())));
+            result.append("\n");
+            if (event.getThrowableInformation()!=null) {
+                result.append("thrown: \n");
+                result.append("throwable: \t\t");
+                result.append(event.getThrowableInformation().getThrowable());
+                result.append("\n");
+                result.append("throwableStrRep: \t");
+                String throwableInformation = Arrays.toString(
+                        event.getThrowableInformation().getThrowableStrRep())
+                        .replace(" \tat","\n \t \t \t at");
+                result.append(throwableInformation);
+                result.append("\n");
+            }
+            if (event.getNDC()!=null) {
+                result.append("NDC: \t");
+                result.append(event.getNDC());
+                result.append("\n");
+            }
+
+        return String.valueOf(result).getBytes();
     }
 }

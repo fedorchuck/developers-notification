@@ -21,6 +21,7 @@ import com.github.fedorchuck.developers_notification.DevelopersNotificationLogge
 import com.github.fedorchuck.developers_notification.antispam.FrequencyOfSending;
 import com.github.fedorchuck.developers_notification.antispam.MessageTypes;
 import com.github.fedorchuck.developers_notification.antispam.SpamProtection;
+import com.github.fedorchuck.developers_notification.configuration.Config;
 import com.github.fedorchuck.developers_notification.configuration.Monitoring;
 import com.github.fedorchuck.developers_notification.helpers.Constants;
 import com.github.fedorchuck.developers_notification.helpers.Lifetime;
@@ -39,10 +40,15 @@ import java.util.List;
  * @since 0.2.0
  */
 public class MonitorProcessor implements Runnable {
-    private static Monitoring monitoringConfig = DevelopersNotification.config.getMonitoring();
+    private Monitoring monitoringConfig;
+    private boolean protectionFromSpam;
     private final Lifetime<List<Disk>> monitoring;
 
     public MonitorProcessor() {
+        Config config = DevelopersNotification.getConfiguration();
+        monitoringConfig = config.getMonitoring();
+        protectionFromSpam = config.getProtectionFromSpam();
+
         if (monitoringConfig.getPeriod() == null) {
             DevelopersNotificationLogger.errorTaskFailed(
                     "MonitorProcessor", new IllegalArgumentException("Check config. Period can not be null.")
@@ -95,15 +101,15 @@ public class MonitorProcessor implements Runnable {
                 getUsageInPercent(currentUsageJVM.getUsedRamMemory(), currentUsageJVM.getTotalRamMemory());
 
         if (currentUsageRamInPercent >= monitoringConfig.getMaxRam()) {
-            SpamProtection.sendIntoMessenger(
-                    false,
+            SpamProtection.sendMonitoringResultsIntoMessenger(
+                    protectionFromSpam,
+                    MessageTypes.RAM_LIMIT,
                     AlertMessages.getAlertRAMLimitMessage(
                             currentUsageJVM.getUsedRamMemory(),
                             currentUsageRamInPercent,
                             monitoringConfig.getMaxRam()
                     )
             );
-            FrequencyOfSending.messageSent(MessageTypes.RAM_LIMIT);
         }
     }
 
@@ -127,8 +133,9 @@ public class MonitorProcessor implements Runnable {
                         getUsageInPercent(rate, currentUsage.getTotalDiskSpace());
 
                 if (rateDiskInPercent >= monitoringConfig.getDiskConsumptionRate()) {
-                    SpamProtection.sendIntoMessenger(
-                            false,
+                    SpamProtection.sendMonitoringResultsIntoMessenger(
+                            protectionFromSpam,
+                            MessageTypes.DISK_CONSUMPTION_RATE,
                             AlertMessages.getAlertDiskRateMessage(
                                     currentUsage.getDiskName(),
                                     rate,
@@ -136,7 +143,6 @@ public class MonitorProcessor implements Runnable {
                                     monitoringConfig.getDiskConsumptionRate()
                             )
                     );
-                    FrequencyOfSending.messageSent(MessageTypes.DISK_CONSUMPTION_RATE);
                 }
             }
         }
@@ -153,8 +159,9 @@ public class MonitorProcessor implements Runnable {
                 getUsageInPercent(currentUsage.getUsableDiskSpace(), currentUsage.getTotalDiskSpace());
 
         if (currentUsageDiskInPercent >= monitoringConfig.getMaxDisk()) {
-            SpamProtection.sendIntoMessenger(
-                    false,
+            SpamProtection.sendMonitoringResultsIntoMessenger(
+                    protectionFromSpam,
+                    MessageTypes.DISK_LIMIT,
                     AlertMessages.getAlertDiskLimitMessage(
                             currentUsage.getDiskName(),
                             currentUsage.getUsableDiskSpace(),
@@ -162,7 +169,6 @@ public class MonitorProcessor implements Runnable {
                             monitoringConfig.getMaxDisk()
                     )
             );
-            FrequencyOfSending.messageSent(MessageTypes.DISK_LIMIT);
         }
     }
 

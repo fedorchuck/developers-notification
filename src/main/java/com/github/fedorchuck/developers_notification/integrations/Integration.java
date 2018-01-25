@@ -16,8 +16,10 @@
 
 package com.github.fedorchuck.developers_notification.integrations;
 
+import com.github.fedorchuck.developers_notification.DevelopersNotificationMessenger;
 import com.github.fedorchuck.developers_notification.http.HttpResponse;
-import com.github.fedorchuck.developers_notification.integrations.developers_notification.DNMessage;
+import com.github.fedorchuck.developers_notification.model.Task;
+import org.apache.log4j.spi.LoggingEvent;
 
 /**
  * Decelerate which methods should contain each integration,
@@ -31,23 +33,41 @@ import com.github.fedorchuck.developers_notification.integrations.developers_not
 public interface Integration {
 
     /**
+     * Contains name of integration
+     *
+     * @return name of integration
+     * @since 0.3.0
+     **/
+    DevelopersNotificationMessenger name();
+
+    /**
      * Provides sending messages to specified messenger
      *
      * @param message to send
      * @since 0.1.0
      **/
-    void sendMessage(DNMessage message);
+    void sendMessage(Task message);
 
     /**
-     * Generate message to send by specified params
+     * Generate {@link Task} to send by specified params
      *
      * @param projectName where was method called. Can be <code>null</code>
      * @param description about situation. Can be <code>null</code>
      * @param throwable   which happened. Can be <code>null</code>
-     * @return generated message as {@link DNMessage } JSON
+     * @return generated message as {@link Task } JSON
      * @since 0.1.0
      **/
-    DNMessage generateMessage(String projectName, String description, Throwable throwable);
+    Task generateMessage(String projectName, String description, Throwable throwable);
+
+    /**
+     * Generate {@link Task} to send by specified params
+     *
+     * @param projectName where was method called. Can be <code>null</code>
+     * @param event from logger
+     * @return generated message as {@link Task } JSON
+     * @since 0.3.0
+     **/
+    Task generateMessageFromLoggingEvent(String projectName, LoggingEvent event);
 
     /**
      * Analyse response after sent message

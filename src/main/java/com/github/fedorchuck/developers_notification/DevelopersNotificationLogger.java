@@ -19,6 +19,7 @@ package com.github.fedorchuck.developers_notification;
 import com.github.fedorchuck.developers_notification.antispam.SentMessage;
 import com.github.fedorchuck.developers_notification.http.HttpResponse;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.log4j.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,6 +36,11 @@ import java.io.IOException;
 public class DevelopersNotificationLogger {
     private static Logger logger(int code) {
         return LoggerFactory.getLogger("DEVELOPERS_NOTIFICATION_"+code);
+    }
+
+    //region FATAL
+    public static void fatalConfigNotFound() {
+        logger(1).error("Config not found. Please, check your configuration. ");
     }
 
     //region ERROR
@@ -134,6 +140,10 @@ public class DevelopersNotificationLogger {
 
     public static void infoScheduler(String val) {
         logger(4071).info(val);
+    }
+
+    public static void infoLoggerLevel(String val1, Level val2) {
+        logger(4100).info("Your input logging level: {}. Will be using logger level: {}", val1, val2);
     }
     //endregion
 }

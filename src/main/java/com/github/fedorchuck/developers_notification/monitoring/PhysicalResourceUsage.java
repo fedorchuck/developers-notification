@@ -29,7 +29,7 @@ class PhysicalResourceUsage {
     private JVM jvm;
     private List<Disk> disks;
 
-    public PhysicalResourceUsage(JVM jvm, List<Disk> disks) {
+    PhysicalResourceUsage(JVM jvm, List<Disk> disks) {
         this.jvm = jvm;
         this.disks = disks;
     }

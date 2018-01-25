@@ -164,10 +164,10 @@ public class DevelopersNotificationUtil {
      * @since 0.3.0
      **/
     public static boolean checkTheNecessaryConfigurationExists(DevelopersNotificationMessenger messenger) {
-        if (DevelopersNotification.config == null)
+        if (!DevelopersNotification.configurationExist())
             return false;
 
-        List<Messenger> messengers = DevelopersNotification.config.getMessenger();
+        List<Messenger> messengers = DevelopersNotification.getConfiguration().getMessenger();
 
         if (messengers == null || messengers.isEmpty())
             return false;

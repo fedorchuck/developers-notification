@@ -18,7 +18,7 @@ package com.github.fedorchuck.developers_notification.integrations.slack;
 
 import com.github.fedorchuck.developers_notification.DevelopersNotificationUtil;
 import com.github.fedorchuck.developers_notification.Utils;
-import com.github.fedorchuck.developers_notification.integrations.developers_notification.DNMessage;
+import com.github.fedorchuck.developers_notification.model.Task;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -55,7 +55,7 @@ public class SlackImplTest {
             Assert.fail(e.getMessage());
         }
 
-        DNMessage actual = slack.generateMessage("developers_notification",
+        Task actual = slack.generateMessage("developers_notification",
                 "test with full method signature", null);
         Assert.assertEquals(expected, actual.getJsonGeneratedMessages());
     }
