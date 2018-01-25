@@ -51,7 +51,7 @@ public class DevelopersNotification {
         Thread.currentThread().setName("Developers notification");
     }
 
-    public static Config config;
+    private static Config config;
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private static boolean monitoringStateAlive = false;
 
@@ -63,8 +63,7 @@ public class DevelopersNotification {
      * @since 0.1.0
      **/
     public static void printConfiguration() {
-        loadConfig();
-        if (config==null) {
+        if (!configurationExist()) {
             DevelopersNotificationLogger.fatalConfigNotFound();
             return;
         }
@@ -85,8 +84,7 @@ public class DevelopersNotification {
      * @since 0.2.0
      **/
     public static void send(final String description, final Throwable throwable) {
-        loadConfig();
-        if (config==null) {
+        if (!configurationExist()) {
             DevelopersNotificationLogger.fatalConfigNotFound();
             return;
         }
@@ -112,8 +110,7 @@ public class DevelopersNotification {
     public static void send(final String projectName,
                             final String description,
                             final Throwable throwable) {
-        loadConfig();
-        if (config==null) {
+        if (!configurationExist()) {
             DevelopersNotificationLogger.fatalConfigNotFound();
             return;
         }
@@ -141,8 +138,7 @@ public class DevelopersNotification {
                             final String projectName,
                             final String description,
                             final Throwable throwable) {
-        loadConfig();
-        if (config==null) {
+        if (!configurationExist()) {
             DevelopersNotificationLogger.fatalConfigNotFound();
             return;
         }
@@ -170,8 +166,7 @@ public class DevelopersNotification {
                             final String projectName,
                             final String description,
                             final Throwable throwable) {
-        loadConfig();
-        if (config==null) {
+        if (!configurationExist()) {
             DevelopersNotificationLogger.fatalConfigNotFound();
             return;
         }
@@ -194,8 +189,7 @@ public class DevelopersNotification {
      * @since 0.2.0
      **/
     public static boolean monitoringStart() {
-        loadConfig();
-        if (config==null) {
+        if (!configurationExist()) {
             DevelopersNotificationLogger.fatalConfigNotFound();
             return false;
         }
@@ -249,19 +243,44 @@ public class DevelopersNotification {
     }
 
     /**
-     * Load Developers Notification configuration from environment variable <code>DN</code>.
+     * Return configuration for Developers Notification library.
+     *
      * <p><b>Note: </b></p>
+     * <p>If configuration is missed - configuration will be loaded from environment variable <code>DN</code>.</p>
      * <p>If configuration was loaded before - new configuration will not be uploaded.</p>
      *
+     * @return configuration for Developers Notification library
      * @since 0.3.0
      */
-    private static void loadConfig() {
+    public static Config getConfiguration() {
         if (config != null)
-            return;
+            return config;
 
         if (!DevelopersNotificationUtil.isNullOrEmpty(DevelopersNotificationUtil.getEnvironmentVariable("DN")))
             config = Json.decodeValue(DevelopersNotificationUtil.getEnvironmentVariable("DN"), Config.class);
         else
             config = null;
+
+        return config;
+    }
+
+    /**
+     * Check is configuration for Developers Notification library exist.
+     *
+     * <p><b>Note: </b></p>
+     * <p>If configuration is missed - configuration will be loaded from environment variable <code>DN</code>.</p>
+     * <p>If configuration was loaded before - new configuration will not be uploaded.</p>
+     *
+     * @return  <code>true</code> if configuration exist
+     *          <code>false</code> otherwise.
+     * @since 0.3.0
+     */
+    public static boolean configurationExist() {
+        if (config == null) {
+            getConfiguration();
+            return config != null;
+        }
+
+        return true;
     }
 }

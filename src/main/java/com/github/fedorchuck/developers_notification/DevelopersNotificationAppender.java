@@ -1,6 +1,7 @@
 package com.github.fedorchuck.developers_notification;
 
 import com.github.fedorchuck.developers_notification.antispam.SpamProtection;
+import com.github.fedorchuck.developers_notification.configuration.Config;
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Level;
 import org.apache.log4j.spi.LoggingEvent;
@@ -29,7 +30,7 @@ public class DevelopersNotificationAppender extends AppenderSkeleton {
     @SuppressWarnings("unused")
     public void setLevel(String level) {
         Level inputLevel = Level.toLevel(level);
-//TODO: check is config available
+
         switch (inputLevel.toInt()) {
             case Level.ALL_INT:
                 availableLevel.add(Level.ALL);
@@ -54,8 +55,14 @@ public class DevelopersNotificationAppender extends AppenderSkeleton {
 
     @Override
     protected void append(LoggingEvent event) {
+        Config config = DevelopersNotification.getConfiguration();
+        if (config == null) {
+            DevelopersNotificationLogger.fatalConfigNotFound();
+            return;
+        }
+
         if (availableLevel.contains(event.getLevel())) {
-            new SpamProtection().sendLogEventIntoMessenger(DevelopersNotification.config.getProtectionFromSpam(), event);
+            new SpamProtection().sendLogEventIntoMessenger(config.getProtectionFromSpam(), event);
         }
     }
 

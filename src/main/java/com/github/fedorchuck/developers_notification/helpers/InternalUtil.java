@@ -21,7 +21,7 @@ import java.util.List;
  * @since 0.2.0
  */
 public class InternalUtil {
-    private static Config config = DevelopersNotification.config;
+    private static Config config = DevelopersNotification.getConfiguration();
 
     /**
      * Return all {@link Integration} from {@link Config} as {@link List}

@@ -49,8 +49,9 @@ public class SpamProtection {
                                                           final MessageTypes types,
                                                           final String description) {
         List<Task> tasks = new ArrayList<Task>(0);
+        String projectName = DevelopersNotification.getConfiguration().getProjectName();
         for (Integration integration : InternalUtil.getIntegrations()) {
-            tasks.add(InternalUtil.generateTask(DevelopersNotification.config.getProjectName(), description, null, integration));
+            tasks.add(InternalUtil.generateTask(projectName, description, null, integration));
         }
 
         for (Task task : tasks) {
@@ -69,14 +70,9 @@ public class SpamProtection {
     public void sendLogEventIntoMessenger(final boolean protectionFromSpam,
                                           final LoggingEvent event) {
         List<Task> tasks = new ArrayList<Task>(0);
+        String projectName = DevelopersNotification.getConfiguration().getProjectName();
         for (Integration integration : InternalUtil.getIntegrations()) {
-            tasks.add(
-                    InternalUtil.generateTaskFromLoggingEvent(
-                            DevelopersNotification.config.getProjectName(),
-                            event,
-                            integration
-                    )
-            );
+            tasks.add(InternalUtil.generateTaskFromLoggingEvent(projectName, event, integration));
         }
 
         for (Task task : tasks) {

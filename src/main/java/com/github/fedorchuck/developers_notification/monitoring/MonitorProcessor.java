@@ -21,6 +21,7 @@ import com.github.fedorchuck.developers_notification.DevelopersNotificationLogge
 import com.github.fedorchuck.developers_notification.antispam.FrequencyOfSending;
 import com.github.fedorchuck.developers_notification.antispam.MessageTypes;
 import com.github.fedorchuck.developers_notification.antispam.SpamProtection;
+import com.github.fedorchuck.developers_notification.configuration.Config;
 import com.github.fedorchuck.developers_notification.configuration.Monitoring;
 import com.github.fedorchuck.developers_notification.helpers.Constants;
 import com.github.fedorchuck.developers_notification.helpers.Lifetime;
@@ -39,11 +40,15 @@ import java.util.List;
  * @since 0.2.0
  */
 public class MonitorProcessor implements Runnable {
-    private static Monitoring monitoringConfig = DevelopersNotification.config.getMonitoring();
-    private static boolean protectionFromSpam = DevelopersNotification.config.getProtectionFromSpam();
+    private Monitoring monitoringConfig;
+    private boolean protectionFromSpam;
     private final Lifetime<List<Disk>> monitoring;
 
     public MonitorProcessor() {
+        Config config = DevelopersNotification.getConfiguration();
+        monitoringConfig = config.getMonitoring();
+        protectionFromSpam = config.getProtectionFromSpam();
+
         if (monitoringConfig.getPeriod() == null) {
             DevelopersNotificationLogger.errorTaskFailed(
                     "MonitorProcessor", new IllegalArgumentException("Check config. Period can not be null.")

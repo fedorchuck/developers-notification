@@ -17,6 +17,7 @@
 package com.github.fedorchuck.developers_notification.http;
 
 import com.github.fedorchuck.developers_notification.DevelopersNotification;
+import com.github.fedorchuck.developers_notification.configuration.Config;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
@@ -41,8 +42,9 @@ public class HttpClient {
     private Integer CONNECT_TIMEOUT;
 
     public HttpClient() {
-        USER_AGENT = DevelopersNotification.config.getUserAgent();
-        CONNECT_TIMEOUT = DevelopersNotification.config.getConnectTimeout();
+        Config config = DevelopersNotification.getConfiguration();
+        USER_AGENT = config.getUserAgent();
+        CONNECT_TIMEOUT = config.getConnectTimeout();
     }
 
     /**

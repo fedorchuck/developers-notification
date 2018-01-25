@@ -20,6 +20,7 @@ import com.github.fedorchuck.developers_notification.DevelopersNotification;
 import com.github.fedorchuck.developers_notification.DevelopersNotificationLogger;
 import com.github.fedorchuck.developers_notification.DevelopersNotificationMessenger;
 import com.github.fedorchuck.developers_notification.DevelopersNotificationUtil;
+import com.github.fedorchuck.developers_notification.configuration.Config;
 import com.github.fedorchuck.developers_notification.configuration.Messenger;
 import com.github.fedorchuck.developers_notification.http.HttpClient;
 import com.github.fedorchuck.developers_notification.http.HttpResponse;
@@ -47,18 +48,21 @@ public class SlackImpl implements Integration {
     private HttpClient httpClient = new HttpClient();
     private String token;
     private String channel;
-    private Boolean showWholeLogDetails = DevelopersNotification.config.getShowWholeLogDetails();
+    private boolean showWholeLogDetails;
     private Boolean configurationExist =
             DevelopersNotificationUtil.checkTheNecessaryConfigurationExists(DevelopersNotificationMessenger.SLACK);
 
     public SlackImpl() {
-        for (Messenger m : DevelopersNotification.config.getMessenger()) {
+        Config config = DevelopersNotification.getConfiguration();
+        for (Messenger m : config.getMessenger()) {
             if (m.getName() == DevelopersNotificationMessenger.SLACK) {
                 token = m.getToken();
                 channel = m.getChannel();
                 break;
             }
         }
+
+        showWholeLogDetails = config.getShowWholeLogDetails();
 
         if (!configurationExist)
             DevelopersNotificationLogger.warnSendMessageBadConfig("SLACK");
