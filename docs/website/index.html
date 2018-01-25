@@ -60,8 +60,8 @@
         <div class="col-md-4">
             <ul class="list-inline" style="margin-top: 3%;">
                 <li>
-                    <a href="https://oss.sonatype.org/content/repositories/releases/com/github/fedorchuck/developers-notification/0.2.2/developers-notification-0.2.2.jar"
-                                class="btn btn-success btn-download" role="button">Download v0.2.2 JAR </a>
+                    <a href="https://oss.sonatype.org/content/repositories/releases/com/github/fedorchuck/developers-notification/0.3.0/developers-notification-0.3.0.jar"
+                                class="btn btn-success btn-download" role="button">Download v0.3.0 JAR </a>
                 </li>
                 <li>
                     <a href="https://github.com/fedorchuck/developers-notification" target="_blank"
@@ -93,23 +93,24 @@
                     of them send notifications to the mail or a issue tracking system of a different type, which is not
                     always convenient and not always possible to track quickly.</p>
                 <p>This library sending notifications to messengers. Just create and connect a bot in the messenger that
-                    your team using and that is supported by this library. For now it is Slack and Telegram. Add the library
-                    to the project, add it configuration (access keys to the bot that you created), add lines, where it is
-                    needed, to send message and you receive messages when something happened.</p>
+                    your team using and that is supported by this library. For now it is Slack and Telegram. Add the
+                    library to the project, add it configuration (access keys to the bot that you created), add lines,
+                    where it is needed, to send message or logging appender and you receive messages when something
+                    happened.</p>
                 <p>Also, this library have monitoring module. It can monitoring current usage of ram and disk memory,
                     set limits of their use and in case of overspending - informs in the selected messengers.</p>
                 <p>This library compatible with Java 6+</p>
             </div>
             <div id="download" class="chapter-line">
                 <h2>Download</h2>
-                <a href="https://oss.sonatype.org/content/repositories/releases/com/github/fedorchuck/developers-notification/0.2.2/developers-notification-0.2.2.jar"
-                       class="btn btn-success btn-download" role="button">↓ v0.2.2 JAR </a>
+                <a href="https://oss.sonatype.org/content/repositories/releases/com/github/fedorchuck/developers-notification/0.3.0/developers-notification-0.3.0.jar"
+                       class="btn btn-success btn-download" role="button">↓ v0.3.0 JAR </a>
                 <p>The source code to the developers-notification, its samples, and this website is
                     <a href="https://github.com/fedorchuck/developers-notification" target="_blank"> available on GitHub.</a>
                 </p>
                 <h4>Gradle:</h4>
                 <pre>
-                    compile 'com.github.fedorchuck:developers-notification:0.2.2'
+                    compile 'com.github.fedorchuck:developers-notification:0.3.0'
                 </pre>
                 <p>
                     Another versions and their JAR-files you can find
@@ -118,6 +119,7 @@
             </div>
             <div id="setup" class="chapter-line">
                 <h2>Setup</h2>
+                <h2>Environment configuration</h2>
                 <p>The library is configured by environment variables or system properties. Supported variable is
                 <code>DN</code>. It is single environment variable witch required if you use this library.
                     Accepted value is JSON:
@@ -175,13 +177,13 @@
                     </li>
                     <li>
                         <p><code>connect_timeout</code> for
-                            <a href="https://fedorchuck.github.io/developers-notification/javadoc-0.2.2/com/github/fedorchuck/developers_notification/http/HttpClient.html" target="_blank">HttpClient</a>
+                            <a href="https://fedorchuck.github.io/developers-notification/javadoc-0.3.0/com/github/fedorchuck/developers_notification/http/HttpClient.html" target="_blank">HttpClient</a>
                             is not required; default value is <code>5000</code>;
                         </p>
                     </li>
                     <li>
                         <p><code>user_agent</code> user agent for
-                            <a href="https://fedorchuck.github.io/developers-notification/javadoc-0.2.2/com/github/fedorchuck/developers_notification/http/HttpClient.html" target="_blank">HttpClient</a>
+                            <a href="https://fedorchuck.github.io/developers-notification/javadoc-0.3.0/com/github/fedorchuck/developers_notification/http/HttpClient.html" target="_blank">HttpClient</a>
                             is not required; default value is <code>Mozilla/5.0</code>;
                         </p>
                     </li>
@@ -210,6 +212,26 @@
                         </ul>
                     </li>
                 </ul>
+                <h2>Logging appender</h2>
+                <p>If you want routing some logging level messages to messengers, you should configure this part of
+                    project. If you use <a href="http://logging.apache.org/log4j/1.2/" target="_blank">log4j</a>
+                    - your <code>log4j.properties</code> file should contain rows like this:
+                </p>
+                <pre>
+# Define the root logger with appender DevelopersNotificationAppender
+log4j.rootLogger = DEBUG, DNAppender
+
+# Define the DevelopersNotificationAppender appender
+log4j.appender.DNAppender=com.github.fedorchuck.developers_notification.DevelopersNotificationAppender
+
+log4j.appender.DNAppender.Level=ERROR
+log4j.appender.DNAppender.layout=org.apache.log4j.PatternLayout
+log4j.appender.DNAppender.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} [%c{1}] %5p - %m%n
+                    </pre>
+
+                <p><b>Note:</b> If you specify unknown logging level, you will recive all logging events to all
+                    specified messengers.
+                </p>
             </div>
             <div id="connecting_bot" class="chapter-line">
                 <h2>Connecting your bot</h2>
@@ -289,7 +311,7 @@
                 <pre>DevelopersNotification.printConfiguration();</pre>
                 <p><b>Note:</b> If configuration value of field <code>show_whole_log_details</code> is <code>false</code> -
                     will be printed result of method
-                    <a href="https://fedorchuck.github.io/developers-notification/javadoc-0.2.2/com/github/fedorchuck/developers_notification/configuration/Config.html" target="_blank">Config</a>#getPublicToString()
+                    <a href="https://fedorchuck.github.io/developers-notification/javadoc-0.3.0/com/github/fedorchuck/developers_notification/configuration/Config.html" target="_blank">Config</a>#getPublicToString()
                 </p>
                 <p>For sending message to chosen destination you can use methods:</p>
                 <ol>
@@ -402,6 +424,8 @@ DevelopersNotification.send(
             DevelopersNotification.send("example of usage", ex);
         }
                 </pre>
+                <p>Also, you can use logger appender. Just send message into logger with logging level, which you
+                    specified in log configuration and you receive message into specified messenger.</p>
             </div>
             <div id="javadoc" class="chapter-line">
                 <h2>Archive and Javadoc</h2>
@@ -414,6 +438,11 @@ DevelopersNotification.send(
                     </tr>
                     </thead>
                     <tbody>
+                    <tr>
+                        <td>v0.3.0</td>
+                        <td><a href="https://fedorchuck.github.io/developers-notification/javadoc-0.3.0" target="_blank">javadoc</a></td>
+                        <td><a href="https://oss.sonatype.org/content/repositories/releases/com/github/fedorchuck/developers-notification/0.3.0/" target="_blank">JAR-files</a></td>
+                    </tr>
                     <tr>
                         <td>v0.2.2</td>
                         <td><a href="https://fedorchuck.github.io/developers-notification/javadoc-0.2.2" target="_blank">javadoc</a></td>
@@ -451,10 +480,16 @@ DevelopersNotification.send(
                 <h2>Dependencies</h2>
                 <ul>
                     <li>
-                        <a href="https://projectlombok.org/" target="_blank">org.projectlombok:lombok:1.16.16</a>
+                        <a href="http://www.slf4j.org/" target="_blank">org.slf4j:slf4j-simple:1.7.25</a>
                     </li>
                     <li>
                         <a href="https://www.slf4j.org/" target="_blank">org.slf4j:slf4j-api:1.7.25</a>
+                    </li>
+                    <li>
+                        <a href="http://hc.apache.org/httpcomponents-client/" target="_blank">org.apache.httpcomponents:httpmime:4.5.4</a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/fedorchuck/dnjson/" target="_blank">com.github.fedorchuck:dnjson:0.1.0</a>
                     </li>
                 </ul>
             </div>
