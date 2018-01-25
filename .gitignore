@@ -1,5 +1,8 @@
 /.gradle/
 /.idea/
 /build/
+/out/
+gradlew
+gradlew.bat
 gradle.properties
 developers-notification.iml

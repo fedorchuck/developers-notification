@@ -32,35 +32,35 @@ class B {
         DevelopersNotification.send("test with signature: " +
                 "'DevelopersNotification.send(description, throwable);'" +
                         "java: " + Runtime.class.getPackage().getImplementationVersion(),
-                new Throwable("test")
+                new Throwable(new Throwable(new Throwable(new Throwable("integration test 1"))))
         );
         DevelopersNotification.send(
                 "integration test",
                 "test with signature: " +
                 "'DevelopersNotification.send(projectName, description, throwable);'" +
                         "java: " + Runtime.class.getPackage().getImplementationVersion(),
-                new Throwable("test")
+                new Throwable("integration test 2")
         );
         DevelopersNotification.send(DevelopersNotificationMessenger.TELEGRAM,
                 "integration test",
                 "test with signature: " +
                 "'DevelopersNotification.send(DevelopersNotificationMessenger.TELEGRAM, projectName, description, throwable);'" +
                         "java: " + Runtime.class.getPackage().getImplementationVersion(),
-                new Throwable("test")
+                new Throwable("integration test 3")
         );
         DevelopersNotification.send(DevelopersNotificationMessenger.SLACK,
                 "integration test",
                 "test with signature: " +
                 "'DevelopersNotification.send(DevelopersNotificationMessenger.SLACK, projectName, description, throwable);'" +
                         "java: " + Runtime.class.getPackage().getImplementationVersion(),
-                new Throwable("test")
+                new Throwable("integration test 3")
         );
         DevelopersNotification.send(DevelopersNotificationMessenger.ALL_AVAILABLE,
                 "integration test",
                 "test with signature: " +
                 "'DevelopersNotification.send(DevelopersNotificationMessenger.ALL_AVAILABLE, projectName, description, throwable);'" +
                         "java: " + Runtime.class.getPackage().getImplementationVersion(),
-                new Throwable("test")
+                new Throwable("integration test 4")
         );
         DevelopersNotification.send(
                 true,
@@ -68,7 +68,7 @@ class B {
                 "test with signature: " +
                 "'DevelopersNotification.send(protectionFromSpam, projectName, description, throwable);'" +
                 "java: " + Runtime.class.getPackage().getImplementationVersion(),
-                new Throwable("test")
+                new Throwable("integration test 5 with protectionFromSpam")
         );
 
         Assert.assertTrue("messages was sent without exceptions", true);

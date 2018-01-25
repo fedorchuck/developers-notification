@@ -16,7 +16,10 @@
 
 package com.github.fedorchuck.developers_notification;
 
+import com.github.fedorchuck.developers_notification.antispam.SentMessage;
 import com.github.fedorchuck.developers_notification.http.HttpResponse;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.log4j.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,11 +32,15 @@ import java.io.IOException;
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>
  * @since 0.1.0
  */
-
 @SuppressWarnings("WeakerAccess")
 public class DevelopersNotificationLogger {
     private static Logger logger(int code) {
         return LoggerFactory.getLogger("DEVELOPERS_NOTIFICATION_"+code);
+    }
+
+    //region FATAL
+    public static void fatalConfigNotFound() {
+        logger(1).error("Config not found. Please, check your configuration. ");
     }
 
     //region ERROR
@@ -72,8 +79,21 @@ public class DevelopersNotificationLogger {
         );
     }
 
+    public static void errorSendMessageBadConfig(String integration) {
+        logger(1033).error(
+                "Message was not send to {}. Integration has not got configuration. Please, check configuration.",
+                integration
+        );
+    }
+
     public static void errorScheduler(String val) {
         logger(1040).error(val);
+    }
+    //endregion
+
+    //region WARN
+    public static void warnSendMessageBadConfig(String integration) {
+        logger(3001).warn("Integration {} has not got configuration. Please, check configuration.", integration);
     }
     //endregion
 
@@ -98,16 +118,32 @@ public class DevelopersNotificationLogger {
         logger(4012).info("Sending message to {} by url: {} with message: {}", integration, val, message);
     }
 
+    public static void infoMessageSend(String integration, String val, MultipartEntityBuilder message) {
+        logger(4013).info("Sending message to {} by url: {} with message: {}", integration, val, message.toString());
+    }
+
+    public static void infoSentMessage(SentMessage sentMessage) {
+        logger(4021).info("[SPAM PROTECTION] Sent message: {}.", sentMessage.getAboutMessage());
+    }
+
+    public static void infoTryToSentDuplicateMessage(SentMessage sentMessage) {
+        logger(4022).info("[SPAM PROTECTION] Try to sent duplicated message: {}.", sentMessage.getAboutMessage());
+    }
+
     public static void infoHttpClientResponseHideDetails(HttpResponse val) {
-        logger(4021).info("Response: {}", val.printResponseHideDetails());
+        logger(4051).info("Response: {}", val.printResponseHideDetails());
     }
 
     public static void infoHttpClientResponse(HttpResponse val) {
-        logger(4022).info("Response: {}", val.printResponse());
+        logger(4052).info("Response: {}", val.printResponse());
     }
 
     public static void infoScheduler(String val) {
-        logger(4031).info(val);
+        logger(4071).info(val);
+    }
+
+    public static void infoLoggerLevel(String val1, Level val2) {
+        logger(4100).info("Your input logging level: {}. Will be using logger level: {}", val1, val2);
     }
     //endregion
 }

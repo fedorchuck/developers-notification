@@ -18,12 +18,11 @@ package com.github.fedorchuck.developers_notification.antispam;
 
 import com.github.fedorchuck.developers_notification.DevelopersNotification;
 import com.github.fedorchuck.developers_notification.DevelopersNotificationLogger;
-import com.github.fedorchuck.developers_notification.DevelopersNotificationMessenger;
-import com.github.fedorchuck.developers_notification.configuration.Messenger;
 import com.github.fedorchuck.developers_notification.helpers.Constants;
+import com.github.fedorchuck.developers_notification.helpers.InternalUtil;
 import com.github.fedorchuck.developers_notification.integrations.Integration;
-import com.github.fedorchuck.developers_notification.integrations.slack.SlackImpl;
-import com.github.fedorchuck.developers_notification.integrations.telegram.TelegramImpl;
+import com.github.fedorchuck.developers_notification.model.Task;
+import org.apache.log4j.spi.LoggingEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,22 +45,38 @@ public class SpamProtection {
      * @param description what happened
      * @since 0.2.0
      **/
-    public static void sendIntoMessenger(final boolean protectionFromSpam, final String description) {
-        for (Messenger messenger : DevelopersNotification.config.getMessenger()) {
-            switch (messenger.getName()) {
-                case SLACK:
-                    sendIntoMessenger(protectionFromSpam, DevelopersNotificationMessenger.SLACK,
-                            DevelopersNotification.config.getProjectName(), description, null);
-                    break;
-                case TELEGRAM:
-                    sendIntoMessenger(protectionFromSpam, DevelopersNotificationMessenger.TELEGRAM,
-                            DevelopersNotification.config.getProjectName(), description, null);
-                    break;
-                case ALL_AVAILABLE:
-                    sendIntoMessenger(protectionFromSpam, DevelopersNotificationMessenger.ALL_AVAILABLE,
-                            DevelopersNotification.config.getProjectName(), description, null);
-                    break;
-            }
+    public static void sendMonitoringResultsIntoMessenger(final boolean protectionFromSpam,
+                                                          final MessageTypes types,
+                                                          final String description) {
+        List<Task> tasks = new ArrayList<Task>(0);
+        String projectName = DevelopersNotification.getConfiguration().getProjectName();
+        for (Integration integration : InternalUtil.getIntegrations()) {
+            tasks.add(InternalUtil.generateTask(projectName, description, null, integration));
+        }
+
+        for (Task task : tasks) {
+            sendIntoMessenger(protectionFromSpam, types, task);
+        }
+    }
+
+    /**
+     * It provide sending messages into messengers.
+     * <p><b>Note:</b> all needed data will be getting from JSON configuration</p>
+     *
+     * @param protectionFromSpam is needed protection from spam
+     * @param event what happened
+     * @since 0.3.0
+     **/
+    public void sendLogEventIntoMessenger(final boolean protectionFromSpam,
+                                          final LoggingEvent event) {
+        List<Task> tasks = new ArrayList<Task>(0);
+        String projectName = DevelopersNotification.getConfiguration().getProjectName();
+        for (Integration integration : InternalUtil.getIntegrations()) {
+            tasks.add(InternalUtil.generateTaskFromLoggingEvent(projectName, event, integration));
+        }
+
+        for (Task task : tasks) {
+            sendIntoMessenger(protectionFromSpam, MessageTypes.LOGGING_EVENT, task);
         }
     }
 
@@ -69,69 +84,49 @@ public class SpamProtection {
      * It provide sending messages to chosen destination.
      *
      * @param protectionFromSpam is needed protection from spam
-     * @param messengerDestination where the message will be sent
-     * @param projectName where was method called
-     * @param description about situation
-     * @param throwable which happened. Can be <code>null</code>
-     * @since 0.2.0
+     * @param types of message
+     * @param task to compete
+     * @since 0.3.0
      **/
     public static void sendIntoMessenger(final boolean protectionFromSpam,
-                                         final DevelopersNotificationMessenger messengerDestination,
-                                         final String projectName,
-                                         final String description,
-                                         final Throwable throwable) {
+                                         final MessageTypes types,
+                                         final Task task) {
         Thread t = new Thread(
-                Constants.THREAD_GROUP,
-                new Runnable() {
-                    public void run() {
-                        Thread.currentThread().setName("Send developers notification to " + messengerDestination.name());
-                        if (protectionFromSpam) {
-                            if (!FrequencyOfSending.canSendMessage(MessageTypes.USERS_MESSAGE, projectName, description))
-                                return; //duplicate ignore
+            Constants.THREAD_GROUP,
+            new Runnable() {
+                public void run() {
+                    Thread.currentThread().setName("Send developers notification to " + task.getIntegration().name());
+                    SentMessage sentMessage =
+                        new SentMessage(types, task.getIntegration().name(), task.getProjectName(), task.getDescription());
 
-                            FrequencyOfSending.messageSent(MessageTypes.USERS_MESSAGE, projectName, description);
-                            sendIntoMessenger(messengerDestination, projectName, description, throwable);
-                        } else {
-                            sendIntoMessenger(messengerDestination, projectName, description, throwable);
+                    if (protectionFromSpam) {
+                        if (!FrequencyOfSending.canSendMessage(sentMessage)) {
+                            DevelopersNotificationLogger.infoTryToSentDuplicateMessage(sentMessage);
+                            return; //duplicate ignore
                         }
+
+                        FrequencyOfSending.messageSent(sentMessage);
+                        DevelopersNotificationLogger.infoSentMessage(sentMessage);
+                        complete(task);
+                    } else {
+                        complete(task);
                     }
-                },
-                Constants.THREAD_NAME_SENDING
+                }
+            },
+            Constants.THREAD_NAME_SENDING
         );
         t.setDaemon(true);
         t.start();
     }
 
     /**
-     * Sent messages
+     * This method complete the {@link Task} by sending messages to destination.
      *
-     * @param messengerDestination where the message will be sent
-     * @param projectName where was method called
-     * @param description about situation
-     * @param throwable which happened. Can be <code>null</code>
-     * @since 0.2.0
+     * @param task to compete
+     * @since 0.3.0
      **/
-    private static void sendIntoMessenger(final DevelopersNotificationMessenger messengerDestination,
-                                          final String projectName,
-                                          final String description,
-                                          final Throwable throwable) {
-        List<Integration> integrations = new ArrayList<Integration>(0);
-        switch (messengerDestination) {
-            case SLACK:
-                integrations.add(new SlackImpl());
-                break;
-            case TELEGRAM:
-                integrations.add(new TelegramImpl());
-                break;
-            case ALL_AVAILABLE:
-                integrations.add(new SlackImpl());
-                integrations.add(new TelegramImpl());
-                break;
-        }
-
-        for (Integration integration : integrations) {
-            integration.sendMessage(integration.generateMessage(projectName, description, throwable));
-            DevelopersNotificationLogger.infoTaskCompleted(integration.getClass().getSimpleName());
-        }
+    private static void complete(Task task) {
+        task.getIntegration().sendMessage(task);
+        DevelopersNotificationLogger.infoTaskCompleted(task.getIntegration().getClass().getSimpleName());
     }
 }

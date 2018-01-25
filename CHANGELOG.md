@@ -1,6 +1,14 @@
 # Java library which provides developers notification via messengers 
 # Changelog
 
+## 0.3.0
+* Start support java 9 ([#32](https://github.com/fedorchuck/developers-notification/pull/32))
+* Improved telegram implementation ([#37](https://github.com/fedorchuck/developers-notification/pull/37))
+* Moved package `com.github.fedorchuck.developers_notification.json` to another library ([#38](https://github.com/fedorchuck/developers-notification/issues/38))
+* Added logging appender ([#44](https://github.com/fedorchuck/developers-notification/pull/44))
+* Fixed minor bugs: ([#43](https://github.com/fedorchuck/developers-notification/pull/43)), 
+([#35](https://github.com/fedorchuck/developers-notification/issues/35))
+
 ## 0.2.2
 * Fixed minor bug with logger ([#29](https://github.com/fedorchuck/developers-notification/pull/29))
 * Added @ToString for `com.github.fedorchuck.developers_notification.configuration.Monitoring` 

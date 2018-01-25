@@ -4,17 +4,21 @@
 [![Build Status](https://travis-ci.org/fedorchuck/developers-notification.svg?branch=master)](https://travis-ci.org/fedorchuck/developers-notification)
 [![Apache License Version 2.0](https://img.shields.io/badge/license-Apache%20License%202.0-brightgreen.svg)](https://github.com/fedorchuck/developers-notification/blob/master/LICENSE.md)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.fedorchuck/developers-notification/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.fedorchuck/developers-notification)
-[![codecov](https://codecov.io/gh/fedorchuck/developers-notification/branch/master/graph/badge.svg)](https://codecov.io/gh/fedorchuck/developers-notification)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/303c60ee26a14d1ead7c6c1473ab25cc)](https://www.codacy.com/app/vl.fedorchuck/developers-notification?utm_source=github.com&utm_medium=referral&utm_content=fedorchuck/developers-notification&utm_campaign=badger)
+[![Codacy Badge](https://api.codacy.com/project/badge/Coverage/4f64c5669e1e4f9684c8f916eb76842f)](https://www.codacy.com/app/vl.fedorchuck/developers-notification?utm_source=github.com&utm_medium=referral&utm_content=fedorchuck/developers-notification&utm_campaign=Badge_Coverage)
 
 ## Introduction
 Sometimes every developer needs to know about the event that happened as soon as possible. For example, about incorrect 
 work of the server or about changing the third-party rest-api, about anything, depending on the specifics of the project.
  
 There are many ways to inform developers about such events - all sorts of services, loggers. But most of them send 
-notifications to the mail or a issue tracking system of a different type, which is not always convenient and not always possible to track quickly.
+notifications to the mail or a issue tracking system of a different type, which is not always convenient and not always 
+possible to track quickly.
 
 This library sending notifications to messengers. Just create and connect a bot in the messenger that your team using 
-and that is supported by this library. For now it is Slack and Telegram. Add the library to the project, add it configuration (access keys to the bot that you created), add lines, where it is needed, to send message and you receive messages when something happened.
+and that is supported by this library. For now it is Slack and Telegram. Add the library to the project, add it 
+configuration (access keys to the bot that you created), add lines, where it is needed, to send message or logging 
+appender and you receive messages when something happened.
 
 Also, this library have monitoring module. It can monitor current usage of RAM and disk memory, set limits of their 
 usage and in case of overspending - informs to the selected messengers.
@@ -27,6 +31,8 @@ This library compatible with Java 6+
 - [Getting started](#getting-started)
   - [Download](#download)
   - [Setup](#setup)
+    - [Environment configuration](#environment-configuration)
+    - [Logging appender](#logging-appender)
   - [Connecting your bot](#connecting-your-bot)
     - [Slack](#slack)
     - [Telegram](#telegram) 
@@ -40,20 +46,21 @@ This library compatible with Java 6+
 ### Download
 Gradle:
 ```groovy
-compile 'com.github.fedorchuck:developers-notification:0.2.2'
+compile 'com.github.fedorchuck:developers-notification:0.3.0'
 ```
 Maven:
 ```xml
 <dependency>
   <groupId>com.github.fedorchuck</groupId>
   <artifactId>developers-notification</artifactId>
-  <version>0.2.2</version>
+  <version>0.3.0</version>
 </dependency>
 ```
 JAR-files:  
 https://oss.sonatype.org/content/repositories/releases/com/github/fedorchuck/developers-notification/
 
 ### Setup
+#### Environment configuration
 The library is configured by environment variables or system properties. Supported variable is `DN`. It is single 
 environment variable witch required if you use this library. Accepted value is JSON:
 ```json
@@ -93,9 +100,9 @@ passwords; is not required; default value is `false`;
 same messages each second). It is necessary for adjust the frequency of sending messages; is not required; default value is `false`;
 * `project_name` name of project using this library; required;
 * `connect_timeout` for 
-[HttpClient](https://fedorchuck.github.io/developers-notification/javadoc-0.2.2/com/github/fedorchuck/developers_notification/http/HttpClient.html) is not required; default value is `5000`;
+[HttpClient](https://fedorchuck.github.io/developers-notification/javadoc-0.3.0/com/github/fedorchuck/developers_notification/http/HttpClient.html) is not required; default value is `5000`;
 * `user_agent` user agent for 
-[HttpClient](https://fedorchuck.github.io/developers-notification/javadoc-0.2.2/com/github/fedorchuck/developers_notification/http/HttpClient.html) is not required; default value is `Mozilla/5.0`;
+[HttpClient](https://fedorchuck.github.io/developers-notification/javadoc-0.3.0/com/github/fedorchuck/developers_notification/http/HttpClient.html) is not required; default value is `Mozilla/5.0`;
 * `monitoring` it is object with configure monitoring of current RAM and disk memory usage, set limits of their use and 
 in case of overspending - informs in the selected messengers; required if you use this feature;
    * `period` receive integer value; the frequency with which the monitoring will be carried out;
@@ -107,6 +114,22 @@ in case of overspending - informs in the selected messengers; required if you us
   * `max_ram` receive integer value; determines the permissible limit of use ram in percent;
   * `max_disk` receive integer value; determines the permissible limit of use disk in percent;
   * `disk_consumption_rate` receive integer value; determines the permissible limit of disk consumption rate in percent;
+
+#### Logging appender
+If you want routing some logging level messages to messengers, you should configure this part of project. If you use [log4j](http://logging.apache.org/log4j/1.2/) - your `log4j.properties` file should contain rows like this:
+```property
+# Define the root logger with appender DevelopersNotificationAppender
+log4j.rootLogger = DEBUG, DNAppender
+
+# Define the DevelopersNotificationAppender appender
+log4j.appender.DNAppender=com.github.fedorchuck.developers_notification.DevelopersNotificationAppender
+
+log4j.appender.DNAppender.Level=ERROR
+log4j.appender.DNAppender.layout=org.apache.log4j.PatternLayout
+log4j.appender.DNAppender.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} [%c{1}] %5p - %m%n
+```
+
+   **Note:** If you specify unknown logging level, you will recive all logging events to all specified messengers.
 
 ### Connecting your bot
 #### Slack
@@ -164,7 +187,7 @@ For checking set environment variables which needed this library use:
 DevelopersNotification.printConfiguration();
 ```
 **Note:** If configuration value of field `show_whole_log_details` is `false` - will be printed result of method 
-[Config#getPublicToString()](https://fedorchuck.github.io/developers-notification/javadoc-0.2.2/com/github/fedorchuck/developers_notification/configuration/Config.html)
+[Config#getPublicToString()](https://fedorchuck.github.io/developers-notification/javadoc-0.3.0/com/github/fedorchuck/developers_notification/configuration/Config.html)
 For sending message to chosen destination you can use methods:
 1) Messenger, spam protection and project name will be reading from config.</p>
 ```groovy
@@ -254,12 +277,17 @@ try {
 }
 ```
 
+Also, you can use logger appender. Just send message into logger with logging level, which you specified in log 
+configuration and you receive message into specified messenger.
+
 ## Changelog
 See [changelog file](https://github.com/fedorchuck/developers-notification/blob/master/CHANGELOG.md)
 
 ## Dependencies
-* [org.projectlombok:lombok:1.16.16](https://projectlombok.org/)
+* [org.slf4j:slf4j-simple:1.7.25](http://www.slf4j.org/)
 * [org.slf4j:slf4j-api:1.7.25](https://www.slf4j.org/) 
+* [org.apache.httpcomponents:httpmime:4.5.4](http://hc.apache.org/httpcomponents-client/)
+* [com.github.fedorchuck:dnjson:0.1.0](https://github.com/fedorchuck/dnjson/) 
 
 ## License
 This software is licensed under [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)

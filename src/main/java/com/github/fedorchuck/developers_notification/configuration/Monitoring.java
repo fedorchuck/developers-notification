@@ -17,7 +17,6 @@
 package com.github.fedorchuck.developers_notification.configuration;
 
 import com.github.fedorchuck.developers_notification.DevelopersNotificationLogger;
-import lombok.*;
 
 import java.util.concurrent.TimeUnit;
 
@@ -29,14 +28,16 @@ import java.util.concurrent.TimeUnit;
  * @since 0.2.0
  */
 @SuppressWarnings("unused")
-@ToString
 public class Monitoring {
-    @Getter
     private Long period;
     private String unit;
     private Integer max_ram;
     private Integer max_disk;
     private Integer disk_consumption_rate;
+
+    public Long getPeriod() {
+        return period;
+    }
 
     /**
      * Return TimeUnit

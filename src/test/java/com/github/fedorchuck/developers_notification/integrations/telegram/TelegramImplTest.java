@@ -16,34 +16,67 @@
 
 package com.github.fedorchuck.developers_notification.integrations.telegram;
 
+import com.github.fedorchuck.developers_notification.DevelopersNotificationUtil;
+import com.github.fedorchuck.developers_notification.Utils;
+import com.github.fedorchuck.developers_notification.model.Task;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
-
-import java.lang.reflect.Field;
 
 /**
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>.
  */
 public class TelegramImplTest {
 
+    @Before
+    public void setUp() {
+        String telegramToken = DevelopersNotificationUtil.getEnvironmentVariable("TRAVIS_TEST_TELEGRAM_TOKEN");
+        String telegramChannel = DevelopersNotificationUtil.getEnvironmentVariable("TRAVIS_TEST_TELEGRAM_CHANNEL");
+
+        String stringTelegramConfig = "{\"messenger\":[{\"name\":\"TELEGRAM\",\"token\":\""+telegramToken+"\",\"channel\":"+telegramChannel+"}],\"show_whole_log_details\":false,\"protection_from_spam\": \"true\",\"project_name\": \"Where this library will be invoked\",\"connect_timeout\":5000,\"user_agent\":\"Mozilla/5.0\"}";
+        Utils.setConfig(stringTelegramConfig);
+    }
+
     @Test
     public void testGenerateMessage() {
-        String expected = "{\"chat_id\":\"-0123456789\",\"parse_mode\":\"Markdown\",\"text\":\"*Project*: developers-notification \\n*Message*: test with full method signature \\n\"}";
+        String telegramChannel = DevelopersNotificationUtil.getEnvironmentVariable("TRAVIS_TEST_TELEGRAM_CHANNEL");
+        String expected = "{\"chat_id\":\""+telegramChannel+"\",\"parse_mode\":\"Markdown\",\"text\":\"*Project*: Where this library will be invoked \\n*Message*: test generate telegram message \\n\"}";
         TelegramImpl telegram = new TelegramImpl();
 
-        Field field;
-        try {
-            field = telegram.getClass().getDeclaredField("channel");
-            field.setAccessible(true);
-            field.set(telegram, "-0123456789");
-        } catch (NoSuchFieldException e) {
-            Assert.fail(e.getMessage());
-        } catch (IllegalAccessException e) {
-            Assert.fail(e.getMessage());
-        }
+        Task actual = telegram.generateMessage("Where this library will be invoked",
+                "test generate telegram message", null);
 
-        String actual = telegram.generateMessage("developers_notification",
-                "test with full method signature", null);
-        Assert.assertEquals(expected, actual);
+        Assert.assertEquals(expected, actual.getJsonGeneratedMessages());
+    }
+
+    @Test
+    public void testSendMessage() {
+        TelegramImpl telegram = new TelegramImpl();
+
+        Task messageToSend;
+
+        messageToSend = telegram.generateMessage(
+                "test " + this.getClass().getCanonicalName() + "#testSendMessage",
+                "test for short message" +
+                "java: " + Runtime.class.getPackage().getImplementationVersion(),
+                null);
+
+        telegram.sendMessage(messageToSend);
+
+        messageToSend = telegram.generateMessage(
+                "test " + this.getClass().getCanonicalName() + "#testSendMessage",
+                "test for long message" +
+                        "java: " + Runtime.class.getPackage().getImplementationVersion(),
+                new Throwable(new Throwable(new Throwable("test for long message"))));
+
+        telegram.sendMessage(messageToSend);
+
+        //TODO: looking for errors in logs
+    }
+
+    @After
+    public void tearDown() {
+        Utils.resetConfig();
     }
 }

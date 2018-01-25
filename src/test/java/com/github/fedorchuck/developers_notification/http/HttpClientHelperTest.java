@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
-
 /**
  * @author <a href="http://vl-fedorchuck.rhcloud.com/">Volodymyr Fedorchuk</a>.
  */
@@ -48,6 +46,32 @@ public class HttpClientHelperTest {
             HttpResponse response = HttpClientHelper.getResponse(connection);
             Assert.assertEquals(200, response.getStatusCode());
             Assert.assertEquals("OK", response.getResponseMessage());
+        } catch (IOException e) {
+            Assert.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void testGetResponseWithError() {
+        HttpURLConnection connection;
+        try {
+            connection = HttpClientHelper.getConnection("https://api.telegram.org/bot\" + telegramToken + \"/sendMessage", null);
+            HttpResponse response = HttpClientHelper.getResponse(connection);
+            Assert.assertEquals(404, response.getStatusCode());
+            Assert.assertEquals("Not Found", response.getResponseMessage());
+            Assert.assertEquals("application/json", response.getContentType());
+            Assert.assertEquals("{\"ok\":false,\"error_code\":404,\"description\":\"Not Found\"}", response.getResponseContent());
+        } catch (IOException e) {
+            Assert.fail(e.getMessage());
+        }
+
+        try {
+            connection = HttpClientHelper.getConnection("https://hooks.slack.com/services/123/abc/789xyz", null);
+            HttpResponse response = HttpClientHelper.getResponse(connection);
+            Assert.assertEquals(404, response.getStatusCode());
+            Assert.assertEquals("Not Found", response.getResponseMessage());
+            Assert.assertEquals("text/html", response.getContentType());
+            Assert.assertEquals("No team", response.getResponseContent());
         } catch (IOException e) {
             Assert.fail(e.getMessage());
         }

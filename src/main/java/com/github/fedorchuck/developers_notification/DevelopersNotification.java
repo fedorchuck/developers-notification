@@ -16,12 +16,17 @@
 
 package com.github.fedorchuck.developers_notification;
 
+import com.github.fedorchuck.developers_notification.antispam.MessageTypes;
 import com.github.fedorchuck.developers_notification.antispam.SpamProtection;
 import com.github.fedorchuck.developers_notification.configuration.Config;
-import com.github.fedorchuck.developers_notification.configuration.Messenger;
-import com.github.fedorchuck.developers_notification.json.Json;
+import com.github.fedorchuck.developers_notification.helpers.InternalUtil;
+import com.github.fedorchuck.developers_notification.integrations.Integration;
+import com.github.fedorchuck.developers_notification.model.Task;
 import com.github.fedorchuck.developers_notification.monitoring.MonitorProcessor;
+import com.github.fedorchuck.dnjson.Json;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -45,8 +50,8 @@ public class DevelopersNotification {
     static {
         Thread.currentThread().setName("Developers notification");
     }
-    public static final Config config =
-            Json.decodeValue(DevelopersNotificationUtil.getEnvironmentVariable("DN"), Config.class);
+
+    private static Config config;
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private static boolean monitoringStateAlive = false;
 
@@ -58,9 +63,14 @@ public class DevelopersNotification {
      * @since 0.1.0
      **/
     public static void printConfiguration() {
+        if (!configurationExist()) {
+            DevelopersNotificationLogger.fatalConfigNotFound();
+            return;
+        }
+
         if (config.getShowWholeLogDetails()) {
             DevelopersNotificationUtil.printToLogEnvironmentVariable("DN");
-            DevelopersNotificationLogger.info(config.toString());
+            DevelopersNotificationLogger.info(config.getPrivateToString());
         } else
             DevelopersNotificationLogger.info(config.getPublicToString());
     }
@@ -74,21 +84,18 @@ public class DevelopersNotification {
      * @since 0.2.0
      **/
     public static void send(final String description, final Throwable throwable) {
-        for (Messenger messenger : config.getMessenger()) {
-            switch (messenger.getName()){
-                case SLACK:
-                    SpamProtection.sendIntoMessenger(config.getProtectionFromSpam(),
-                            DevelopersNotificationMessenger.SLACK, config.getProjectName(), description, throwable);
-                    break;
-                case TELEGRAM:
-                    SpamProtection.sendIntoMessenger(config.getProtectionFromSpam(),
-                            DevelopersNotificationMessenger.TELEGRAM, config.getProjectName(), description, throwable);
-                    break;
-                case ALL_AVAILABLE:
-                    SpamProtection.sendIntoMessenger(config.getProtectionFromSpam(),
-                            DevelopersNotificationMessenger.ALL_AVAILABLE, config.getProjectName(), description, throwable);
-                    break;
-            }
+        if (!configurationExist()) {
+            DevelopersNotificationLogger.fatalConfigNotFound();
+            return;
+        }
+
+        List<Task> tasks = new ArrayList<Task>(0);
+        for (Integration integration : InternalUtil.getIntegrations()) {
+            tasks.add(InternalUtil.generateTask(config.getProjectName(), description, throwable, integration));
+        }
+
+        for (Task task : tasks) {
+            SpamProtection.sendIntoMessenger(config.getProtectionFromSpam(), MessageTypes.USERS_MESSAGE, task);
         }
     }
 
@@ -103,21 +110,18 @@ public class DevelopersNotification {
     public static void send(final String projectName,
                             final String description,
                             final Throwable throwable) {
-        for (Messenger messenger : config.getMessenger()) {
-            switch (messenger.getName()){
-                case SLACK:
-                    SpamProtection.sendIntoMessenger(config.getProtectionFromSpam(),
-                            DevelopersNotificationMessenger.SLACK, projectName, description, throwable);
-                    break;
-                case TELEGRAM:
-                    SpamProtection.sendIntoMessenger(config.getProtectionFromSpam(),
-                            DevelopersNotificationMessenger.TELEGRAM, projectName, description, throwable);
-                    break;
-                case ALL_AVAILABLE:
-                    SpamProtection.sendIntoMessenger(config.getProtectionFromSpam(),
-                            DevelopersNotificationMessenger.ALL_AVAILABLE, projectName, description, throwable);
-                    break;
-            }
+        if (!configurationExist()) {
+            DevelopersNotificationLogger.fatalConfigNotFound();
+            return;
+        }
+
+        List<Task> tasks = new ArrayList<Task>(0);
+        for (Integration integration : InternalUtil.getIntegrations()) {
+            tasks.add(InternalUtil.generateTask(projectName, description, throwable, integration));
+        }
+
+        for (Task task : tasks) {
+            SpamProtection.sendIntoMessenger(config.getProtectionFromSpam(), MessageTypes.USERS_MESSAGE, task);
         }
     }
 
@@ -134,8 +138,19 @@ public class DevelopersNotification {
                             final String projectName,
                             final String description,
                             final Throwable throwable) {
-        SpamProtection.sendIntoMessenger(config.getProtectionFromSpam(),
-                messengerDestination, projectName, description, throwable);
+        if (!configurationExist()) {
+            DevelopersNotificationLogger.fatalConfigNotFound();
+            return;
+        }
+
+        List<Task> tasks = new ArrayList<Task>(0);
+        for (Integration integration : InternalUtil.getIntegrations(messengerDestination)) {
+            tasks.add(InternalUtil.generateTask(projectName, description, throwable, integration));
+        }
+
+        for (Task task : tasks) {
+            SpamProtection.sendIntoMessenger(config.getProtectionFromSpam(), MessageTypes.USERS_MESSAGE, task);
+        }
     }
 
     /**
@@ -151,21 +166,18 @@ public class DevelopersNotification {
                             final String projectName,
                             final String description,
                             final Throwable throwable) {
-        for (Messenger messenger : config.getMessenger()) {
-            switch (messenger.getName()){
-                case SLACK:
-                    SpamProtection.sendIntoMessenger(protectionFromSpam,
-                            DevelopersNotificationMessenger.SLACK, projectName, description, throwable);
-                    break;
-                case TELEGRAM:
-                    SpamProtection.sendIntoMessenger(protectionFromSpam,
-                            DevelopersNotificationMessenger.TELEGRAM, projectName, description, throwable);
-                    break;
-                case ALL_AVAILABLE:
-                    SpamProtection.sendIntoMessenger(protectionFromSpam,
-                            DevelopersNotificationMessenger.ALL_AVAILABLE, projectName, description, throwable);
-                    break;
-            }
+        if (!configurationExist()) {
+            DevelopersNotificationLogger.fatalConfigNotFound();
+            return;
+        }
+
+        List<Task> tasks = new ArrayList<Task>(0);
+        for (Integration integration : InternalUtil.getIntegrations()) {
+            tasks.add(InternalUtil.generateTask(projectName, description, throwable, integration));
+        }
+
+        for (Task task : tasks) {
+            SpamProtection.sendIntoMessenger(protectionFromSpam, MessageTypes.USERS_MESSAGE, task);
         }
     }
 
@@ -176,7 +188,12 @@ public class DevelopersNotification {
      *          <code>false</code> otherwise.
      * @since 0.2.0
      **/
-    public static boolean monitoringStart(){
+    public static boolean monitoringStart() {
+        if (!configurationExist()) {
+            DevelopersNotificationLogger.fatalConfigNotFound();
+            return false;
+        }
+
         if (monitoringStateAlive) {
             DevelopersNotificationLogger.error("Monitoring process is already running.");
             return false;
@@ -225,4 +242,45 @@ public class DevelopersNotification {
         return monitoringStateAlive;
     }
 
+    /**
+     * Return configuration for Developers Notification library.
+     *
+     * <p><b>Note: </b></p>
+     * <p>If configuration is missed - configuration will be loaded from environment variable <code>DN</code>.</p>
+     * <p>If configuration was loaded before - new configuration will not be uploaded.</p>
+     *
+     * @return configuration for Developers Notification library
+     * @since 0.3.0
+     */
+    public static Config getConfiguration() {
+        if (config != null)
+            return config;
+
+        if (!DevelopersNotificationUtil.isNullOrEmpty(DevelopersNotificationUtil.getEnvironmentVariable("DN")))
+            config = Json.decodeValue(DevelopersNotificationUtil.getEnvironmentVariable("DN"), Config.class);
+        else
+            config = null;
+
+        return config;
+    }
+
+    /**
+     * Check is configuration for Developers Notification library exist.
+     *
+     * <p><b>Note: </b></p>
+     * <p>If configuration is missed - configuration will be loaded from environment variable <code>DN</code>.</p>
+     * <p>If configuration was loaded before - new configuration will not be uploaded.</p>
+     *
+     * @return  <code>true</code> if configuration exist
+     *          <code>false</code> otherwise.
+     * @since 0.3.0
+     */
+    public static boolean configurationExist() {
+        if (config == null) {
+            getConfiguration();
+            return config != null;
+        }
+
+        return true;
+    }
 }

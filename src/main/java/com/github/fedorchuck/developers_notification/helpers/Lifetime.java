@@ -16,6 +16,7 @@
 
 package com.github.fedorchuck.developers_notification.helpers;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
@@ -46,6 +47,7 @@ public class Lifetime<V> {
                     Constants.THREAD_GROUP,
                     new Runnable() {
                         public void run() {
+                            //noinspection InfiniteLoopStatement
                             while (true) {
                                 try {
                                     Thread.sleep(updateTimerInterval * 1000);
@@ -149,10 +151,10 @@ public class Lifetime<V> {
                 return;
 
             CacheObject<V> c;
-            for (CacheObject<V> object : list) {
-                c = object;
+            for (Iterator<CacheObject<V>> iterator = list.iterator(); iterator.hasNext();) {
+                c = iterator.next();
                 if (c != null && (now > (timeToLive + c.lastAccessed))) {
-                    list.remove(c);
+                    iterator.remove();
                 }
             }
         }

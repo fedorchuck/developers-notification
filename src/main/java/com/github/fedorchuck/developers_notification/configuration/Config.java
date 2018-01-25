@@ -17,7 +17,6 @@
 package com.github.fedorchuck.developers_notification.configuration;
 
 import com.github.fedorchuck.developers_notification.DevelopersNotificationUtil;
-import lombok.*;
 
 import java.util.List;
 
@@ -53,17 +52,22 @@ import java.util.List;
  * @since 0.2.0
  */
 @SuppressWarnings({"unused", "MismatchedQueryAndUpdateOfCollection"})
-@ToString
 public class Config {
-    @Getter
     private List<Messenger> messenger;
-    @Getter
     private Monitoring monitoring;
     private String project_name;
     private Boolean protection_from_spam;
     private Boolean show_whole_log_details;
     private Integer connect_timeout;
     private String user_agent;
+
+    public List<Messenger> getMessenger() {
+        return messenger;
+    }
+
+    public Monitoring getMonitoring() {
+        return monitoring;
+    }
 
     public Boolean getShowWholeLogDetails() {
         if (show_whole_log_details == null)
@@ -108,6 +112,39 @@ public class Config {
         res.append("Messengers: ");
         for (Messenger m : messenger)
             res.append(m.getName()).append(", ");
+        res.append("project name: ").append(this.getProjectName()).append(", ");
+        res.append("protection from spam: ").append(this.getProtectionFromSpam()).append(", ");
+        res.append("monitoring period: ").append(monitoring.getPeriod()).append(", ");
+        res.append("monitoring unit: ").append(monitoring.getUnit()).append(", ");
+        res.append("monitoring max_ram: ").append(monitoring.getMaxRam()).append(", ");
+        res.append("monitoring disk_consumption_rate: ").append(monitoring.getDiskConsumptionRate()).append(", ");
+        res.append("show_whole_log_details: ").append(this.getShowWholeLogDetails()).append(", ");
+        res.append("connect_timeout: ").append(this.getConnectTimeout()).append(", ");
+        res.append("user_agent: ").append(this.getUserAgent()).append(".");
+        return res.toString();
+    }
+
+    /**
+     * It create string with "sensitive data"
+     *
+     * @return string with "sensitive data"
+     * @since 0.3.0
+     **/
+    public String getPrivateToString() {
+        StringBuilder res = new StringBuilder();
+        res.append("Messengers: [");
+        for (Messenger m : messenger) {
+            res.append("{ name: ");
+            res.append(m.getName());
+            res.append(", ");
+            res.append("token: ");
+            res.append(m.getToken());
+            res.append(", ");
+            res.append("chanel: ");
+            res.append(m.getChannel());
+            res.append(" }");
+        }
+        res.append("], ");
         res.append("project name: ").append(this.getProjectName()).append(", ");
         res.append("protection from spam: ").append(this.getProtectionFromSpam()).append(", ");
         res.append("monitoring period: ").append(monitoring.getPeriod()).append(", ");

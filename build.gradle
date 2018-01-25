@@ -12,26 +12,44 @@ setSourceCompatibility(1.6)
 setTargetCompatibility(1.6)
 compileJava.options.encoding = 'UTF-8'
 
-dependencies {
-    compile 'org.projectlombok:lombok:1.16.16'
+configurations {
+    codacy
+}
 
+dependencies {
     compile 'org.slf4j:slf4j-simple:1.7.25'
     compile 'org.slf4j:slf4j-api:1.7.25'
 
+    // https://mvnrepository.com/artifact/log4j/log4j
+    compile 'log4j:log4j:1.2.17'
+
+    // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient
+    compile 'org.apache.httpcomponents:httpclient:4.5.4'
+    // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpmime
+    compile 'org.apache.httpcomponents:httpmime:4.5.4'
+    compile 'com.github.fedorchuck:dnjson:0.1.0'
+
     testRuntime 'org.slf4j:slf4j-log4j12:1.7.5'
     testCompile 'junit:junit:4.12'
+
+    testCompile group: 'com.codacy', name: 'codacy-coverage-reporter', version: '2.0.0'
+}
+
+ext {
+    limits = [
+            'instruction': 40.00,
+            'branch'     : 20.00,
+            'line'       : 40.00,
+            'complexity' : 30.00,
+            'method'     : 40.00,
+            'class'      : 60.00
+    ]
 }
 
 if(project.hasProperty('signing.keyId'))
     signing {
         sign configurations.archives
     }
-
-task([type: Copy], 'backup') {
-    delete "${backup}/developers-notification/"
-    from projectDir.canonicalPath
-    into "${backup}/developers-notification/"
-}
 
 task([type: Copy], 'copyDocs') {
     delete "$projectDir/docs/javadoc-${version}"
@@ -127,32 +145,121 @@ if(project.hasProperty('signing.keyId'))
         }
     }
 
-task codeCoverageReport(type: JacocoReport) {
-    executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
-
-    subprojects.each {
-        sourceSets it.sourceSets.main
-    }
-
-    reports {
-        xml.enabled true
-        xml.destination "${buildDir}/reports/jacoco/report.xml"
-        html.enabled false
-        csv.enabled false
-    }
-}
-
-codeCoverageReport.dependsOn {
-    subprojects*.task(test)
+jacoco {
+    toolVersion = "0.7.7.201606060606"
+    reportsDir = file("${buildDir}/test-results/jacoco")
 }
 
 jacocoTestReport {
+    executionData = fileTree(dir: "${buildDir}", include: '**/jacoco/*.exec')
+
     reports {
         xml.enabled true
-        html.enabled false
+        csv.enabled false
+        html.enabled true
+        html.destination "${projectDir.canonicalPath}/docs/jacocotestreport-${version}"
+    }
+
+    doLast {
+        def report = reports.xml.destination
+        logger.lifecycle("Checking coverage results: ${report}")
+
+        def parser = new XmlParser()
+        parser.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+        parser.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false)
+        def results = parser.parse(report)
+
+        def percentage = {
+            if( it == null ) {
+                return 100
+            }
+            def covered = it.'@covered' as Double
+            def missed = it.'@missed' as Double
+            ((covered / (covered + missed)) * 100).round(2)
+        }
+
+        def counters = results.counter
+        def metrics = [:]
+        metrics << [
+                'instruction': percentage(counters.find { it.'@type'.equals('INSTRUCTION') }),
+                'branch'     : percentage(counters.find { it.'@type'.equals('BRANCH') }),
+                'line'       : percentage(counters.find { it.'@type'.equals('LINE') }),
+                'complexity' : percentage(counters.find { it.'@type'.equals('COMPLEXITY') }),
+                'method'     : percentage(counters.find { it.'@type'.equals('METHOD') }),
+                'class'      : percentage(counters.find { it.'@type'.equals('CLASS') })
+        ]
+
+        def failures = []
+        def success = []
+        metrics.each {
+            def limit = limits[it.key]
+            if (it.value < limit) {
+                failures.add("- ${it.key} coverage rate is: ${it.value}%, minimum is ${limit}%")
+            }
+            else {
+                success.add("- ${it.key} coverage rate is: ${it.value}%, minimum is ${limit}%")
+            }
+        }
+
+        logger.quiet("------------------ Code Coverage Passes -----------------------")
+        success.each { logger.quiet(it) }
+        logger.quiet("---------------------------------------------------------------")
+        if (failures) {
+            logger.quiet("------------------ Code Coverage Failed -----------------------")
+            failures.each { logger.quiet(it) }
+            logger.quiet("---------------------------------------------------------------")
+//            throw new GradleException("Code coverage failed")
+        } else{
+            logger.quiet("Passed Code Coverage Checks")
+        }
+    }
+}
+
+check.dependsOn jacocoTestReport
+
+task uploadCoverageToCodacy(type: JavaExec, dependsOn : jacocoTestReport) {
+    main = "com.codacy.CodacyCoverageReporter"
+    classpath = configurations.codacy
+    args = [
+            "-l",
+            "Java",
+            "-r",
+            "${buildDir}/test-results/jacoco/${archivesBaseName}.xml"
+    ]
+}
+
+task (codacyDepsize) << {
+    def size = 0;
+    configurations.codacy.collect { it.length() / (1024 * 1024) }.each { size += it }
+    println "Total dependencies size: ${Math.round(size * 100) / 100} Mb"
+
+    configurations
+            .codacy
+            .sort { -it.length() }
+            .each { println "${it.name} : ${Math.round(it.length() / (1024) * 100) / 100} kb" }
+}
+
+task (codacyLocs) << {
+    configurations.codacy.each {
+        String jarName = it
+        println jarName
     }
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.14'
+    gradleVersion = '4.4'
+}
+
+test {
+    if(project.hasProperty('TRAVIS_TEST_TELEGRAM_TOKEN')
+            && project.hasProperty('TRAVIS_TEST_TELEGRAM_CHANNEL')
+            && project.hasProperty('TRAVIS_TEST_SLACK_TOKEN')
+            && project.hasProperty('TRAVIS_TEST_SLACK_CHANNEL')) {
+        environment "TRAVIS_TEST_TELEGRAM_TOKEN", project.getProperty('TRAVIS_TEST_TELEGRAM_TOKEN')
+        environment "TRAVIS_TEST_TELEGRAM_CHANNEL", project.getProperty('TRAVIS_TEST_TELEGRAM_CHANNEL')
+        environment "TRAVIS_TEST_SLACK_TOKEN", project.getProperty('TRAVIS_TEST_SLACK_TOKEN')
+        environment "TRAVIS_TEST_SLACK_CHANNEL", project.getProperty('TRAVIS_TEST_SLACK_CHANNEL')
+
+        environment "DN", "{\"messenger\":[{\"name\":\"SLACK\",\"token\":\"${project.getProperty('TRAVIS_TEST_SLACK_TOKEN')}\",\"channel\":\"${project.getProperty('TRAVIS_TEST_SLACK_CHANNEL')}\"},{\"name\":\"TELEGRAM\",\"token\":\"${project.getProperty('TRAVIS_TEST_TELEGRAM_TOKEN')}\",\"channel\":\"${project.getProperty('TRAVIS_TEST_TELEGRAM_CHANNEL')}\"}],\"show_whole_log_details\":false,\"protection_from_spam\": \"true\",\"project_name\": \"Where this library will be invoked\",\"connect_timeout\":5000,\"user_agent\":\"Mozilla/5.0\",\"monitoring\":{\"period\":5,\"unit\":\"seconds\",\"max_ram\":90,\"max_disk\": 90,\"disk_consumption_rate\":2}}"
+    }
 }
